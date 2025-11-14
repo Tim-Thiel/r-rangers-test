@@ -1,5 +1,5 @@
-const username = "DEIN_GITHUB_USERNAME";   // hier dein GitHub-Benutzername eintragen
-const repo = "DEIN_REPOSITORY_NAME";       // hier dein Repository-Name eintragen
+const username = "Tim_Thiel";   // hier dein GitHub-Benutzername eintragen
+const repo = "r-rangers";       // hier dein Repository-Name eintragen
 const folder = "bilder/sommerlager2024";  // Pfad zum Bilderordner im Repo
 
 async function loadGallery() {
