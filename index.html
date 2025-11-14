@@ -2,76 +2,59 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>R-Rangers – Aktionen</title>
+    <title>Sommerlager 2024</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="script.js" defer></script>
 
     <style>
         body {
             font-family: Arial, sans-serif;
-            max-width: 900px;
-            margin: auto;
-            padding: 20px;
-            background: #f5f5f5;
         }
-
-        h1 {
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+        .item {
+            border: 1px solid #ccc;
+            padding: 10px;
             text-align: center;
-            color: #d88b00; /* gold / ranger-style */
-            margin-bottom: 40px;
+            border-radius: 8px;
         }
-
-        .aktion {
-            background: white;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 25px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-
-        .aktion img {
+        img {
             width: 100%;
-            border-radius: 10px;
+            border-radius: 5px;
         }
-
-        .aktion h3 {
-            margin-top: 10px;
-            color: #333;
-        }
-
-        a {
-            text-decoration: none;
-            color: inherit;
+        button {
+            padding: 10px 15px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
         }
     </style>
 </head>
-
 <body>
 
-    <h1>Royal Rangers – Aktionen</h1>
+<h1>Sommerlager 2024</h1>
 
-    <!-- Beispiel-Aktion 1 -->
-    <div class="aktion">
-        <a href="aktionen/sommerlager2024.html">
-            <img src="bilder/sommerlager2024/bild1.jpg" alt="Sommerlager 2024">
-            <h3>Sommerlager 2024</h3>
-        </a>
+<button onclick="downloadSelected()">Ausgewählte Bilder herunterladen</button>
+
+<div class="gallery">
+    <div class="item">
+        <img src="../bilder/sommerlager2024/bild1.jpg">
+        <label><input type="checkbox" value="../bilder/sommerlager2024/bild1.jpg"> auswählen</label>
     </div>
 
-    <!-- Beispiel-Aktion 2 -->
-    <div class="aktion">
-        <a href="aktionen/pfingstcamp2023.html">
-            <img src="bilder/pfingstcamp2023/bild1.jpg" alt="Pfingstcamp 2023">
-            <h3>Pfingstcamp 2023</h3>
-        </a>
+    <div class="item">
+        <img src="../bilder/sommerlager2024/bild2.jpg">
+        <label><input type="checkbox" value="../bilder/sommerlager2024/bild2.jpg"> auswählen</label>
     </div>
 
-    <!-- Beispiel-Aktion 3 -->
-    <div class="aktion">
-        <a href="aktionen/haik2024.html">
-            <img src="bilder/haik2024/bild1.jpg" alt="Haik 2024">
-            <h3>Haik 2024</h3>
-        </a>
+    <div class="item">
+        <img src="../bilder/sommerlager2024/bild3.jpg">
+        <label><input type="checkbox" value="../bilder/sommerlager2024/bild3.jpg"> auswählen</label>
     </div>
+</div>
 
 </body>
 </html>
