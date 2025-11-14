@@ -1,4 +1,4 @@
-const username = "tim_thiel";   // hier dein GitHub-Benutzername eintragen
+const username = "tim-thiel";   // hier dein GitHub-Benutzername eintragen
 const repo = "r-rangers";       // hier dein Repository-Name eintragen
 const folder = "bilder/sommerlager2024";  // Pfad zum Bilderordner im Repo
 
