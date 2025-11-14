@@ -7,6 +7,12 @@ async function loadGallery() {
     const response = await fetch(url);
     const files = await response.json();
 
+    // 🔹 Fehlerabfangung, falls API kein Array zurückgibt
+    if (!Array.isArray(files)) {
+        console.error("API hat kein Array zurückgegeben:", files);
+        return;
+    }
+
     const gallery = document.getElementById("gallery");
 
     files.forEach(file => {
@@ -40,6 +46,10 @@ async function loadGallery() {
         }
     });
 }
+
+// Galerie beim Laden der Seite automatisch erstellen
+loadGallery();
+
 
 // Galerie beim Laden der Seite automatisch erstellen
 loadGallery();
