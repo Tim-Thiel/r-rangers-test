@@ -1,35 +1,134 @@
-/* Allgemeine Farben für Buttons */
-.download-btn {
-    background-color: #0055aa;
+/* --------------------------------------------
+   Farben & Variablen
+--------------------------------------------- */
+:root {
+    --ranger-blue: #0055aa;
+    --ranger-blue-dark: #003f7f;
+    --ranger-gold: #f1c40f;
+    --light-bg: #f5f7fa;
+    --card-bg: #ffffff;
+    --text-dark: #222;
+    --shadow: 0 4px 12px rgba(0,0,0,0.1);
+    --shadow-hover: 0 6px 20px rgba(0,0,0,0.15);
+    --radius: 12px;
+}
+
+/* --------------------------------------------
+   Globales Layout
+--------------------------------------------- */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: var(--light-bg);
+    color: var(--text-dark);
+}
+
+/* --------------------------------------------
+   Kopfzeilen / Titel
+--------------------------------------------- */
+h1, h2 {
+    text-align: center;
+    color: var(--ranger-blue);
+    margin-top: 20px;
+    font-weight: 700;
+}
+
+/* --------------------------------------------
+   Buttons
+--------------------------------------------- */
+button,
+.download-btn,
+#download-selected {
+    background: var(--ranger-blue);
     color: white;
     border: none;
-    padding: 10px 20px;
+    padding: 12px 20px;
     font-size: 16px;
+    border-radius: var(--radius);
     cursor: pointer;
-    border-radius: 8px;
+    transition: 0.25s;
+    box-shadow: var(--shadow);
+    display: inline-block;
 }
 
-.download-btn:hover {
-    background-color: #003f7f;
+button:hover,
+.download-btn:hover,
+#download-selected:hover {
+    background: var(--ranger-blue-dark);
+    box-shadow: var(--shadow-hover);
 }
 
-/* Titel */
-h1 {
-    color: #0055aa;
-    text-align: center;
-    margin-bottom: 20px;
+button:disabled,
+#download-selected:disabled {
+    background: #999;
+    cursor: not-allowed;
+    box-shadow: none;
 }
 
-/* Galerie-Layout */
+/* --------------------------------------------
+   Galerie Layout
+--------------------------------------------- */
 .gallery {
+    max-width: 1200px;
+    margin: 20px auto;
     display: grid;
+    gap: 20px;
+    padding: 10px;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 15px;
-    padding: 20px;
+}
+
+/* --------------------------------------------
+   Einzelnes Bild / Karte
+--------------------------------------------- */
+.gallery-item {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 10px;
+    transition: 0.25s;
+}
+
+.gallery-item:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hover);
 }
 
 .gallery-item img {
     width: 100%;
-    border-radius: 10px;
+    border-radius: var(--radius);
 }
 
+/* Checkbox-Kontainer */
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 8px;
+}
+
+.checkbox-container input {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+/* --------------------------------------------
+   Abschnitt-Trenner
+--------------------------------------------- */
+.section {
+    max-width: 1200px;
+    margin: auto;
+    padding: 20px;
+}
+
+/* --------------------------------------------
+   Footer
+--------------------------------------------- */
+footer {
+    margin-top: 40px;
+    padding: 25px;
+    text-align: center;
+    background: var(--ranger-blue);
+    color: white;
+}
