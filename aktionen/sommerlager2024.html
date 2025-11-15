@@ -14,6 +14,15 @@
 </head>
 
 <body>
+    
+    <div id="nav-placeholder"></div>
+<script>
+    fetch("/nav.html")
+        .then(res => res.text())
+        .then(data => {
+            document.getElementById("nav-placeholder").innerHTML = data;
+        });
+</script>
 
 <h1>Sommerlager 2024</h1>
 
