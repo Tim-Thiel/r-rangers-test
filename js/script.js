@@ -51,8 +51,6 @@ async function loadGallery() {
 loadGallery();
 
 
-// Galerie beim Laden der Seite automatisch erstellen
-loadGallery();
 
 // Funktion zum Herunterladen ausgewählter Bilder
 async function downloadSelected() {
