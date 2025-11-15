@@ -18,7 +18,7 @@ async function loadGallery() {
     files.forEach(file => {
         if (file.type === "file") {
             const div = document.createElement("div");
-            div.className = "item";
+            div.className = "gallery-item";
 
             const img = document.createElement("img");
             img.src = file.download_url;
