@@ -1,13 +1,12 @@
-const username = "tim-thiel";   // hier dein GitHub-Benutzername eintragen
-const repo = "r-rangers";       // hier dein Repository-Name eintragen
-const folder = "bilder/sommerlager2024";  // Pfad zum Bilderordner im Repo
+const username = "tim-thiel";   
+const repo = "r-rangers";       
+const folder = "bilder/sommerlager2024";  
 
 async function loadGallery() {
     const url = `https://api.github.com/repos/${username}/${repo}/contents/${folder}`;
     const response = await fetch(url);
     const files = await response.json();
 
-    // 🔹 Fehlerabfangung, falls API kein Array zurückgibt
     if (!Array.isArray(files)) {
         console.error("API hat kein Array zurückgegeben:", files);
         return;
@@ -17,42 +16,47 @@ async function loadGallery() {
 
     files.forEach(file => {
         if (file.type === "file") {
-            const div = document.createElement("div");
-            div.className = "gallery-item";
+
+            const card = document.createElement("div");
+            card.className = "gallery-item";
 
             const img = document.createElement("img");
             img.src = file.download_url;
 
-            const label = document.createElement("label");
+            // Checkbox + Text
+            const checkboxContainer = document.createElement("div");
+            checkboxContainer.className = "checkbox-container";
+
             const checkbox = document.createElement("input");
             checkbox.type = "checkbox";
             checkbox.value = file.download_url;
-            label.appendChild(checkbox);
-            label.appendChild(document.createTextNode(" auswählen"));
 
+            const label = document.createElement("label");
+            label.textContent = "Bild auswählen";
+
+            checkboxContainer.appendChild(checkbox);
+            checkboxContainer.appendChild(label);
+
+            // Download-Button
             const downloadLink = document.createElement("a");
             downloadLink.href = file.download_url;
             downloadLink.download = "";
             downloadLink.textContent = "Download";
             downloadLink.className = "download-btn";
 
-            div.appendChild(img);
-            div.appendChild(document.createElement("br"));
-            div.appendChild(label);
-            div.appendChild(document.createElement("br"));
-            div.appendChild(downloadLink);
+            // Aufbau der Karte
+            card.appendChild(img);
+            card.appendChild(checkboxContainer);
+            card.appendChild(downloadLink);
 
-            gallery.appendChild(div);
+            gallery.appendChild(card);
         }
     });
 }
 
-// Galerie beim Laden der Seite automatisch erstellen
 loadGallery();
 
-
-
-// Funktion zum Herunterladen ausgewählter Bilder
+// ZIP-Download
 async function downloadSelected() {
     const checkboxes = document.querySelectorAll("input[type=checkbox]:checked");
 
