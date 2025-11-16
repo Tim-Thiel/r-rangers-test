@@ -36,7 +36,7 @@ async function loadPreview(actionName, containerId) {
 
 // Automatisch beim Laden der Seite
 document.addEventListener("DOMContentLoaded", () => {
-    loadPreview("sommerlager2024", "sommerlager2024-preview");
+    loadPreview("unlimited2025", "unlimited2025-preview");
     loadPreview("pfingstcamp2023", "pfingstcamp2023-preview");
     // Weitere Aktionen hier hinzufügen
 });
