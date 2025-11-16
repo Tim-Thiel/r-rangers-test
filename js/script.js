@@ -108,3 +108,16 @@ function showPrev() {
     currentIndex = (currentIndex - 1 + images.length) % images.length;
     document.getElementById("lightbox-img").src = images[currentIndex];
 }
+
+// Click-Events
+document.querySelector(".lightbox-close").addEventListener("click", closeLightbox);
+document.querySelector(".lightbox-next").addEventListener("click", showNext);
+document.querySelector(".lightbox-prev").addEventListener("click", showPrev);
+
+// ESC schließt
+document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeLightbox();
+    if (e.key === "ArrowRight") showNext();
+    if (e.key === "ArrowLeft") showPrev();
+});
+
