@@ -82,3 +82,29 @@ async function downloadSelected() {
     link.download = "bilder.zip";
     link.click();
 }
+
+let currentIndex = 0;
+let images = [];
+
+// Lightbox öffnen
+function openLightbox(index) {
+    currentIndex = index;
+    document.getElementById("lightbox-img").src = images[index];
+    document.getElementById("lightbox").classList.remove("hidden");
+}
+
+// Lightbox schließen
+function closeLightbox() {
+    document.getElementById("lightbox").classList.add("hidden");
+}
+
+// Navigation
+function showNext() {
+    currentIndex = (currentIndex + 1) % images.length;
+    document.getElementById("lightbox-img").src = images[currentIndex];
+}
+
+function showPrev() {
+    currentIndex = (currentIndex - 1 + images.length) % images.length;
+    document.getElementById("lightbox-img").src = images[currentIndex];
+}
