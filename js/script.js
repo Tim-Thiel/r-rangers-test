@@ -1,6 +1,9 @@
-const username = "tim-thiel";   
-const repo = "r-rangers";       
-const folder = "bilder/sommerlager2024";  
+const username = "tim-thiel";
+const repo = "r-rangers";
+const folder = "bilder/sommerlager2024";
+
+let images = [];          // speichert ALLE Bild-URLs
+let currentIndex = 0;     // für die Lightbox
 
 async function loadGallery() {
     const url = `https://api.github.com/repos/${username}/${repo}/contents/${folder}`;
@@ -14,7 +17,9 @@ async function loadGallery() {
 
     const gallery = document.getElementById("gallery");
 
-    files.forEach(file => {
+    images = files.filter(f => f.type === "file").map(f => f.download_url);
+
+    files.forEach((file, index) => {
         if (file.type === "file") {
 
             const card = document.createElement("div");
@@ -22,8 +27,12 @@ async function loadGallery() {
 
             const img = document.createElement("img");
             img.src = file.download_url;
+            img.dataset.index = index;
 
-            // Checkbox + Text
+            // → Lightbox beim Klick öffnen
+            img.addEventListener("click", () => openLightbox(index));
+
+            // Checkbox
             const checkboxContainer = document.createElement("div");
             checkboxContainer.className = "checkbox-container";
 
@@ -44,7 +53,6 @@ async function loadGallery() {
             downloadLink.textContent = "Download";
             downloadLink.className = "download-btn";
 
-            // Aufbau der Karte
             card.appendChild(img);
             card.appendChild(checkboxContainer);
             card.appendChild(downloadLink);
@@ -83,22 +91,22 @@ async function downloadSelected() {
     link.click();
 }
 
-let currentIndex = 0;
-let images = [];
 
-// Lightbox öffnen
+
+// ------------------------------------------------------------
+// LIGHTBOX FUNKTIONEN
+// ------------------------------------------------------------
+
 function openLightbox(index) {
     currentIndex = index;
     document.getElementById("lightbox-img").src = images[index];
     document.getElementById("lightbox").classList.remove("hidden");
 }
 
-// Lightbox schließen
 function closeLightbox() {
     document.getElementById("lightbox").classList.add("hidden");
 }
 
-// Navigation
 function showNext() {
     currentIndex = (currentIndex + 1) % images.length;
     document.getElementById("lightbox-img").src = images[currentIndex];
@@ -109,15 +117,25 @@ function showPrev() {
     document.getElementById("lightbox-img").src = images[currentIndex];
 }
 
-// Click-Events
-document.querySelector(".lightbox-close").addEventListener("click", closeLightbox);
-document.querySelector(".lightbox-next").addEventListener("click", showNext);
-document.querySelector(".lightbox-prev").addEventListener("click", showPrev);
 
-// ESC schließt
-document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") closeLightbox();
-    if (e.key === "ArrowRight") showNext();
-    if (e.key === "ArrowLeft") showPrev();
+
+// ------------------------------------------------------------
+// EVENT-LISTENER ERST SETZEN, WENN DOM GELADEN IST
+// ------------------------------------------------------------
+
+document.addEventListener("DOMContentLoaded", () => {
+    const closeBtn = document.querySelector(".lightbox-close");
+    const nextBtn = document.querySelector(".lightbox-next");
+    const prevBtn = document.querySelector(".lightbox-prev");
+
+    if (closeBtn) closeBtn.addEventListener("click", closeLightbox);
+    if (nextBtn) nextBtn.addEventListener("click", showNext);
+    if (prevBtn) prevBtn.addEventListener("click", showPrev);
+
+    // ESC + Pfeiltasten
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") closeLightbox();
+        if (e.key === "ArrowRight") showNext();
+        if (e.key === "ArrowLeft") showPrev();
+    });
 });
-
