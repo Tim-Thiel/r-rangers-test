@@ -1,97 +1,140 @@
-// Aktionsname aus dem Dateinamen der aktuellen HTML-Seite holen
-const actionName = window.location.pathname
-    .split("/")
-    .pop()
-    .replace(".html", "");
+/* script.js — komplette, automatische Galerie + Lightbox + ZIP-Download */
 
-// Bilderordner automatisch aus dem Aktionsnamen bauen
+// === CONFIG (kein Ändern nötig, Username/Repo werden automatisch erkannt) ===
+const username = "tim-thiel";      // dein GitHub-Benutzername
+const repo = "r-rangers";          // dein Repo-Name
+
+// Aktionsname automatisch aus Dateiname: "sommerlager2024.html" -> "sommerlager2024"
+const actionName = window.location.pathname.split("/").pop().replace(".html", "") || "index";
 const folder = `bilder/${actionName}`;
 
+// Globale Variablen
+let images = [];       // Array mit Download-URLs
+let currentIndex = 0;  // Lightbox-Index
 
-const username = "tim-thiel";
-const repo = "r-rangers";
-const folder = "bilder/sommerlager2024";
+// Hilfsfunktion: konsolen-log bei Fehlern schön
+function logError(msg, obj) {
+    console.error("GalleryError:", msg, obj ?? "");
+}
 
-let images = [];          // speichert ALLE Bild-URLs
-let currentIndex = 0;     // für die Lightbox
-
+// Lädt die Galerie aus GitHub-API
 async function loadGallery() {
-    const url = `https://api.github.com/repos/${username}/${repo}/contents/${folder}`;
-    const response = await fetch(url);
-    const files = await response.json();
-
-    if (!Array.isArray(files)) {
-        console.error("API hat kein Array zurückgegeben:", files);
+    const gallery = document.getElementById("gallery");
+    if (!gallery) {
+        logError("Kein Element mit id='gallery' gefunden.");
         return;
     }
 
-    const gallery = document.getElementById("gallery");
+    const apiUrl = `https://api.github.com/repos/${username}/${repo}/contents/${folder}`;
+    let response;
+    try {
+        response = await fetch(apiUrl);
+    } catch (e) {
+        logError("Fetch fehlgeschlagen", e);
+        return;
+    }
 
-    images = files.filter(f => f.type === "file").map(f => f.download_url);
+    if (!response.ok) {
+        logError(`API-Antwort nicht OK (${response.status})`, await response.text());
+        return;
+    }
 
-    files.forEach((file, index) => {
-        if (file.type === "file") {
+    let files;
+    try {
+        files = await response.json();
+    } catch (e) {
+        logError("JSON parsing failed", e);
+        return;
+    }
 
-            const card = document.createElement("div");
-            card.className = "gallery-item";
+    if (!Array.isArray(files)) {
+        logError("API hat kein Array zurückgegeben:", files);
+        return;
+    }
 
-            const img = document.createElement("img");
-            img.src = file.download_url;
-            img.dataset.index = index;
+    // Filter nur Dateien, sortiere nach name (optional) — oder behalten Reihenfolge wie im Repo
+    const fileEntries = files.filter(f => f.type === "file");
 
-            // → Lightbox beim Klick öffnen
-            img.addEventListener("click", () => openLightbox(index));
+    // Wenn keine Bilder -> Hinweis
+    if (fileEntries.length === 0) {
+        gallery.innerHTML = "<p>Keine Bilder im Ordner gefunden.</p>";
+        return;
+    }
 
-            // Checkbox
-            const checkboxContainer = document.createElement("div");
-            checkboxContainer.className = "checkbox-container";
+    // build images array (download_url) in same order
+    images = fileEntries.map(f => f.download_url);
 
-            const checkbox = document.createElement("input");
-            checkbox.type = "checkbox";
-            checkbox.value = file.download_url;
+    // löschen was vorher da war
+    gallery.innerHTML = "";
 
-            const label = document.createElement("label");
-            label.textContent = "Bild auswählen";
+    // Erstelle die Karten
+    fileEntries.forEach((file, idx) => {
+        const card = document.createElement("div");
+        card.className = "gallery-item";
 
-            checkboxContainer.appendChild(checkbox);
-            checkboxContainer.appendChild(label);
+        const img = document.createElement("img");
+        img.src = file.download_url;
+        img.alt = file.name || `Bild ${idx+1}`;
+        img.dataset.index = idx;
+        img.loading = "lazy"; // lazy loading
 
-            // Download-Button
-            const downloadLink = document.createElement("a");
-            downloadLink.href = file.download_url;
-            downloadLink.download = "";
-            downloadLink.textContent = "Download";
-            downloadLink.className = "download-btn";
+        // Klick öffnet Lightbox an der korrekten Position
+        img.addEventListener("click", () => openLightbox(idx));
 
-            card.appendChild(img);
-            card.appendChild(checkboxContainer);
-            card.appendChild(downloadLink);
+        // Checkboxcontainer
+        const checkboxContainer = document.createElement("div");
+        checkboxContainer.className = "checkbox-container";
 
-            gallery.appendChild(card);
-        }
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.value = file.download_url;
+
+        const label = document.createElement("label");
+        label.appendChild(checkbox);
+        label.appendChild(document.createTextNode(" Bild auswählen"));
+
+        checkboxContainer.appendChild(label);
+
+        // Download button (einzeln)
+        const downloadLink = document.createElement("a");
+        downloadLink.href = file.download_url;
+        downloadLink.download = "";
+        downloadLink.textContent = "Download";
+        downloadLink.className = "download-btn";
+
+        // Baue Karte zusammen
+        card.appendChild(img);
+        card.appendChild(checkboxContainer);
+        card.appendChild(downloadLink);
+
+        gallery.appendChild(card);
     });
+
+    // Stelle sicher, dass Lightbox-Listener gesetzt sind (falls Lightbox HTML schon da ist)
+    setupLightboxControls();
 }
 
-loadGallery();
-
-// ZIP-Download
+// ZIP-Download: alle ausgewählten Bilder, ZIP heißt actionName.zip
 async function downloadSelected() {
     const checkboxes = document.querySelectorAll("input[type=checkbox]:checked");
-
     if (checkboxes.length === 0) {
         alert("Bitte wähle mindestens ein Bild aus.");
         return;
     }
 
     const zip = new JSZip();
-    const folderZip = zip.folder("ausgewählte_bilder");
+    const folderZip = zip.folder(actionName);
 
     for (let box of checkboxes) {
         const url = box.value;
         const filename = url.split("/").pop();
-        const response = await fetch(url);
-        const blob = await response.blob();
-        folderZip.file(filename, blob);
+        try {
+            const resp = await fetch(url);
+            const blob = await resp.blob();
+            folderZip.file(filename, blob);
+        } catch (e) {
+            logError("Fehler beim Laden einer Datei für ZIP", e);
+        }
     }
 
     const content = await zip.generateAsync({ type: "blob" });
@@ -101,51 +144,75 @@ async function downloadSelected() {
     link.click();
 }
 
-
-
-// ------------------------------------------------------------
-// LIGHTBOX FUNKTIONEN
-// ------------------------------------------------------------
-
+// ---------------- Lightbox-Funktionen ----------------
 function openLightbox(index) {
+    if (!images || images.length === 0) return;
     currentIndex = index;
-    document.getElementById("lightbox-img").src = images[index];
-    document.getElementById("lightbox").classList.remove("hidden");
+    const lb = document.getElementById("lightbox");
+    const lbImg = document.getElementById("lightbox-img");
+    if (!lb || !lbImg) return;
+    lbImg.src = images[currentIndex];
+    lb.classList.remove("hidden");
 }
 
 function closeLightbox() {
-    document.getElementById("lightbox").classList.add("hidden");
+    const lb = document.getElementById("lightbox");
+    if (!lb) return;
+    lb.classList.add("hidden");
 }
 
 function showNext() {
+    if (!images || images.length === 0) return;
     currentIndex = (currentIndex + 1) % images.length;
     document.getElementById("lightbox-img").src = images[currentIndex];
 }
 
 function showPrev() {
+    if (!images || images.length === 0) return;
     currentIndex = (currentIndex - 1 + images.length) % images.length;
     document.getElementById("lightbox-img").src = images[currentIndex];
 }
 
-
-
-// ------------------------------------------------------------
-// EVENT-LISTENER ERST SETZEN, WENN DOM GELADEN IST
-// ------------------------------------------------------------
-
-document.addEventListener("DOMContentLoaded", () => {
+// Setzt Event-Listener für Lightbox-Buttons (sicher mehrfach aufrufbar)
+function setupLightboxControls() {
     const closeBtn = document.querySelector(".lightbox-close");
     const nextBtn = document.querySelector(".lightbox-next");
     const prevBtn = document.querySelector(".lightbox-prev");
+    const lb = document.getElementById("lightbox");
 
-    if (closeBtn) closeBtn.addEventListener("click", closeLightbox);
-    if (nextBtn) nextBtn.addEventListener("click", showNext);
-    if (prevBtn) prevBtn.addEventListener("click", showPrev);
+    if (closeBtn && !closeBtn.dataset.listener) {
+        closeBtn.addEventListener("click", closeLightbox);
+        closeBtn.dataset.listener = "1";
+    }
+    if (nextBtn && !nextBtn.dataset.listener) {
+        nextBtn.addEventListener("click", showNext);
+        nextBtn.dataset.listener = "1";
+    }
+    if (prevBtn && !prevBtn.dataset.listener) {
+        prevBtn.addEventListener("click", showPrev);
+        prevBtn.dataset.listener = "1";
+    }
 
-    // ESC + Pfeiltasten
-    document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape") closeLightbox();
-        if (e.key === "ArrowRight") showNext();
-        if (e.key === "ArrowLeft") showPrev();
-    });
+    // Klicken auf Hintergrund schließt (wenn außerhalb Bild)
+    if (lb && !lb.dataset.bgListener) {
+        lb.addEventListener("click", (e) => {
+            if (e.target === lb) closeLightbox();
+        });
+        lb.dataset.bgListener = "1";
+    }
+
+    // Tastatur-Ereignisse nur einmal setzen
+    if (!document.body.dataset.kbListener) {
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "Escape") closeLightbox();
+            if (e.key === "ArrowRight") showNext();
+            if (e.key === "ArrowLeft") showPrev();
+        });
+        document.body.dataset.kbListener = "1";
+    }
+}
+
+// ---------------- Init: warte bis DOM aufgebaut ist ----------------
+document.addEventListener("DOMContentLoaded", () => {
+    loadGallery();
 });
