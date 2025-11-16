@@ -97,10 +97,22 @@ async function loadGallery() {
 
         // Download button (einzeln)
         const downloadLink = document.createElement("a");
-        downloadLink.href = file.download_url;
-        downloadLink.download = "";
+        downloadLink.href = "#";
         downloadLink.textContent = "Download";
         downloadLink.className = "download-btn";
+
+        downloadLink.addEventListener("click", async (e) => {
+            e.preventDefault();
+
+            const response = await fetch(file.download_url);
+            const blob = await response.blob();
+
+            const a = document.createElement("a");
+            a.href = URL.createObjectURL(blob);
+            a.download = file.name;  
+            a.click();
+        });
+
 
         // Baue Karte zusammen
         card.appendChild(img);
