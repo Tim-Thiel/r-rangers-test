@@ -1,3 +1,13 @@
+// Aktionsname aus dem Dateinamen der aktuellen HTML-Seite holen
+const actionName = window.location.pathname
+    .split("/")
+    .pop()
+    .replace(".html", "");
+
+// Bilderordner automatisch aus dem Aktionsnamen bauen
+const folder = `bilder/${actionName}`;
+
+
 const username = "tim-thiel";
 const repo = "r-rangers";
 const folder = "bilder/sommerlager2024";
@@ -87,7 +97,7 @@ async function downloadSelected() {
     const content = await zip.generateAsync({ type: "blob" });
     const link = document.createElement("a");
     link.href = URL.createObjectURL(content);
-    link.download = "bilder.zip";
+    link.download = `${actionName}.zip`;
     link.click();
 }
 
