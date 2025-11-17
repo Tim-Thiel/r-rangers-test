@@ -6,7 +6,8 @@ const repo = "r-rangers";          // dein Repo-Name
 
 // Aktionsname automatisch aus Dateiname: "sommerlager2024.html" -> "sommerlager2024"
 const actionName = window.location.pathname.split("/").pop().replace(".html", "") || "index";
-const folder = `bilder/${actionName}`;
+const folder = `bilder/${actionName}/thumbs`;
+
 
 // Globale Variablen
 let images = [];       // Array mit Download-URLs
