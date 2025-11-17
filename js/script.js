@@ -73,7 +73,7 @@ async function loadGallery() {
         card.className = "gallery-item";
 
         const img = document.createElement("img");
-        img.src = file.download_url;
+        img.src = file.download_url + "?raw=true&width=500";
         img.alt = file.name || `Bild ${idx+1}`;
         img.dataset.index = idx;
         img.loading = "lazy"; // lazy loading
