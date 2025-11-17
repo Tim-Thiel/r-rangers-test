@@ -73,7 +73,8 @@ async function loadGallery() {
         card.className = "gallery-item";
 
         const img = document.createElement("img");
-        img.src = file.download_url + "?raw=true&width=500";
+        // img.src = Thumbnail, download = Original
+        img.src = file.download_url.replace('/original/', '/thumbs/');  // Thumbnail in Galerie
         img.alt = file.name || `Bild ${idx+1}`;
         img.dataset.index = idx;
         img.loading = "lazy"; // lazy loading
@@ -98,7 +99,7 @@ async function loadGallery() {
         // Download button (einzeln)
         const downloadLink = document.createElement("a");
         downloadLink.href = file.download_url;   // ORIGINALDATEI
-        downloadLink.download = "";              // Download erzwingen
+        downloadLink.download = file.name;           // Download erzwingen
         downloadLink.textContent = "Download";
         downloadLink.className = "download-btn";
 
