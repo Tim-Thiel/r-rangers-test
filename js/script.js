@@ -62,7 +62,8 @@ async function loadGallery() {
     }
 
     // build images array (download_url) in same order
-    images = fileEntries.map(f => f.download_url);
+    images = fileEntries.map(f => f.download_url.replace('/original/', '/thumbs/'));
+
 
     // löschen was vorher da war
     gallery.innerHTML = "";
