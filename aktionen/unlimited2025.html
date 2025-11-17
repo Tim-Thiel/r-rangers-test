@@ -15,7 +15,7 @@
 
 <body>
 
-    <div id="password-overlay" style="
+<div id="password-overlay" style="
     position: fixed;
     top:0; left:0; width:100%; height:100%;
     background: rgba(0,0,0,0.9);
@@ -28,40 +28,32 @@
 ">
     <h2>Passwort erforderlich</h2>
     <input type="password" id="pw" placeholder="Passwort eingeben">
-    <button onclick="checkPassword()">Login</button>
-
-    <script>
-    function checkPassword() {
-        const pass = document.getElementById("pw").value;
-
-        if (pass === "deinPasswort") {
-            window.location.href = "unlimited2025.html"; // Seite, die geschützt ist
-        } else {
-            alert("Falsches Passwort!");
-        }
-    }
-
-    document.getElementById("pw").addEventListener("keydown", function(event) {
-        if (event.key === "Enter") {
-            checkPassword();
-        }
-    });
-    </script>
-
+    <button onclick="validatePassword()">Login</button>
 </div>
 
 <script>
+// 🔒 Passwort hier festlegen
 const password = "rangers2025";
 
 function validatePassword() {
-    const input = document.getElementById("pw-input").value;
-    if(input === password) {
+    const input = document.getElementById("pw").value;
+
+    if (input === password) {
+        // Overlay ausblenden
         document.getElementById("password-overlay").style.display = "none";
     } else {
         alert("Falsches Passwort!");
     }
 }
+
+// ENTER zum Login
+document.getElementById("pw").addEventListener("keydown", function(event) {
+    if (event.key === "Enter") {
+        validatePassword();
+    }
+});
 </script>
+
 
     <div id="nav-placeholder"></div>
 <script>
