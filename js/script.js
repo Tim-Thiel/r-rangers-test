@@ -97,7 +97,8 @@ async function loadGallery() {
 
         // Download button (einzeln)
         const downloadLink = document.createElement("a");
-        downloadLink.href = "#";
+        downloadLink.href = file.download_url;   // ORIGINALDATEI
+        downloadLink.download = "";              // Download erzwingen
         downloadLink.textContent = "Download";
         downloadLink.className = "download-btn";
 
