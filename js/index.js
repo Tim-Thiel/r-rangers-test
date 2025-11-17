@@ -2,7 +2,8 @@ async function loadPreview(actionName, containerId) {
     const gallery = document.getElementById(containerId);
     if (!gallery) return;
 
-    const folder = `bilder/${actionName}`;
+    // Suche NUR in /thumbs/
+    const folder = `bilder/${actionName}/thumbs`;
     const apiUrl = `https://api.github.com/repos/tim-thiel/r-rangers/contents/${folder}`;
 
     try {
@@ -11,17 +12,24 @@ async function loadPreview(actionName, containerId) {
 
         if (!Array.isArray(files) || files.length === 0) return;
 
-        // Erstes Bild als Vorschaubild
-        const firstFile = files.find(f => f.type === "file");
-        if (!firstFile) return;
+        // Erstes Thumbnail suchen
+        const firstThumb = files.find(f => f.type === "file");
+        if (!firstThumb) return;
 
+        // Thumbnail anzeigen
         const img = document.createElement("img");
-        img.src = firstFile.download_url;
+        img.src = firstThumb.download_url + "?raw=true";
         img.alt = actionName;
 
+        // Titel formatieren (optional schöner)
         const title = document.createElement("h3");
-        title.textContent = actionName.replace(/\d+$/, ""); // Optional: Jahr entfernen
+        title.textContent =
+            actionName
+                .replace(/^\D*/, "") === actionName
+                ? actionName
+                : actionName.replace(/([a-zA-Z]+)(\d+)/, "$1 $2");
 
+        // Link zur Aktionsseite
         const link = document.createElement("a");
         link.href = `aktionen/${actionName}.html`;
         link.appendChild(img);
@@ -34,10 +42,8 @@ async function loadPreview(actionName, containerId) {
     }
 }
 
-// Automatisch beim Laden der Seite
+// -------- Automatisches Laden für alle Aktionen -------
 document.addEventListener("DOMContentLoaded", () => {
     loadPreview("unlimited2025", "unlimited2025-preview");
     loadPreview("pfingstcamp2023", "pfingstcamp2023-preview");
-    // Weitere Aktionen hier hinzufügen
 });
-
