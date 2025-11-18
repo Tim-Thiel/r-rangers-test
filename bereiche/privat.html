@@ -6,14 +6,57 @@
 <title>Private Bilder</title>
 
 <style>
-    body { font-family: Arial; max-width:900px; margin:auto; padding:20px; }
-    h1 { text-align:center; color:#0055aa; }
+    body { font-family: Arial; max-width:1000px; margin:auto; padding:20px; }
+    h1 { text-align:center; color:#0055aa; margin-bottom:30px; }
+
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+    }
+
+    .card {
+        background: #f3f7ff;
+        padding: 15px;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: 0.2s;
+        border: 2px solid #0055aa;
+    }
+
+    .card:hover {
+        transform: scale(1.03);
+        background: #d8e8ff;
+    }
+
+    .card img {
+        width:100%;
+        border-radius:8px;
+    }
+
+    .card h3 {
+        text-align:center;
+        margin-top:10px;
+    }
 </style>
 </head>
 
 <body>
     <h1>Private Bilder</h1>
-    <p>Hier kommen deine privaten Bilder rein.</p>
+
+    <div class="grid">
+
+        <div class="card" onclick="location.href='privat/urlaub2024.html'">
+            <img src="img/urlaub2024/thumb.jpg">
+            <h3>Urlaub 2024</h3>
+        </div>
+
+        <div class="card" onclick="location.href='privat/freunde.html'">
+            <img src="img/freunde/thumb.jpg">
+            <h3>Freunde</h3>
+        </div>
+
+    </div>
+
 </body>
 </html>
-
