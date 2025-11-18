@@ -1,13 +1,10 @@
-// ==========================
-// PASSWÖRTER PRO BEREICH
-// ==========================
+// Passwort für jeden Bereich
 const areaPasswords = {
     "bereiche/aktionen.html": "aktionenPass",
     "bereiche/team.html": "teamPass",
     "bereiche/privat.html": "privatPass"
 };
 
-// Variablen für Overlay
 let targetUrl = "";
 
 // Globale Funktion für onclick
