@@ -1,47 +1,63 @@
-/* index.js — Passwortschutz pro Bereich */
-
-// Passwörter für jeden Bereich
-const passwords = {
+// ==========================
+// PASSWÖRTER PRO BEREICH
+// ==========================
+const areaPasswords = {
     "bereiche/aktionen.html": "aktionenPass",
     "bereiche/team.html": "teamPass",
     "bereiche/privat.html": "privatPass"
 };
 
-let targetPage = null;
+// Gemerkte Zielseite
+let targetUrl = "";
 
-// Overlay öffnen
-function openPassword(page) {
-    targetPage = page;
 
-    document.getElementById("password-overlay").style.display = "flex";
-    document.getElementById("pw-input").value = "";
-    document.getElementById("pw-input").focus();
+// ==========================
+// Passwort-Overlay öffnen
+// ==========================
+function openPassword(url) {
+    targetUrl = url;
+
+    const overlay = document.getElementById("password-overlay");
+    overlay.style.display = "flex";
+
+    const input = document.getElementById("pw-input");
+    input.value = "";
+    input.focus();
 }
 
-// Öffnen-Button
-document.getElementById("pw-open").addEventListener("click", () => {
-    checkPassword();
-});
 
-// Enter-Taste
-document.getElementById("pw-input").addEventListener("keydown", (e) => {
-    if (e.key === "Enter") checkPassword();
-});
-
+// ==========================
 // Passwort prüfen
+// ==========================
 function checkPassword() {
     const input = document.getElementById("pw-input").value;
-    const correctPassword = passwords[targetPage];
+    const correct = areaPasswords[targetUrl];
 
-    if (input === correctPassword) {
-        window.location.href = targetPage;
+    if (input === correct) {
+        window.location.href = targetUrl;
     } else {
         alert("Falsches Passwort!");
     }
 }
 
-// Zurück-Button
-document.getElementById("pw-back").addEventListener("click", () => {
-    document.getElementById("password-overlay").style.display = "none";
-    document.getElementById("pw-input").value = "";
+
+// ==========================
+// Init Events
+// ==========================
+document.addEventListener("DOMContentLoaded", () => {
+
+    // Öffnen-Button
+    document.getElementById("pw-open").onclick = checkPassword;
+
+    // Zurück-Button
+    document.getElementById("pw-back").onclick = () => {
+        document.getElementById("password-overlay").style.display = "none";
+    };
+
+    // ENTER im Passwortfeld
+    document.getElementById("pw-input").addEventListener("keydown", e => {
+        if (e.key === "Enter") checkPassword();
+    });
+
+    console.log("index.js wurde erfolgreich geladen");
 });
