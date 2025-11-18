@@ -1,101 +1,31 @@
-// =====================
-// PASSWÖRTER PRO AKTION
-// =====================
-const actionPasswords = {
-    "unlimited2025": "unlimitedPass",
-    "pfingstcamp2023": "pfingstPass"
+// Passwörter für die Kategorien
+const passwords = {
+    "team.html": "forscher2025",
+    "aktionen.html": "actions2025",
+    "privat.html": "privat2025"
 };
 
-// Variablen für Overlay
-let targetUrl = "";
-let currentAction = "";
+let selectedTarget = null;
 
-// =====================
-// Vorschau laden
-// =====================
-async function loadPreview(actionName, containerId) {
-    const gallery = document.getElementById(containerId);
-    if (!gallery) return;
-
-    const folder = `bilder/${actionName}/thumbs`;
-    const apiUrl = `https://api.github.com/repos/tim-thiel/r-rangers/contents/${folder}`;
-
-    try {
-        const response = await fetch(apiUrl);
-        const files = await response.json();
-
-        if (!Array.isArray(files) || files.length === 0) return;
-
-        const firstThumb = files.find(f => f.type === "file");
-        if (!firstThumb) return;
-
-        const img = document.createElement("img");
-        img.src = firstThumb.download_url + "?raw=true";
-        img.alt = actionName;
-
-        const title = document.createElement("h3");
-        title.textContent = actionName.replace(/([a-zA-Z]+)(\d+)/, "$1 $2");
-
-        // Link öffnet Passwortabfrage statt direkt Seite
-        const link = document.createElement("a");
-        link.href = "#";
-        link.onclick = () => requestPassword(actionName, `aktionen/${actionName}.html`);
-
-        link.appendChild(img);
-        link.appendChild(title);
-
-        gallery.appendChild(link);
-
-    } catch (e) {
-        console.error("Vorschau konnte nicht geladen werden:", e);
-    }
-}
-
-// =====================
-// Passwort anfragen
-// =====================
-function requestPassword(actionName, url) {
-    currentAction = actionName;
-    targetUrl = url;
-
+// Overlay öffnen
+function openPassword(target) {
+    selectedTarget = target;
     document.getElementById("password-overlay").style.display = "flex";
     document.getElementById("pw-input").value = "";
-    document.getElementById("pw-input").focus();
 }
 
-// =====================
-// Passwort prüfen
-// =====================
-function checkPassword() {
-    const input = document.getElementById("pw-input").value;
-    const correctPassword = actionPasswords[currentAction];
-
-    if (input === correctPassword) {
-        window.location.href = targetUrl;
-    } else {
-        alert("Falsches Passwort!");
-    }
-}
-
-// =====================
-// Zurück-Button
-// =====================
+// Overlay schließen
 document.getElementById("pw-back-btn").addEventListener("click", () => {
     document.getElementById("password-overlay").style.display = "none";
 });
 
-// ENTER-Taste im Passwortfeld
-document.addEventListener("DOMContentLoaded", () => {
-    loadPreview("unlimited2025", "unlimited2025-preview");
-    loadPreview("pfingstcamp2023", "pfingstcamp2023-preview");
+// Passwort prüfen
+document.getElementById("pw-btn").addEventListener("click", () => {
+    const input = document.getElementById("pw-input").value;
 
-    document.getElementById("pw-input").addEventListener("keydown", e => {
-        if (e.key === "Enter") checkPassword();
-    });
-    
-    // Buttons verbinden
-    document.getElementById("pw-btn").onclick = checkPassword;
-    document.getElementById("pw-back-btn").onclick = () => {
-        document.getElementById("password-overlay").style.display = "none";
-    };
+    if (passwords[selectedTarget] === input) {
+        window.location.href = selectedTarget;
+    } else {
+        alert("Falsches Passwort!");
+    }
 });
