@@ -1,31 +1,47 @@
-// Passwörter für die Kategorien
+/* index.js — Passwortschutz pro Bereich */
+
+// Passwörter für jeden Bereich
 const passwords = {
-    "team.html": "forscher2025",
-    "aktionen.html": "actions2025",
-    "privat.html": "privat2025"
+    "bereiche/aktionen.html": "aktionenPass",
+    "bereiche/team.html": "teamPass",
+    "bereiche/privat.html": "privatPass"
 };
 
-let selectedTarget = null;
+let targetPage = null;
 
 // Overlay öffnen
-function openPassword(target) {
-    selectedTarget = target;
+function openPassword(page) {
+    targetPage = page;
+
     document.getElementById("password-overlay").style.display = "flex";
     document.getElementById("pw-input").value = "";
+    document.getElementById("pw-input").focus();
 }
 
-// Overlay schließen
-document.getElementById("pw-back-btn").addEventListener("click", () => {
-    document.getElementById("password-overlay").style.display = "none";
+// Öffnen-Button
+document.getElementById("pw-open").addEventListener("click", () => {
+    checkPassword();
+});
+
+// Enter-Taste
+document.getElementById("pw-input").addEventListener("keydown", (e) => {
+    if (e.key === "Enter") checkPassword();
 });
 
 // Passwort prüfen
-document.getElementById("pw-btn").addEventListener("click", () => {
+function checkPassword() {
     const input = document.getElementById("pw-input").value;
+    const correctPassword = passwords[targetPage];
 
-    if (passwords[selectedTarget] === input) {
-        window.location.href = selectedTarget;
+    if (input === correctPassword) {
+        window.location.href = targetPage;
     } else {
         alert("Falsches Passwort!");
     }
+}
+
+// Zurück-Button
+document.getElementById("pw-back").addEventListener("click", () => {
+    document.getElementById("password-overlay").style.display = "none";
+    document.getElementById("pw-input").value = "";
 });
