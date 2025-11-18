@@ -13,7 +13,7 @@ let targetUrl = "";
 // ==========================
 // Passwort-Overlay öffnen
 // ==========================
-function openPassword(url) {
+window.openPassword(url) {
     targetUrl = url;
 
     const overlay = document.getElementById("password-overlay");
