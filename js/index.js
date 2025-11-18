@@ -92,4 +92,10 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("pw-input").addEventListener("keydown", e => {
         if (e.key === "Enter") checkPassword();
     });
+    
+    // Buttons verbinden
+    document.getElementById("pw-btn").onclick = checkPassword;
+    document.getElementById("pw-back-btn").onclick = () => {
+        document.getElementById("password-overlay").style.display = "none";
+    };
 });
