@@ -7,8 +7,8 @@ const areaPasswords = {
 
 let targetUrl = "";
 
-// Globale Funktion für onclick
-window.openPassword = function(url) {
+// Overlay öffnen
+function openPassword(url) {
     targetUrl = url;
     const overlay = document.getElementById("password-overlay");
     overlay.style.display = "flex";
@@ -16,7 +16,7 @@ window.openPassword = function(url) {
     const input = document.getElementById("pw-input");
     input.value = "";
     input.focus();
-};
+}
 
 // Passwort prüfen
 function checkPassword() {
@@ -29,8 +29,17 @@ function checkPassword() {
     }
 }
 
-// Alles andere erst nach DOMContentLoaded
+// Setze alle EventListener nach DOMContentLoaded
 document.addEventListener("DOMContentLoaded", () => {
+    // Menü-Karten EventListener
+    document.querySelectorAll(".menu-card").forEach(card => {
+        card.addEventListener("click", () => {
+            const url = card.dataset.url;
+            openPassword(url);
+        });
+    });
+
+    // Overlay Buttons
     const pwOpen = document.getElementById("pw-open");
     const pwBack = document.getElementById("pw-back");
     const pwInput = document.getElementById("pw-input");
