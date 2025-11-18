@@ -81,12 +81,70 @@
         <!-- weitere Aktionen -->
     </div>
 
-    <!-- PASSWORT OVERLAY -->
-    <div id="password-overlay">
-        <h2>Passwort erforderlich</h2>
-        <input type="password" id="pw-input" placeholder="Passwort eingeben">
-        <button id="pw-btn" onclick="checkPassword()">Öffnen</button>
+<!-- PASSWORT OVERLAY -->
+<div id="password-overlay">
+    <h2>Passwort erforderlich</h2>
+    <input type="password" id="pw-input" placeholder="Passwort eingeben">
+    <div style="display:flex; gap:10px; margin-top:10px;">
+        <button id="pw-btn">Öffnen</button>
+        <button id="pw-back-btn">Zurück</button>
     </div>
+</div>
+
+<style>
+    #password-overlay {
+        position: fixed;
+        top:0; left:0;
+        width:100%; height:100%;
+        background: rgba(0,0,0,0.9);
+        color:white;
+        display:none;
+        flex-direction: column;
+        justify-content:center;
+        align-items:center;
+        z-index:9999;
+        gap:15px;
+        font-family: Arial, sans-serif;
+    }
+
+    #pw-input {
+        padding: 10px 15px;
+        font-size: 18px;
+        border-radius: 12px;
+        border: none;
+        width: 250px;
+        text-align: center;
+    }
+
+    #pw-btn {
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 12px;
+        border: none;
+        background-color: #0055aa;
+        color: white;
+        cursor: pointer;
+    }
+
+    #pw-back-btn {
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 12px;
+        border: none;
+        background-color: #888;
+        color: white;
+        cursor: pointer;
+    }
+
+    #pw-btn:hover {
+        background-color: #003f7f;
+    }
+
+    #pw-back-btn:hover {
+        background-color: #555;
+    }
+</style>
+
 
     <script src="js/index.js" defer></script>
 </body>
