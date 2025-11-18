@@ -4,81 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Unlimited 2025 – R-Rangers</title>
-
     <link rel="stylesheet" href="../css/style.css">
-
     <!-- JSZip für ZIP-Download -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <script src="../js/script.js" defer></script>
-
 </head>
 
-<body>
-
-<div id="password-overlay" style="
-    position: fixed;
-    top:0; left:0; width:100%; height:100%;
-    background: rgba(0,0,0,0.9);
-    color: white;
-    display:flex;
-    flex-direction: column;
-    justify-content:center;
-    align-items:center;
-    z-index: 9999;
-">
-    <h2>Passwort erforderlich</h2>
-    <input type="password" id="pw" placeholder="Passwort eingeben">
-    <button onclick="validatePassword()">Eingeben</button>
-</div>
-
-<script>
-// 🔒 Passwort hier festlegen
-const password = "rangers2025";
-
-function validatePassword() {
-    const input = document.getElementById("pw").value;
-
-    if (input === password) {
-        // Overlay ausblenden
-        document.getElementById("password-overlay").style.display = "none";
-    } else {
-        alert("Falsches Passwort!");
-    }
-}
-
-// ENTER zum Login
-document.getElementById("pw").addEventListener("keydown", function(event) {
-    if (event.key === "Enter") {
-        validatePassword();
-    }
-});
-</script>
-
+<body data-action="unlimited2025">
 
     <div id="nav-placeholder"></div>
-<script>
-    fetch("/nav.html")
-        .then(res => res.text())
-        .then(data => {
-            document.getElementById("nav-placeholder").innerHTML = data;
-        });
-</script>
+    <script>
+        fetch("/nav.html")
+            .then(res => res.text())
+            .then(data => {
+                document.getElementById("nav-placeholder").innerHTML = data;
+            });
+    </script>
 
-<h1>Unlimited 2025</h1>
+    <h1>Unlimited 2025</h1>
 
-<button onclick="downloadSelected()">Ausgewählte Bilder herunterladen</button>
+    <button onclick="downloadSelected()">Ausgewählte Bilder herunterladen</button>
 
-<div id="gallery" class="gallery"></div>
-    
+    <div id="gallery" class="gallery"></div>
+
     <!-- Lightbox -->
-<div id="lightbox" class="lightbox hidden">
-    <span class="lightbox-close">&times;</span>
-    <img id="lightbox-img" src="" alt="">
-    <div class="lightbox-nav">
-        <span class="lightbox-prev">&#10094;</span>
-        <span class="lightbox-next">&#10095;</span>
+    <div id="lightbox" class="lightbox hidden">
+        <span class="lightbox-close">&times;</span>
+        <img id="lightbox-img" src="" alt="">
+        <div class="lightbox-nav">
+            <span class="lightbox-prev">&#10094;</span>
+            <span class="lightbox-next">&#10095;</span>
+        </div>
     </div>
-</div>
 
 </body>
 </html>
