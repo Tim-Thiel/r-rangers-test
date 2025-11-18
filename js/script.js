@@ -71,60 +71,61 @@ async function loadGallery() {
 
     // Erstelle die Karten
     fileEntries.forEach((file, idx) => {
-        const card = document.createElement("div");
-        card.className = "gallery-item";
+    const card = document.createElement("div");
+    card.className = "gallery-item";
 
-        const img = document.createElement("img");
-        // img.src = Thumbnail, download = Original
-        img.src = file.download_url.replace('/original/', '/thumbs/');  // Thumbnail in Galerie
-        img.alt = file.name || `Bild ${idx+1}`;
-        img.dataset.index = idx;
-        img.loading = "lazy"; // lazy loading
+    const thumbUrl = file.download_url.replace('/original/', '/thumbs/');
+    const originalUrl = file.download_url; // Original für Download
+
+    const img = document.createElement("img");
+    img.src = thumbUrl;  // Thumbnail in Galerie
+    img.alt = file.name || `Bild ${idx+1}`;
+    img.dataset.index = idx;
+    img.loading = "lazy";
 
         // Klick öffnet Lightbox an der korrekten Position
         img.addEventListener("click", () => openLightbox(idx));
 
         // Checkboxcontainer
-        const checkboxContainer = document.createElement("div");
-        checkboxContainer.className = "checkbox-container";
+    const checkboxContainer = document.createElement("div");
+    checkboxContainer.className = "checkbox-container";
 
-        const checkbox = document.createElement("input");
-        checkbox.type = "checkbox";
-        checkbox.value = file.download_url;
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.value = originalUrl; // Original für ZIP-Download
 
-        const label = document.createElement("label");
-        label.appendChild(checkbox);
-        label.appendChild(document.createTextNode(" Bild auswählen"));
+    const label = document.createElement("label");
+    label.appendChild(checkbox);
+    label.appendChild(document.createTextNode(" Bild auswählen"));
 
-        checkboxContainer.appendChild(label);
+    checkboxContainer.appendChild(label);
+
 
         // Download button (einzeln)
-        const downloadLink = document.createElement("a");
-        downloadLink.href = file.download_url;   // ORIGINALDATEI
-        downloadLink.download = file.name;           // Download erzwingen
-        downloadLink.textContent = "Download";
-        downloadLink.className = "download-btn";
+    const downloadLink = document.createElement("a");
+    downloadLink.href = originalUrl; // Original
+    downloadLink.download = file.name;
+    downloadLink.textContent = "Download";
+    downloadLink.className = "download-btn";
 
-        downloadLink.addEventListener("click", async (e) => {
-            e.preventDefault();
+    downloadLink.addEventListener("click", async (e) => {
+        e.preventDefault();
+        const response = await fetch(originalUrl);
+        const blob = await response.blob();
 
-            const response = await fetch(file.download_url);
-            const blob = await response.blob();
-
-            const a = document.createElement("a");
-            a.href = URL.createObjectURL(blob);
-            a.download = file.name;  
-            a.click();
-        });
-
-
-        // Baue Karte zusammen
-        card.appendChild(img);
-        card.appendChild(checkboxContainer);
-        card.appendChild(downloadLink);
-
-        gallery.appendChild(card);
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = file.name;
+        a.click();
     });
+
+    // Karte zusammenbauen
+    card.appendChild(img);
+    card.appendChild(checkboxContainer);
+    card.appendChild(downloadLink);
+
+    gallery.appendChild(card);
+});
 
     // Stelle sicher, dass Lightbox-Listener gesetzt sind (falls Lightbox HTML schon da ist)
     setupLightboxControls();
