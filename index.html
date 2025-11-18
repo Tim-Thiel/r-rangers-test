@@ -84,9 +84,24 @@
         color:white;
     }
 
+    #pw-open:hover {
+        background:#003f7f;
+    }
+
     #pw-back {
         background:#666;
         color:white;
+    }
+
+    #pw-back:hover {
+        background:#444;
+    }
+
+    /* Button Container */
+    .pw-buttons {
+        display:flex;
+        gap:10px;
+        margin-top:10px;
     }
 </style>
 </head>
@@ -112,8 +127,10 @@
     <div id="password-overlay">
         <h2>Passwort eingeben</h2>
         <input type="password" id="pw-input" placeholder="Passwort">
-        <button id="pw-open" class="pw-btn">Öffnen</button>
-        <button id="pw-back" class="pw-btn">Zurück</button>
+        <div class="pw-buttons">
+            <button id="pw-open" class="pw-btn">Öffnen</button>
+            <button id="pw-back" class="pw-btn">Zurück</button>
+        </div>
     </div>
 
     <script src="index.js" defer></script>
