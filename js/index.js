@@ -7,56 +7,57 @@ const areaPasswords = {
     "bereiche/privat.html": "privatPass"
 };
 
-// Gemerkte Zielseite
+// Variablen für Overlay
 let targetUrl = "";
+let currentAction = "";
 
-// ==========================
-// Passwort-Overlay öffnen
-// ==========================
-window.openPassword(url) {
+// =====================
+// Passwort anfragen
+// =====================
+function requestPassword(actionName, url) {
+    currentAction = actionName;
     targetUrl = url;
 
-    const overlay = document.getElementById("password-overlay");
-    overlay.style.display = "flex";
-
-    const input = document.getElementById("pw-input");
-    input.value = "";
-    input.focus();
+    document.getElementById("password-overlay").style.display = "flex";
+    document.getElementById("pw-input").value = "";
+    document.getElementById("pw-input").focus();
 }
 
-// ==========================
+// =====================
 // Passwort prüfen
-// ==========================
+// =====================
 function checkPassword() {
     const input = document.getElementById("pw-input").value;
-    const correct = areaPasswords[targetUrl];
+    const correctPassword = actionPasswords[currentAction];
 
-    if (input === correct) {
+    if (input === correctPassword) {
         window.location.href = targetUrl;
     } else {
         alert("Falsches Passwort!");
     }
 }
 
-// ==========================
-// Init Events
-// ==========================
+
+
+// =====================
+// Zurück-Button
+// =====================
+document.getElementById("pw-back-btn").addEventListener("click", () => {
+    document.getElementById("password-overlay").style.display = "none";
+});
+
+// ENTER-Taste im Passwortfeld
 document.addEventListener("DOMContentLoaded", () => {
+    loadPreview("unlimited2025", "unlimited2025-preview");
+    loadPreview("pfingstcamp2023", "pfingstcamp2023-preview");
 
-    const openBtn = document.getElementById("pw-open");
-    const backBtn = document.getElementById("pw-back");
-    const pwInput = document.getElementById("pw-input");
-
-    openBtn.onclick = checkPassword;
-
-    backBtn.onclick = () => {
-        document.getElementById("password-overlay").style.display = "none";
-    };
-
-    // ENTER-Taste im Passwortfeld
-    pwInput.addEventListener("keydown", e => {
+    document.getElementById("pw-input").addEventListener("keydown", e => {
         if (e.key === "Enter") checkPassword();
     });
-
-    console.log("index.js erfolgreich geladen");
+    
+    // Buttons verbinden
+    document.getElementById("pw-btn").onclick = checkPassword;
+    document.getElementById("pw-back-btn").onclick = () => {
+        document.getElementById("password-overlay").style.display = "none";
+    };
 });
