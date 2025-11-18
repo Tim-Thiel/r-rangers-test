@@ -10,7 +10,6 @@ const areaPasswords = {
 // Gemerkte Zielseite
 let targetUrl = "";
 
-
 // ==========================
 // Passwort-Overlay öffnen
 // ==========================
@@ -24,7 +23,6 @@ function openPassword(url) {
     input.value = "";
     input.focus();
 }
-
 
 // ==========================
 // Passwort prüfen
@@ -40,24 +38,25 @@ function checkPassword() {
     }
 }
 
-
 // ==========================
 // Init Events
 // ==========================
 document.addEventListener("DOMContentLoaded", () => {
 
-    // Öffnen-Button
-    document.getElementById("pw-open").onclick = checkPassword;
+    const openBtn = document.getElementById("pw-open");
+    const backBtn = document.getElementById("pw-back");
+    const pwInput = document.getElementById("pw-input");
 
-    // Zurück-Button
-    document.getElementById("pw-back").onclick = () => {
+    openBtn.onclick = checkPassword;
+
+    backBtn.onclick = () => {
         document.getElementById("password-overlay").style.display = "none";
     };
 
-    // ENTER im Passwortfeld
-    document.getElementById("pw-input").addEventListener("keydown", e => {
+    // ENTER-Taste im Passwortfeld
+    pwInput.addEventListener("keydown", e => {
         if (e.key === "Enter") checkPassword();
     });
 
-    console.log("index.js wurde erfolgreich geladen");
+    console.log("index.js erfolgreich geladen");
 });
