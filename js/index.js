@@ -77,6 +77,13 @@ function checkPassword() {
     }
 }
 
+// =====================
+// Zurück-Button
+// =====================
+document.getElementById("pw-back-btn").addEventListener("click", () => {
+    document.getElementById("password-overlay").style.display = "none";
+});
+
 // ENTER-Taste im Passwortfeld
 document.addEventListener("DOMContentLoaded", () => {
     loadPreview("unlimited2025", "unlimited2025-preview");
