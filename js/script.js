@@ -74,19 +74,24 @@ async function loadGallery() {
     const card = document.createElement("div");
     card.className = "gallery-item";
 
-    const thumbUrl = file.download_url.replace('/original/', '/thumbs/');
-    const originalUrl = file.download_url; // Original für Download
+    // file.download_url kommt aus /thumbs/ (weil folder auf thumbs zeigt)
+    const thumbUrl = file.download_url; // Thumb-URL (aus API)
+    const originalUrl = file.download_url.replace('/thumbs/', '/original/'); // Original ableiten
 
+    // Bild (Thumb) in der Galerie
     const img = document.createElement("img");
-    img.src = thumbUrl;  // Thumbnail in Galerie
+    img.src = thumbUrl;  // Thumbnail anzeigen
     img.alt = file.name || `Bild ${idx+1}`;
     img.dataset.index = idx;
     img.loading = "lazy";
 
-        // Klick öffnet Lightbox an der korrekten Position
-        img.addEventListener("click", () => openLightbox(idx));
+    // Für die Lightbox: wir wollen oft das Original zeigen -> images enthält Original-URLs
+    images.push(originalUrl);
 
-        // Checkboxcontainer
+    // Klick öffnet Lightbox an der korrekten Position
+    img.addEventListener("click", () => openLightbox(idx));
+
+    // Checkboxcontainer (werte auf Original setzen)
     const checkboxContainer = document.createElement("div");
     checkboxContainer.className = "checkbox-container";
 
@@ -100,32 +105,36 @@ async function loadGallery() {
 
     checkboxContainer.appendChild(label);
 
-
-        // Download button (einzeln)
+    // Download button (einzeln) -> Original herunterladen
     const downloadLink = document.createElement("a");
-    downloadLink.href = originalUrl; // Original
-    downloadLink.download = file.name;
+    downloadLink.href = originalUrl;   // Original-URL
+    downloadLink.download = file.name; // Name für Dateidownload
     downloadLink.textContent = "Download";
     downloadLink.className = "download-btn";
 
     downloadLink.addEventListener("click", async (e) => {
         e.preventDefault();
-        const response = await fetch(originalUrl);
-        const blob = await response.blob();
-
-        const a = document.createElement("a");
-        a.href = URL.createObjectURL(blob);
-        a.download = file.name;
-        a.click();
+        try {
+            const response = await fetch(originalUrl);
+            const blob = await response.blob();
+            const a = document.createElement("a");
+            a.href = URL.createObjectURL(blob);
+            a.download = file.name;
+            a.click();
+        } catch (err) {
+            console.error("Fehler beim Herunterladen der Originaldatei:", err);
+            alert("Download fehlgeschlagen.");
+        }
     });
 
-    // Karte zusammenbauen
+    // Baue Karte zusammen
     card.appendChild(img);
     card.appendChild(checkboxContainer);
     card.appendChild(downloadLink);
 
     gallery.appendChild(card);
 });
+
 
     // Stelle sicher, dass Lightbox-Listener gesetzt sind (falls Lightbox HTML schon da ist)
     setupLightboxControls();
