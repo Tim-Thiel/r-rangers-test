@@ -1,17 +1,5 @@
 /* script.js — komplette, automatische Galerie + Lightbox + ZIP-Download */
 
-// === CONFIG (kein Ändern nötig, Username/Repo werden automatisch erkannt) ===
-const username = "tim-thiel";      // dein GitHub-Benutzername
-const repo = "r-rangers";          // dein Repo-Name
-
-// 1. Dateiname: unlimited2025.html → unlimited2025
-const pageName = window.location.pathname.split("/").pop().replace(".html", "");
-
-// 2. Ordnerpfad herausfinden
-// Beispiele:
-// /bereiche/aktionen/unlimited2025.html → ['','bereiche','aktionen','unlimited2025.html']
-// /bereiche/team/teamtreff.html        → ['','bereiche','team','teamtreff.html']/* script.js — automatische Galerie + Lightbox + ZIP-Download */
-
 // === CONFIG ===
 const username = "tim-thiel";
 const repo = "r-rangers";
