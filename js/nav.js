@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // CSS laden
     const link = document.createElement("link");
     link.rel = "stylesheet";
-    link.href = "/css/navigation.css";
+    link.href = "/css/nav.css";
     document.head.appendChild(link);
 });
 
