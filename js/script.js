@@ -118,6 +118,8 @@ async function loadGallery() {
 
 // ================= ZIP-Download =================
 async function downloadSelected() {
+    alert("⚠️ Hinweis:\nDie heruntergeladenen Bilder sind nur für private Nutzung bestimmt.\nBitte nicht öffentlich teilen.");
+
     const checkboxes = document.querySelectorAll("input[type=checkbox]:checked");
     if (checkboxes.length === 0) { alert("Bitte wähle mindestens ein Bild aus."); return; }
 
