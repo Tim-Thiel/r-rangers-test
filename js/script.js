@@ -92,6 +92,8 @@ async function loadGallery() {
 
         downloadLink.addEventListener("click", async (e) => {
             e.preventDefault();
+            alert("⚠️ Hinweis:\nDiese Bilder dürfen ausschließlich privat genutzt und nicht öffentlich geteilt werden.");
+
             try {
                 const resp = await fetch(originalUrl);
                 const blob = await resp.blob();
