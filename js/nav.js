@@ -4,9 +4,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const navHTML = `
         <nav class="site-navigation">
             <a href="/index.html">🏠 Startseite</a>
-            <a href="/team/team.html">👥 Team</a>
-            <a href="/aktionen/aktionen.html">⭐ Aktionen</a>
-            <a href="/privat/privat.html">🔒 Privat</a>
+            <a href="/bereiche/team/team.html">👥 Team</a>
+            <a href="/bereiche/aktionen/aktionen.html">⭐ Aktionen</a>
+            <a href="/bereiche/privat/privat.html">🔒 Privat</a>
         </nav>
     `;
 
