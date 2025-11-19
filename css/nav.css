@@ -1,1 +1,22 @@
+nav.site-navigation {
+    width: 100%;
+    background: #222;
+    color: white;
+    padding: 12px 20px;
+    box-sizing: border-box;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    font-size: 18px;
+}
+
+nav.site-navigation a {
+    color: white;
+    text-decoration: none;
+    transition: 0.2s;
+}
+
+nav.site-navigation a:hover {
+    color: #ffbf00;
+}
 
