@@ -4,9 +4,29 @@
 const username = "tim-thiel";      // dein GitHub-Benutzername
 const repo = "r-rangers";          // dein Repo-Name
 
-// Aktionsname automatisch aus Dateiname: "sommerlager2024.html" -> "sommerlager2024"
-const actionName = window.location.pathname.split("/").pop().replace(".html", "") || "index";
-const folder = `bilder/${actionName}/thumbs`;
+// 1. Dateiname: unlimited2025.html → unlimited2025
+const pageName = window.location.pathname.split("/").pop().replace(".html", "");
+
+// 2. Ordnerpfad herausfinden
+// Beispiele:
+// /bereiche/aktionen/unlimited2025.html → ['','bereiche','aktionen','unlimited2025.html']
+// /bereiche/team/teamtreff.html        → ['','bereiche','team','teamtreff.html']
+
+const pathParts = window.location.pathname.split("/");
+
+// Bereich ermitteln
+let category = "";  // aktionen / team / privat
+
+if (pathParts.includes("aktionen"))  category = "aktionen";
+if (pathParts.includes("team"))      category = "team";
+if (pathParts.includes("privat"))    category = "privat";
+
+// 3. Finaler Pfad zu den Thumbs
+// Beispiel: bilder/aktionen/unlimited2025/thumbs
+const folder = `bilder/${category}/${pageName}/thumbs`;
+
+console.log("📁 Lade Ordner:", folder);
+
 
 
 // Globale Variablen
