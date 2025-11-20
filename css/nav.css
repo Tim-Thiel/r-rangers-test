@@ -2,17 +2,28 @@
 nav.site-navigation {
     width: 100%;
     max-width: 100% !important;
-    margin-left: calc(50% - 50vw);  /* zwingt über den gesamten Bildschirm */
+    /* Zwingt die Navigationsleiste über den gesamten Bildschirmrand */
+    margin-left: calc(50% - 50vw); 
     margin-right: calc(50% - 50vw);
-    background: linear-gradient(135deg, #1b1b1b, #2b2b2b);
-    padding: 14px 22px;
+    
+    /* NEU: Hintergrund auf hell setzen (Weiß) */
+    background-color: white; 
+    
+    /* NEU: Kompakteres Padding */
+    padding: 12px 22px; 
     box-sizing: border-box;
     display: flex;
     gap: 25px;
     align-items: center;
     font-size: 18px;
-    border-bottom: 3px solid #c89b3c; /* Ranger-Gold */
-    box-shadow: 0 3px 8px rgba(0,0,0,0.35);
+    
+    /* NEU: Untere Linie in Ranger-Blau */
+    border-bottom: 3px solid var(--ranger-blue); 
+    
+    /* Subtiler Schatten */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
+    
+    /* Sticky Position bleibt erhalten */
     position: sticky;
     top: 0;
     z-index: 99;
@@ -20,26 +31,33 @@ nav.site-navigation {
 
 /* Links */
 nav.site-navigation a {
-    color: #f8f5e1; /* leichtes Pergament-Weiß */
+    /* NEU: Textfarbe auf Ranger-Blau */
+    color: var(--ranger-blue); 
     text-decoration: none;
     padding: 8px 14px;
     border-radius: 8px;
     transition: 0.25s;
-    font-weight: 500;
+    /* NEU: Etwas fetter für bessere Lesbarkeit */
+    font-weight: 600; 
 }
 
-/* Hover Ranger-Style */
+/* Hover Blau-Weiß-Style */
 nav.site-navigation a:hover {
-    background: #c89b3c; /* Gold */
-    color: #1b1b1b;
-    box-shadow: 0 0 10px rgba(200,155,60,0.6);
-    transform: translateY(-1px);
+    /* NEU: Hintergrundfarbe wird Ranger-Blau */
+    background: var(--ranger-blue); 
+    
+    /* NEU: Textfarbe wird Weiß */
+    color: white; 
+    
+    /* Blauer Schatten und keine Verschiebung */
+    box-shadow: 0 0 5px rgba(0, 85, 170, 0.3); 
+    transform: none; 
 }
 
-/* Aktiver Link (optional, wenn du später aktiv markieren willst) */
+/* Aktiver Link */
 nav.site-navigation a.active {
-    background: #c89b3c;
-    color: #1b1b1b;
+    background: var(--ranger-blue);
+    color: white;
 }
 
 /* Mobile Ansicht */
