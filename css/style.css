@@ -205,7 +205,42 @@ footer {
     margin: auto;
     padding: 20px;
 }
+#scrollToTopBtn {
+    /* Positionierung */
+    position: fixed; /* Bleibt beim Scrollen an Ort und Stelle */
+    bottom: 30px;    /* 30 Pixel vom unteren Rand */
+    right: 30px;     /* 30 Pixel vom rechten Rand */
+    z-index: 9000;   /* Stellt sicher, dass der Button über allem liegt */
+    
+    /* Aussehen */
+    background-color: var(--ranger-blue);
+    color: white;
+    border: none;
+    border-radius: 50%; /* Rund machen */
+    width: 50px;       /* Breite */
+    height: 50px;      /* Höhe */
+    font-size: 24px;   /* Großer Pfeil */
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    opacity: 0.8;
+    transition: background-color 0.3s, opacity 0.3s;
+}
 
+#scrollToTopBtn:hover {
+    background-color: var(--ranger-blue-dark);
+    opacity: 1;
+}
+
+/* Optional: Versteckt ihn auf kleinen Bildschirmen */
+@media (max-width: 600px) {
+    #scrollToTopBtn {
+        bottom: 15px;
+        right: 15px;
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+    }
+}
 /* ================================================
    STYLES VON index.html
    (Startseite-Menü)
