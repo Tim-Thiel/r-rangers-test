@@ -335,22 +335,34 @@ footer {
    STYLES VON aktionen.html / team.html / privat.html
    (Listen-Ansicht)
    ================================================ */
+.card { /* Die einzelnen Listenelemente - NEUER STYLE */
+    background: #f3f7ff; /* Behält den hellblauen Hintergrund bei */
+    padding: 15px;
+    border-radius: 12px;
+    cursor: pointer;
+    
+    /* Ändert den Übergang, um den Schwebeschatten zu inkludieren */
+    transition: transform 0.3s, box-shadow 0.3s; 
+    
+    /* NEU: Entfernt den dicken blauen Rand, da wir jetzt den Schatten nutzen */
+    border: none; 
+}
+
+.card:hover {
+    transform: translateY(-5px); /* NEU: Lässt die Karte hochspringen */
+    
+    /* NEU: Stärkerer, blauer Schatten für den "schwebenden" Effekt */
+    box-shadow: 0 15px 25px rgba(0, 85, 170, 0.25); 
+    
+    background: #e6f0ff; /* Ein bisschen dunkler beim Hover */
+}
+
+/* Der Rest (.grid, .card img, .card h3) bleibt gut, muss nicht geändert werden: */
+
 .grid { /* Definiert das Layout für die Vorschaulisten */
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 20px;
-}
-.card { /* Die einzelnen Listenelemente */
-    background: #f3f7ff;
-    padding: 15px;
-    border-radius: 12px;
-    cursor: pointer;
-    transition: 0.2s;
-    border: 2px solid var(--ranger-blue);
-}
-.card:hover {
-    transform: scale(1.03);
-    background: #d8e8ff;
 }
 .card img {
     width: 100%;
