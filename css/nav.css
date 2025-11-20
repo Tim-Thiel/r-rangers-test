@@ -6,24 +6,23 @@ nav.site-navigation {
     margin-left: calc(50% - 50vw); 
     margin-right: calc(50% - 50vw);
     
-    /* NEU: Hintergrund auf hell setzen (Weiß) */
-    background-color: white; 
+    /* NEU: Hintergrundfarbe auf Ranger-Blau setzen */
+    background-color: var(--ranger-blue); 
     
-    /* NEU: Kompakteres Padding */
-    padding: 12px 22px; 
+    /* NEU: Mehr vertikaler Abstand */
+    padding: 18px 22px; 
     box-sizing: border-box;
     display: flex;
     gap: 25px;
     align-items: center;
     font-size: 18px;
     
-    /* NEU: Untere Linie in Ranger-Blau */
-    border-bottom: 3px solid var(--ranger-blue); 
+    /* NEU: border-bottom entfernt */
+    border-bottom: none; 
     
-    /* Subtiler Schatten */
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
+    /* NEU: Stärkerer Schatten, damit die Leiste 'schwebt' und Tiefe bekommt */
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4); 
     
-    /* Sticky Position bleibt erhalten */
     position: sticky;
     top: 0;
     z-index: 99;
@@ -31,36 +30,35 @@ nav.site-navigation {
 
 /* Links */
 nav.site-navigation a {
-    /* NEU: Textfarbe auf Ranger-Blau */
-    color: var(--ranger-blue); 
+    /* NEU: Textfarbe auf Weiß setzen für maximalen Kontrast */
+    color: white; 
     text-decoration: none;
     padding: 8px 14px;
     border-radius: 8px;
     transition: 0.25s;
-    /* NEU: Etwas fetter für bessere Lesbarkeit */
     font-weight: 600; 
 }
 
 /* Hover Blau-Weiß-Style */
 nav.site-navigation a:hover {
-    /* NEU: Hintergrundfarbe wird Ranger-Blau */
-    background: var(--ranger-blue); 
+    /* NEU: Hintergrund wird ein helles, transparentes Blau */
+    background: rgba(255, 255, 255, 0.15); 
     
-    /* NEU: Textfarbe wird Weiß */
+    /* Textfarbe bleibt Weiß */
     color: white; 
     
-    /* Blauer Schatten und keine Verschiebung */
-    box-shadow: 0 0 5px rgba(0, 85, 170, 0.3); 
+    box-shadow: none; 
     transform: none; 
 }
 
 /* Aktiver Link */
 nav.site-navigation a.active {
-    background: var(--ranger-blue);
+    /* Hellerer, transparenter Hintergrund für den aktiven Link */
+    background: rgba(255, 255, 255, 0.25);
     color: white;
 }
 
-/* Mobile Ansicht */
+/* Mobile Ansicht (unverändert) */
 @media (max-width: 700px) {
     nav.site-navigation {
         flex-wrap: wrap;
