@@ -206,13 +206,12 @@ footer {
     padding: 20px;
 }
 #scrollToTopBtn {
-    /* Positionierung */
+    /* Positionierung und allgemeines Aussehen bleiben gleich */
     position: fixed;
     bottom: 30px;
     right: 30px;
     z-index: 9000;
     
-    /* Aussehen */
     background-color: var(--ranger-blue);
     color: white;
     border: none;
@@ -225,15 +224,14 @@ footer {
     opacity: 0.8;
     transition: background-color 0.3s, opacity 0.3s;
     
-    /* ZENTRIERUNG */
+    /* ZENTRIERUNG MIT FLEXBOX */
     display: flex;
     justify-content: center; /* Zentriert horizontal */
     align-items: center;    /* Zentriert vertikal */
     
-    /* HACK FÜR PERFEKTE MITTE: Korrigiert die Textdarstellung */
-    line-height: 1; /* <-- Stellt sicher, dass die Zeilenhöhe nicht stört */
-    padding-bottom: 2px; /* <-- Schiebt den Pfeil minimal nach oben, um ihn zu zentrieren */
-}
+    /* NEU: Entfernt die Text-Korrekturen */
+    line-height: initial;
+    padding: 0;
 
 #scrollToTopBtn:hover {
     background-color: var(--ranger-blue-dark);
