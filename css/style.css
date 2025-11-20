@@ -230,8 +230,9 @@ footer {
     justify-content: center; /* Zentriert horizontal */
     align-items: center;    /* Zentriert vertikal */
     
-    /* NEU: Korrigiert die vertikale Position des Textpfeils */
-    padding-top: 3px; 
+    /* HACK FÜR PERFEKTE MITTE: Korrigiert die Textdarstellung */
+    line-height: 1; /* <-- Stellt sicher, dass die Zeilenhöhe nicht stört */
+    padding-bottom: 2px; /* <-- Schiebt den Pfeil minimal nach oben, um ihn zu zentrieren */
 }
 
 #scrollToTopBtn:hover {
