@@ -1,4 +1,4 @@
-/* auth.js – zentrale Passwortlogik mit Popup */
+/* auth.js – zentrale Passwortlogik mit Popup und Enter-Taste */
 
 // 🔐 Passwörter an einer Stelle ändern
 const PASSWORDS = {
@@ -28,8 +28,7 @@ function askPassword(area, onSuccess) {
     input.value = "";
     input.focus();
 
-    // Open-Button
-    btnOpen.onclick = () => {
+    const submit = () => {
         if (input.value === PASSWORDS[area]) {
             localStorage.setItem("auth_" + area, "true");
             popup.style.display = "none";
@@ -37,6 +36,14 @@ function askPassword(area, onSuccess) {
         } else {
             alert("❌ Falsches Passwort.");
         }
+    };
+
+    // Open-Button
+    btnOpen.onclick = submit;
+
+    // Enter-Taste
+    input.onkeydown = (e) => {
+        if (e.key === "Enter") submit();
     };
 
     // Cancel-Button
