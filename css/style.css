@@ -226,4 +226,10 @@ footer {
     color: #0055aa;
     font-size: 1rem;        /* kleinere Schrift */
 }
+.page-wrapper {
+    max-width: 1000px;
+    margin: auto;
+    padding: 20px;
+}
+
 
