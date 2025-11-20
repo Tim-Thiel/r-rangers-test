@@ -253,28 +253,58 @@ footer {
    STYLES VON index.html
    (Startseite-Menü)
    ================================================ */
-.menu {
+.landing-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 20px;
-    margin-top: 30px;
+    /* Definiert ein Grid mit 3 Spalten auf großen Bildschirmen */
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px; /* Abstand zwischen den Karten */
+    margin: 40px 0;
+    
+    /* Zentriert den Grid-Container bei Bedarf */
+    justify-content: center;
 }
-.menu-card {
-    background: #f3f7ff;
-    padding: 20px;
-    border-radius: 18px;
-    border: 2px solid var(--ranger-blue);
+
+.landing-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Zentriert den Inhalt horizontal */
     text-align: center;
-    cursor: pointer;
-    transition: 0.2s;
+    
+    /* Design */
+    padding: 25px;
+    background-color: #f9f9f9; 
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    text-decoration: none; 
+    color: var(--text-dark); 
+    transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
 }
-.menu-card:hover {
-    transform: scale(1.03);
-    background: #d8e8ff;
+
+/* Hover-Effekt: Hebt die Karte an und akzentuiert sie in Ranger-Blau */
+.landing-card:hover {
+    transform: translateY(-5px); 
+    
+    /* Blauer Schatten in Ranger-Farbe */
+    box-shadow: 0 15px 25px rgba(0, 85, 170, 0.25); 
+    border-color: var(--ranger-blue); /* Blauer Rand */
 }
-.menu-card h2 {
-    margin-top: 10px;
-    color: var(--ranger-blue-dark);
+
+.landing-card .emoji {
+    font-size: 3.5rem; /* Große Symbole */
+    margin-bottom: 10px;
+    line-height: 1; /* Für bessere vertikale Zentrierung des Emojis */
+}
+
+.landing-card h3 {
+    color: var(--ranger-blue); 
+    margin: 10px 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.landing-card p {
+    color: var(--text-muted);
+    font-size: 0.9rem;
 }
 .info-box {
     margin-top: 25px;
