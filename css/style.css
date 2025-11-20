@@ -247,6 +247,12 @@ footer {
     margin-right: auto;
 }
 
+.intro-text {
+    color: var(--text-dark) !important; /* Setzt die Farbe auf Schwarz */
+    font-weight: 400; /* Optional: Macht den Text weniger fett, wenn gewünscht */
+    margin-bottom: 30px; /* Optional: Fügt etwas Abstand nach dem Namen ein */
+}
+
 /* ================================================
    STYLES VON aktionen.html / team.html / privat.html
    (Listen-Ansicht)
