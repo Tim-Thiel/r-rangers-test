@@ -77,14 +77,23 @@ button:disabled,
 .gallery-item {
     background: var(--card-bg);
     border-radius: var(--radius);
-    box-shadow: var(--shadow);
+    
+    /* Behält den normalen Schatten bei */
+    box-shadow: var(--shadow); 
+    
     padding: 10px;
-    transition: 0.25s;
+    transition: transform 0.3s, box-shadow 0.3s; /* Übergang vereinheitlicht */
+    cursor: pointer; /* Fügt den Klick-Cursor hinzu, falls nicht schon vorhanden */
 }
+
 .gallery-item:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-hover);
+    /* NEU: Lässt die Karte hochspringen */
+    transform: translateY(-5px); 
+    
+    /* NEU: Stärkerer, blauer Schatten für den "schwebenden" Effekt */
+    box-shadow: 0 15px 25px rgba(0, 85, 170, 0.25); 
 }
+
 .gallery-item img {
     width: 100%;
     border-radius: var(--radius);
