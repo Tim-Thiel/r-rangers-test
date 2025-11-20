@@ -1,6 +1,9 @@
 /* Hauptnavigation */
 nav.site-navigation {
     width: 100%;
+    max-width: 100% !important;
+    margin-left: calc(50% - 50vw);  /* zwingt über den gesamten Bildschirm */
+    margin-right: calc(50% - 50vw);
     background: linear-gradient(135deg, #1b1b1b, #2b2b2b);
     padding: 14px 22px;
     box-sizing: border-box;
