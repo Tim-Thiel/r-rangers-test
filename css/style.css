@@ -232,6 +232,7 @@ footer {
     /* NEU: Entfernt die Text-Korrekturen */
     line-height: initial;
     padding: 0;
+}
 
 #scrollToTopBtn:hover {
     background-color: var(--ranger-blue-dark);
