@@ -195,3 +195,42 @@ function setupLightboxControls() {
 document.addEventListener("DOMContentLoaded", () => {
     loadGallery();
 });
+
+// Funktion, die den Button einblendet / ausblendet
+function toggleScrollButton() {
+    const button = document.getElementById("scrollToTopBtn");
+    if (!button) return;
+
+    // Zeigt den Button, wenn 200 Pixel gescrollt wurde
+    if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+        button.style.display = "block";
+    } else {
+        button.style.display = "none";
+    }
+}
+
+// Funktion, die ganz nach oben scrollt
+function scrollToTop() {
+    // Sanfter Scroll-Effekt
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+}
+
+// Event Listener zur Initialisierung nach dem Laden
+document.addEventListener("DOMContentLoaded", () => {
+    // ... (deine bestehende loadGallery Logik ist hier) ...
+
+    const button = document.getElementById("scrollToTopBtn");
+    if (button) {
+        // Bei Klick nach oben scrollen
+        button.addEventListener("click", scrollToTop);
+
+        // Beim Scrollen prüfen, ob der Button angezeigt werden soll
+        window.addEventListener("scroll", toggleScrollButton);
+
+        // Beim Laden einmal prüfen
+        toggleScrollButton();
+    }
+});
