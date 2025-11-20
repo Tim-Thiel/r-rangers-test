@@ -1,14 +1,14 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-    // Navigation HTML
-    const navHTML = `
-        <nav class="site-navigation">
-            <a href="/index.html">🏠 Startseite</a>
-            <a href="#" data-area="aktionen" data-url="/bereiche/aktionen.html">⭐ Aktionen & Camps</a>
-            <a href="#" data-area="team" data-url="/bereiche/team.html">👥 Rennmäuse</a>
-            <a href="#" data-area="privat" data-url="/bereiche/privat.html">🔒 Private Bilder</a>
-        </nav>
-    `;
+    // Navigation HTML (KORRIGIERT)
+const navHTML = `
+    <nav class="site-navigation">
+        <a href="/index.html">⚜️ Startseite</a>
+        <a href="#" data-area="aktionen" data-url="/bereiche/aktionen.html">🔥 Aktionen & Camps</a>
+        <a href="#" data-area="team" data-url="/bereiche/team.html">🐾 Rennmäuse</a>
+        <a href="#" data-area="privat" data-url="/bereiche/privat.html">🔐 Private Bilder</a>
+    </nav>
+`;
 
     // Navigation ganz oben einfügen
     document.body.insertAdjacentHTML("afterbegin", navHTML);
