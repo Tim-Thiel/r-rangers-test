@@ -64,8 +64,8 @@ button:disabled,
    Galerie Layout
 --------------------------------------------- */
 .gallery {
-    max-width: 1800px;
-    margin: 20px auto;
+    max-width: none;
+    margin: 20px;
     display: grid;
     gap: 20px;
     padding: 10px;
