@@ -31,5 +31,15 @@
 </div>
 <button id="scrollToTopBtn" aria-label="Nach oben scrollen" title="Nach oben scrollen" style="display:none;">
     <i class="fas fa-arrow-up"></i>  </button>
+    <div id="downloadModal" class="modal-overlay hidden">
+    <div class="modal-content">
+        <span class="modal-close" onclick="closeDownloadModal()">&times;</span> 
+        <h3>Wichtiger Hinweis zum Download!</h3>
+        <p>⚠️ **Bitte beachten:** Die ausgewählten Bilder sind **ausschließlich für die private Nutzung** bestimmt.</p>
+        <p>Bitte teile oder veröffentliche die Bilder **NICHT** öffentlich, um die Privatsphäre aller Teilnehmer zu schützen. Mit dem Klick auf "Download starten" stimmst du dieser Regelung zu.</p>
+        
+        <button id="startDownloadBtn" class="download-btn">Download starten</button>
+    </div>
+</div>
 </body>
 </html>
