@@ -1,4 +1,4 @@
-/* auth.js – zentrale Passwortlogik */
+/* auth.js – zentrale Passwortlogik mit Popup */
 
 // 🔐 Passwörter an einer Stelle ändern
 const PASSWORDS = {
@@ -7,31 +7,51 @@ const PASSWORDS = {
     privat: "privat"
 };
 
-// Funktion: prüft Zugang
+// Prüft, ob Bereich bereits freigeschaltet
 function checkAccess(area) {
     return localStorage.getItem("auth_" + area) === "true";
 }
 
-// Funktion: Passwortdialog + speichern
-async function requestAccess(area) {
-    const pw = PASSWORDS[area];
-    if (!pw) return true; // Bereich ohne Passwort
+// Passwort-Popup anzeigen
+function askPassword(area, onSuccess) {
+    const popup = document.getElementById("pw-popup");
+    const input = document.getElementById("pw-popup-input");
+    const btnOpen = document.getElementById("pw-popup-confirm");
+    const btnCancel = document.getElementById("pw-popup-cancel");
 
-    if (checkAccess(area)) return true;
-
-    const entered = prompt(`Bitte Passwort für „${area}“ eingeben:`);
-
-    if (entered === pw) {
-        localStorage.setItem("auth_" + area, "true");
-        return true;
+    if (!popup) {
+        console.error("Kein Passwort-Popup im DOM gefunden!");
+        return;
     }
 
-    alert("❌ Falsches Passwort.");
-    return false;
+    popup.style.display = "flex";
+    input.value = "";
+    input.focus();
+
+    // Open-Button
+    btnOpen.onclick = () => {
+        if (input.value === PASSWORDS[area]) {
+            localStorage.setItem("auth_" + area, "true");
+            popup.style.display = "none";
+            onSuccess();
+        } else {
+            alert("❌ Falsches Passwort.");
+        }
+    };
+
+    // Cancel-Button
+    btnCancel.onclick = () => {
+        popup.style.display = "none";
+    };
 }
 
-// Funktion: Sicherer Seitenaufruf
-async function openArea(area) {
-    const ok = await requestAccess(area);
-    if (ok) window.location.href = `/bereiche/${area}.html`;
+// Öffnet einen Bereich sicher
+function openArea(area, url) {
+    if (checkAccess(area)) {
+        window.location.href = url;
+    } else {
+        askPassword(area, () => {
+            window.location.href = url;
+        });
+    }
 }
