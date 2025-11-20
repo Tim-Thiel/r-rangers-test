@@ -253,6 +253,17 @@ footer {
    STYLES VON index.html
    (Startseite-Menü)
    ================================================ */
+/* Styling für das Vorschaubild in der Karte */
+.landing-card img {
+    width: calc(100% + 50px); /* Bild füllt die Breite der Karte + Padding */
+    margin: -25px -25px 15px -25px; /* NEU: Setzt das Bild über das Padding hinaus */
+    height: 200px; /* Feste Höhe, damit alle Karten gleich hoch sind */
+    object-fit: cover; /* Schneidet das Bild zu, damit es die Fläche füllt */
+    border-top-left-radius: 12px; /* Runde Ecken oben links (passt zur Karte) */
+    border-top-right-radius: 12px; /* Runde Ecken oben rechts */
+    border-bottom-left-radius: 0; /* Unten keine runden Ecken */
+    border-bottom-right-radius: 0;
+}
 .landing-grid {
     display: grid;
     /* Definiert ein Grid mit 3 Spalten auf großen Bildschirmen */
@@ -267,19 +278,19 @@ footer {
 .landing-card {
     display: flex;
     flex-direction: column;
-    align-items: center; /* Zentriert den Inhalt horizontal */
-    text-align: center;
+    /* ENTFERNT: align-items: center; */ 
+    text-align: center; /* BEHALTEN: Zentriert nur den Text */
     
     /* Design */
-    padding: 25px;
+    padding: 25px; 
     background-color: #f9f9f9; 
     border: 1px solid #ddd;
     border-radius: 12px;
     text-decoration: none; 
     color: var(--text-dark); 
     transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+    /* WICHTIG: Überschrift und Text werden weiterhin zentriert, da wir text-align: center; nutzen. */
 }
-
 /* Hover-Effekt: Hebt die Karte an und akzentuiert sie in Ranger-Blau */
 .landing-card:hover {
     transform: translateY(-5px); 
@@ -287,12 +298,6 @@ footer {
     /* Blauer Schatten in Ranger-Farbe */
     box-shadow: 0 15px 25px rgba(0, 85, 170, 0.25); 
     border-color: var(--ranger-blue); /* Blauer Rand */
-}
-
-.landing-card .emoji {
-    font-size: 3.5rem; /* Große Symbole */
-    margin-bottom: 10px;
-    line-height: 1; /* Für bessere vertikale Zentrierung des Emojis */
 }
 
 .landing-card h3 {
