@@ -6,10 +6,10 @@ nav.site-navigation {
     margin-left: calc(50% - 50vw); 
     margin-right: calc(50% - 50vw);
     
-    /* NEU: Hintergrundfarbe auf Ranger-Blau setzen */
-    background-color: var(--ranger-blue); 
+    /* NEU: Hintergrundfarbe auf RGBA setzen, damit sie leicht durchscheinend ist */
+    background-color: rgba(0, 85, 170, 0.9); 
     
-    /* NEU: Mehr vertikaler Abstand */
+    /* Mehr vertikaler Abstand */
     padding: 18px 22px; 
     box-sizing: border-box;
     display: flex;
@@ -17,10 +17,10 @@ nav.site-navigation {
     align-items: center;
     font-size: 18px;
     
-    /* NEU: border-bottom entfernt */
+    /* border-bottom entfernt */
     border-bottom: none; 
     
-    /* NEU: Stärkerer Schatten, damit die Leiste 'schwebt' und Tiefe bekommt */
+    /* Stärkerer Schatten, damit die Leiste 'schwebt' */
     box-shadow: 0 4px 12px rgba(0,0,0,0.4); 
     
     position: sticky;
@@ -30,7 +30,7 @@ nav.site-navigation {
 
 /* Links */
 nav.site-navigation a {
-    /* NEU: Textfarbe auf Weiß setzen für maximalen Kontrast */
+    /* Textfarbe auf Weiß setzen für maximalen Kontrast */
     color: white; 
     text-decoration: none;
     padding: 8px 14px;
@@ -41,7 +41,7 @@ nav.site-navigation a {
 
 /* Hover Blau-Weiß-Style */
 nav.site-navigation a:hover {
-    /* NEU: Hintergrund wird ein helles, transparentes Blau */
+    /* Hintergrund wird ein helles, transparentes Blau */
     background: rgba(255, 255, 255, 0.15); 
     
     /* Textfarbe bleibt Weiß */
