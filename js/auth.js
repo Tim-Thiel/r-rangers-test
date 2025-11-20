@@ -24,14 +24,14 @@ function askPassword(area, onSuccess) {
         return;
     }
 
-    popup.style.display = "flex";
+    popup.classList.remove("hidden");
     input.value = "";
     input.focus();
 
     const submit = () => {
         if (input.value === PASSWORDS[area]) {
             localStorage.setItem("auth_" + area, "true");
-            popup.style.display = "none";
+            popup.classList.add("hidden");
             onSuccess();
         } else {
             alert("❌ Falsches Passwort.");
