@@ -4,6 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>R-Rangers – Private Bilder</title>
+<script src="/js/auth.js"></script>
+<script>
+if (!checkAccess("team")) {
+    alert("Zugang nur mit Passwort möglich.");
+    window.location.href = "/index.html";
+}
+</script>
+
 <script src="../js/nav.js" defer></script>
 
 <style>
