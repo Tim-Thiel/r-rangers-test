@@ -65,10 +65,9 @@ button:disabled,
 --------------------------------------------- */
 .gallery {
     max-width: none;
-    margin: 20px;
+    margin: 20px auto;
     display: grid;
     gap: 20px;
-    padding: 10px;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
    /* NEU & WICHTIG: Zentriert die Spalten, wenn Platz übrig ist */
     justify-content: center;
@@ -227,10 +226,13 @@ footer {
     opacity: 0.8;
     transition: background-color 0.3s, opacity 0.3s;
     
-    /* NEU: Zentrierung des Pfeils */
-    display: flex; /* Aktiviert das flexible Box-Modell */
+    /* ZENTRIERUNG */
+    display: flex;
     justify-content: center; /* Zentriert horizontal */
-    align-items: center; /* Zentriert vertikal */
+    align-items: center;    /* Zentriert vertikal */
+    
+    /* NEU: Korrigiert die vertikale Position des Textpfeils */
+    padding-top: 3px; 
 }
 
 #scrollToTopBtn:hover {
