@@ -14,35 +14,22 @@ const navHTML = `
     document.body.insertAdjacentHTML("afterbegin", navHTML);
 
     // Passwort-Popup GLOBAL einfügen
-    document.body.insertAdjacentHTML("beforeend", `
-        <div id="pw-popup" style="
-            position: fixed;
-            top:0; left:0;
-            width:100%; height:100%;
-            background: rgba(0,0,0,0.8);
-            display:none;
-            justify-content:center;
-            align-items:center;
-            z-index:9999;
-        ">
-            <div style="
-                background:white;
-                padding:25px;
-                border-radius:15px;
-                max-width:300px;
-                text-align:center;
-                font-family:Arial;
-            ">
-                <h3>Passwort eingeben</h3>
-                <input id="pw-popup-input" type="password" placeholder="Passwort"
-                    style="width:90%; padding:10px; border-radius:8px; margin-top:10px;">
-                <div style="margin-top:15px; display:flex; gap:10px; justify-content:center;">
-                    <button id="pw-popup-confirm" style="padding:10px 15px; border-radius:8px; background:#0055aa; color:white;">Öffnen</button>
-                    <button id="pw-popup-cancel" style="padding:10px 15px; border-radius:8px; background:#666; color:white;">Abbrechen</button>
-                </div>
+document.body.insertAdjacentHTML("beforeend", `
+    <div id="pw-popup" class="modal-overlay hidden">
+        <div class="modal-content">
+            <span id="pw-popup-close" class="modal-close">&times;</span>
+            <h3>🔐 Zugang erforderlich</h3>
+            
+            <input id="pw-popup-input" type="password" placeholder="Passwort"
+                style="width:90%; padding:10px; border-radius:8px; margin: 15px 0;">
+                
+            <div style="margin-top:15px; display:flex; gap:10px; justify-content:center;">
+                <button id="pw-popup-confirm" class="download-btn">Öffnen</button>
+                <button id="pw-popup-cancel" class="download-btn" style="background: #666;">Abbrechen</button>
             </div>
         </div>
-    `);
+    </div>
+`);
 
     // CSS laden
     const link = document.createElement("link");
