@@ -1,4 +1,4 @@
-/* auth.js – zentrale Passwortlogik mit Popup und Enter-Taste */
+/* auth.js – zentrale Passwortlogik mit Popup */
 
 // 🔐 Passwörter an einer Stelle ändern
 const PASSWORDS = {
@@ -7,58 +7,67 @@ const PASSWORDS = {
     privat: "privat"
 };
 
-// Prüft, ob Bereich bereits freigeschaltet
+// Popup Elemente
+let pwPopup, pwInput, pwConfirm, pwCancel;
+let pendingArea = null;
+let pendingUrl = null;
+
+// Popup vorbereiten (wird von nav.js ins DOM eingesetzt)
+document.addEventListener("DOMContentLoaded", () => {
+    pwPopup   = document.getElementById("pw-popup");
+    pwInput   = document.getElementById("pw-popup-input");
+    pwConfirm = document.getElementById("pw-popup-confirm");
+    pwCancel  = document.getElementById("pw-popup-cancel");
+
+    if (!pwPopup) return;
+
+    pwConfirm.addEventListener("click", () => handlePassword());
+    pwCancel.addEventListener("click", () => closePopup());
+
+    pwInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") handlePassword();
+    });
+});
+
+// Prüfen ob bereits freigeschaltet
 function checkAccess(area) {
     return localStorage.getItem("auth_" + area) === "true";
 }
 
-// Passwort-Popup anzeigen
-function askPassword(area, onSuccess) {
-    const popup = document.getElementById("pw-popup");
-    const input = document.getElementById("pw-popup-input");
-    const btnOpen = document.getElementById("pw-popup-confirm");
-    const btnCancel = document.getElementById("pw-popup-cancel");
+// Öffnet Passwort-Popup
+function requestAccess(area, url) {
+    pendingArea = area;
+    pendingUrl  = url;
 
-    if (!popup) {
-        console.error("Kein Passwort-Popup im DOM gefunden!");
-        return;
-    }
-
-    popup.style.display = "flex";
-    input.value = "";
-    input.focus();
-
-    const submit = () => {
-        if (input.value === PASSWORDS[area]) {
-            localStorage.setItem("auth_" + area, "true");
-            popup.style.display = "none";
-            onSuccess();
-        } else {
-            alert("❌ Falsches Passwort.");
-        }
-    };
-
-    // Open-Button
-    btnOpen.onclick = submit;
-
-    // Enter-Taste
-    input.onkeydown = (e) => {
-        if (e.key === "Enter") submit();
-    };
-
-    // Cancel-Button
-    btnCancel.onclick = () => {
-        popup.style.display = "none";
-    };
+    pwInput.value = "";
+    pwPopup.style.display = "flex";
+    pwInput.focus();
 }
 
-// Öffnet einen Bereich sicher
+// Passwort prüfen
+function handlePassword() {
+    const correct = PASSWORDS[pendingArea];
+    const entered = pwInput.value;
+
+    if (entered === correct) {
+        localStorage.setItem("auth_" + pendingArea, "true");
+        closePopup();
+        window.location.href = pendingUrl;
+    } else {
+        alert("❌ Falsches Passwort");
+    }
+}
+
+// Popup schließen
+function closePopup() {
+    pwPopup.style.display = "none";
+}
+
+// Sicherer Aufruf einer Seite
 function openArea(area, url) {
     if (checkAccess(area)) {
         window.location.href = url;
-    } else {
-        askPassword(area, () => {
-            window.location.href = url;
-        });
+        return;
     }
+    requestAccess(area, url);
 }
