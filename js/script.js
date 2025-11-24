@@ -18,25 +18,34 @@ const folder = `bilder/${category}/${pageName}/thumbs`;
 console.log("📁 Lade Ordner:", folder);
 
 // ================= Globale Variablen =================
-let galleryImages = [];   // Thumbs für Galerie & Lightbox
-let originalImages = [];  // Originale für ZIP
+let galleryImages = [];    // Thumbs für Galerie & Lightbox
+let originalImages = [];   // Originale für ZIP
 let currentIndex = 0;
 
 // === NEU: Modal-Elemente ===
 const modalOverlay = document.getElementById('downloadModal');
 const startDownloadBtn = document.getElementById('startDownloadBtn');
 let downloadAction = null; // Speichert die Funktion, die beim Klick auf 'Download starten' ausgeführt wird
+let downloadEnterHandler = null; // ✅ NEU: Speichert den temporären Enter-Key Handler
 
 // ================= Hilfsfunktionen =================
 function logError(msg, obj) {
-    console.error("GalleryError:", msg, obj ?? "");
+    console.error("GalleryError:", msg, obj ?? "");
 }
 
-// === NEU: Pop-up Steuerung ===
+// === Pop-up Steuerung (KORRIGIERT für Enter-Key) ===
 function closeDownloadModal() {
     if (modalOverlay) modalOverlay.classList.add('hidden');
-    // Wichtig: Entfernt den alten Listener, um Mehrfach-Downloads zu verhindern
-    if (startDownloadBtn) startDownloadBtn.removeEventListener('click', downloadAction);
+    
+    // Wichtig: Entfernt den alten Click-Listener
+    if (startDownloadBtn && downloadAction) startDownloadBtn.removeEventListener('click', downloadAction);
+    
+    // ✅ NEU: Entfernt den Enter-Key Listener
+    if (downloadEnterHandler) {
+        document.removeEventListener('keydown', downloadEnterHandler);
+        downloadEnterHandler = null;
+    }
+    
     downloadAction = null;
 }
 
@@ -49,15 +58,29 @@ function showDownloadPrompt(actionFunction) {
     
     // Speichert die Download-Funktion
     downloadAction = () => {
-        closeDownloadModal();
+        closeDownloadModal(); // Schließt Modal und entfernt alle Listener
         actionFunction(); // Führt die eigentliche Download-Logik aus
     };
 
+    // ✅ NEU: Definiert den Handler für die Enter-Taste
+    downloadEnterHandler = (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault(); 
+            downloadAction(); // Ruft die Download-Aktion auf
+        }
+    };
+    
     // Zeigt das Modal an
     modalOverlay.classList.remove('hidden');
     
-    // Fügt den Listener hinzu, der die gespeicherte Aktion startet
-    startDownloadBtn.addEventListener('click', downloadAction, { once: true });
+    // Fügt den Listener hinzu, der die gespeicherte Aktion startet (Click)
+    startDownloadBtn.addEventListener('click', downloadAction); 
+    
+    // ✅ NEU: Fügt den Enter-Key Listener hinzu
+    document.addEventListener('keydown', downloadEnterHandler);
+
+    // ✅ NEU: Fokus auf den Button setzen, damit er optisch als aktiv hervorgehoben wird (gute UX)
+    startDownloadBtn.focus();
 }
 
 // === NEU: Einzel-Download Logik ===
@@ -71,94 +94,99 @@ async function triggerSingleDownload(originalUrl, filename) {
         a.click();
     } catch (err) {
         console.error("Download fehlgeschlagen", err);
-        alert("Download fehlgeschlagen.");
+        // Hinweis: Hier könnte ebenfalls showError() genutzt werden
+        alert("Download fehlgeschlagen."); 
     }
 }
 
 // ================= Galerie laden =================
 async function loadGallery() {
-    const gallery = document.getElementById("gallery");
-    if (!gallery) { logError("Kein Element mit id='gallery'"); return; }
+    const gallery = document.getElementById("gallery");
+    if (!gallery) { logError("Kein Element mit id='gallery'"); return; }
 
-    let response;
-    try { response = await fetch(`https://api.github.com/repos/${username}/${repo}/contents/${folder}`); } 
-    catch(e) { logError("Fetch fehlgeschlagen", e); return; }
+    let response;
+    try { response = await fetch(`https://api.github.com/repos/${username}/${repo}/contents/${folder}`); } 
+    catch(e) { logError("Fetch fehlgeschlagen", e); return; }
 
-    if (!response.ok) { logError(`API-Antwort nicht OK (${response.status})`, await response.text()); return; }
+    if (!response.ok) { logError(`API-Antwort nicht OK (${response.status})`, await response.text()); return; }
 
-    let files;
-    try { files = await response.json(); } 
-    catch(e) { logError("JSON parsing failed", e); return; }
+    let files;
+    try { files = await response.json(); } 
+    catch(e) { logError("JSON parsing failed", e); return; }
 
-    const fileEntries = files.filter(f => f.type === "file");
-    if (fileEntries.length === 0) { gallery.innerHTML = "<p>Keine Bilder gefunden.</p>"; return; }
+    const fileEntries = files.filter(f => f.type === "file");
+    if (fileEntries.length === 0) { gallery.innerHTML = "<p>Keine Bilder gefunden.</p>"; return; }
 
-    gallery.innerHTML = "";
-    galleryImages = [];
-    originalImages = [];
+    gallery.innerHTML = "";
+    galleryImages = [];
+    originalImages = [];
 
-    fileEntries.forEach((file, idx) => {
-        const thumbUrl = file.download_url;
-        const originalUrl = thumbUrl.replace('/thumbs/', '/original/');
+    fileEntries.forEach((file, idx) => {
+        const thumbUrl = file.download_url;
+        const originalUrl = thumbUrl.replace('/thumbs/', '/original/');
 
-        // Arrays befüllen
-        galleryImages.push(thumbUrl);   // Thumbs für Galerie & Lightbox
-        originalImages.push(originalUrl); // Originale für ZIP
+        // Arrays befüllen
+        galleryImages.push(thumbUrl);    // Thumbs für Galerie & Lightbox
+        originalImages.push(originalUrl); // Originale für ZIP
 
-        // Karte erstellen
-        const card = document.createElement("div");
-        card.className = "gallery-item";
+        // Karte erstellen
+        const card = document.createElement("div");
+        card.className = "gallery-item";
 
-        // Bild
-        const img = document.createElement("img");
-        img.src = thumbUrl;
-        img.alt = file.name;
-        img.dataset.index = idx;
-        img.loading = "lazy";
+        // Bild
+        const img = document.createElement("img");
+        img.src = thumbUrl;
+        img.alt = file.name;
+        img.dataset.index = idx;
+        img.loading = "lazy";
 
-        img.addEventListener("click", () => openLightbox(idx));
+        img.addEventListener("click", () => openLightbox(idx));
 
-        // Checkbox für ZIP
-        const checkboxContainer = document.createElement("div");
-        checkboxContainer.className = "checkbox-container";
+        // Checkbox für ZIP
+        const checkboxContainer = document.createElement("div");
+        checkboxContainer.className = "checkbox-container";
 
-        const checkbox = document.createElement("input");
-        checkbox.type = "checkbox";
-        checkbox.value = originalUrl; // Original für ZIP
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.value = originalUrl; // Original für ZIP
 
-        const label = document.createElement("label");
-        label.appendChild(checkbox);
-        label.appendChild(document.createTextNode(" Bild auswählen"));
-        checkboxContainer.appendChild(label);
+        const label = document.createElement("label");
+        label.appendChild(checkbox);
+        label.appendChild(document.createTextNode(" Bild auswählen"));
+        checkboxContainer.appendChild(label);
 
-        // Einzel-Download
-        const downloadLink = document.createElement("a");
-        downloadLink.href = originalUrl;
-        downloadLink.download = file.name;
-        downloadLink.textContent = "Download";
-        downloadLink.className = "download-btn";
+        // Einzel-Download
+        const downloadLink = document.createElement("a");
+        downloadLink.href = originalUrl;
+        downloadLink.download = file.name;
+        downloadLink.textContent = "Download";
+        downloadLink.className = "download-btn";
 
         // NEU: Ruft das Modal auf und übergibt die Download-Funktion als Callback
-        downloadLink.addEventListener("click", (e) => {
-            e.preventDefault();
-            showDownloadPrompt(() => triggerSingleDownload(originalUrl, file.name));
-        });
+        downloadLink.addEventListener("click", (e) => {
+            e.preventDefault();
+            showDownloadPrompt(() => triggerSingleDownload(originalUrl, file.name));
+        });
 
-        card.appendChild(img);
-        card.appendChild(checkboxContainer);
-        card.appendChild(downloadLink);
-        gallery.appendChild(card);
-    });
+        card.appendChild(img);
+        card.appendChild(checkboxContainer);
+        card.appendChild(downloadLink);
+        gallery.appendChild(card);
+    });
 
-    setupLightboxControls();
+    setupLightboxControls();
 }
 
 // ================= ZIP-Download =================
 // NEU: Die eigentliche Logik (wird vom Modal-Button aufgerufen)
 async function triggerZipDownload() {
     const checkboxes = document.querySelectorAll("input[type=checkbox]:checked");
-    // Doppelte Prüfung, falls der Button enabled war
-    if (checkboxes.length === 0) { alert("Bitte wähle mindestens ein Bild aus."); return; } 
+    
+    // Doppelte Prüfung, falls der Button enabled war (Alert durch showError ersetzt)
+    if (checkboxes.length === 0) { 
+        showError("🖼️ Fehler: Es wurde kein Bild ausgewählt."); 
+        return; 
+    } 
     
     const zip = new JSZip();
     const folderZip = zip.folder(pageName);
@@ -180,72 +208,71 @@ async function triggerZipDownload() {
     link.click();
 }
 
-// NEU: Öffnet das Modal, bevor der eigentliche Download startet
+// NEU: Öffnet das Modal, bevor der eigentliche Download startet (KORRIGIERT für showError)
 async function downloadSelected() {
-    const checkboxes = document.querySelectorAll("input[type=checkbox]:checked");
+    const checkboxes = document.querySelectorAll("input[type=checkbox]:checked");
     
     if (checkboxes.length === 0) {
-        // ✅ NEU: Rufe die gestylte Fehlerfunktion auf!
-        // Hier wird die global in auth.js definierte Funktion verwendet.
+        // ✅ Rufe die gestylte Fehlerfunktion auf!
         showError("🖼️ Bitte wähle mindestens ein Bild zum Herunterladen aus!"); 
         return; 
     }
-    
+    
     // Startet den Download-Prompt, der dann triggerZipDownload() aufruft
     showDownloadPrompt(triggerZipDownload);
 }
 
 // ================= Lightbox =================
 function openLightbox(index) {
-    currentIndex = index;
-    const lb = document.getElementById("lightbox");
-    const lbImg = document.getElementById("lightbox-img");
-    if (!lb || !lbImg) return;
-    lbImg.src = galleryImages[currentIndex]; // Thumbs anzeigen
-    lb.classList.remove("hidden");
+    currentIndex = index;
+    const lb = document.getElementById("lightbox");
+    const lbImg = document.getElementById("lightbox-img");
+    if (!lb || !lbImg) return;
+    lbImg.src = galleryImages[currentIndex]; // Thumbs anzeigen
+    lb.classList.remove("hidden");
 }
 
 function closeLightbox() {
-    const lb = document.getElementById("lightbox");
-    if (!lb) return;
-    lb.classList.add("hidden");
+    const lb = document.getElementById("lightbox");
+    if (!lb) return;
+    lb.classList.add("hidden");
 }
 
 function showNext() {
-    currentIndex = (currentIndex + 1) % galleryImages.length;
-    document.getElementById("lightbox-img").src = galleryImages[currentIndex];
+    currentIndex = (currentIndex + 1) % galleryImages.length;
+    document.getElementById("lightbox-img").src = galleryImages[currentIndex];
 }
 
 function showPrev() {
-    currentIndex = (currentIndex - 1 + galleryImages.length) % galleryImages.length;
-    document.getElementById("lightbox-img").src = galleryImages[currentIndex];
+    currentIndex = (currentIndex - 1 + galleryImages.length) % galleryImages.length;
+    document.getElementById("lightbox-img").src = galleryImages[currentIndex];
 }
 
 function setupLightboxControls() {
-    const lb = document.getElementById("lightbox");
-    const closeBtn = document.querySelector(".lightbox-close");
-    const nextBtn = document.querySelector(".lightbox-next");
-    const prevBtn = document.querySelector(".lightbox-prev");
+    const lb = document.getElementById("lightbox");
+    const closeBtn = document.querySelector(".lightbox-close");
+    const nextBtn = document.querySelector(".lightbox-next");
+    const prevBtn = document.querySelector(".lightbox-prev");
 
-    if (closeBtn && !closeBtn.dataset.listener) { closeBtn.addEventListener("click", closeLightbox); closeBtn.dataset.listener="1"; }
-    if (nextBtn && !nextBtn.dataset.listener) { nextBtn.addEventListener("click", showNext); nextBtn.dataset.listener="1"; }
-    if (prevBtn && !prevBtn.dataset.listener) { prevBtn.addEventListener("click", showPrev); prevBtn.dataset.listener="1"; }
+    if (closeBtn && !closeBtn.dataset.listener) { closeBtn.addEventListener("click", closeLightbox); closeBtn.dataset.listener="1"; }
+    if (nextBtn && !nextBtn.dataset.listener) { nextBtn.addEventListener("click", showNext); nextBtn.dataset.listener="1"; }
+    if (prevBtn && !prevBtn.dataset.listener) { prevBtn.addEventListener("click", showPrev); prevBtn.dataset.listener="1"; }
 
-    if (lb && !lb.dataset.bgListener) { lb.addEventListener("click", (e) => { if (e.target === lb) closeLightbox(); }); lb.dataset.bgListener="1"; }
+    if (lb && !lb.dataset.bgListener) { lb.addEventListener("click", (e) => { if (e.target === lb) closeLightbox(); }); lb.dataset.bgListener="1"; }
 
-    if (!document.body.dataset.kbListener) {
-        document.addEventListener("keydown", (e) => {
-            if (e.key === "Escape") closeLightbox();
-            if (e.key === "ArrowRight") showNext();
-            if (e.key === "ArrowLeft") showPrev();
-        });
-        document.body.dataset.kbListener="1";
-    }
+    if (!document.body.dataset.kbListener) {
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "Escape") closeLightbox();
+            if (e.key === "ArrowRight") showNext();
+            if (e.key === "ArrowLeft") showPrev();
+        });
+        document.body.dataset.kbListener="1";
+    }
 }
 
 // ================= Init =================
 document.addEventListener("DOMContentLoaded", () => {
-    loadGallery();
+    loadGallery();
     // NEU: Listener für das Schließen des Modals über das X
     const modalCloseBtn = document.querySelector('.modal-close');
     if(modalCloseBtn) modalCloseBtn.addEventListener('click', closeDownloadModal);
@@ -253,39 +280,39 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // Funktion, die den Button einblendet / ausblendet
 function toggleScrollButton() {
-    const button = document.getElementById("scrollToTopBtn");
-    if (!button) return;
+    const button = document.getElementById("scrollToTopBtn");
+    if (!button) return;
 
-    // Zeigt den Button, wenn 200 Pixel gescrollt wurde
-    if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
-        button.style.display = "block";
-    } else {
-        button.style.display = "none";
-    }
+    // Zeigt den Button, wenn 200 Pixel gescrollt wurde
+    if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+        button.style.display = "block";
+    } else {
+        button.style.display = "none";
+    }
 }
 
 // Funktion, die ganz nach oben scrollt
 function scrollToTop() {
-    // Sanfter Scroll-Effekt
-    window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-    });
+    // Sanfter Scroll-Effekt
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
 }
 
 // Event Listener zur Initialisierung nach dem Laden
 document.addEventListener("DOMContentLoaded", () => {
-    // ... (deine bestehende loadGallery Logik ist hier) ...
+    // ... (deine bestehende loadGallery Logik ist hier) ...
 
-    const button = document.getElementById("scrollToTopBtn");
-    if (button) {
-        // Bei Klick nach oben scrollen
-        button.addEventListener("click", scrollToTop);
+    const button = document.getElementById("scrollToTopBtn");
+    if (button) {
+        // Bei Klick nach oben scrollen
+        button.addEventListener("click", scrollToTop);
 
-        // Beim Scrollen prüfen, ob der Button angezeigt werden soll
-        window.addEventListener("scroll", toggleScrollButton);
+        // Beim Scrollen prüfen, ob der Button angezeigt werden soll
+        window.addEventListener("scroll", toggleScrollButton);
 
-        // Beim Laden einmal prüfen
-        toggleScrollButton();
-    }
+        // Beim Laden einmal prüfen
+        toggleScrollButton();
+    }
 });
