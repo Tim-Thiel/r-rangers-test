@@ -48,6 +48,10 @@ button,
     box-shadow: var(--shadow);
     display: inline-block;
 }
+/* ✅ NEU: Entfernt die Unterstreichung von Links, die den Button-Stil nutzen */
+.download-btn {
+    text-decoration: none; 
+}
 button:hover,
 .download-btn:hover,
 #download-selected:hover {
