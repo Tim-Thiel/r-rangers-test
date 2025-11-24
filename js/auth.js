@@ -16,14 +16,14 @@ function closePopupClean() {
     const btnOpen = document.getElementById("pw-popup-confirm");
     const btnCancel = document.getElementById("pw-popup-cancel");
 
-    // Funktion zum Anzeigen von stylischen Fehlern (ersetzt alert)
+// Funktion zum Anzeigen von stylischen Fehlern (ersetzt alert)
 function showError(message) {
     const errorPopup = document.getElementById('error-popup');
     const errorMessage = document.getElementById('error-message');
     const closeBtn = document.getElementById('error-popup-close');
     
     if (!errorPopup) {
-        // Fallback, falls das Modal nicht gefunden wird
+        // Fallback, falls das Modal nicht gefunden wird (WICHTIG!)
         alert(message);
         return;
     }
@@ -31,11 +31,12 @@ function showError(message) {
     errorMessage.textContent = message;
     errorPopup.classList.remove('hidden');
     
-    // Listener für das Schließen (wird jedes Mal neu gesetzt, da es temporär ist)
+    // Listener für das Schließen (wird jedes Mal neu gesetzt)
     closeBtn.onclick = () => {
         errorPopup.classList.add('hidden');
         // Fokus zurück auf das Passwort-Feld setzen
-        document.getElementById("pw-popup-input").focus(); 
+        const pwInput = document.getElementById("pw-popup-input");
+        if(pwInput) pwInput.focus();
     };
 }
 
