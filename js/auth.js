@@ -84,7 +84,7 @@ function openArea(area, url) {
     }
 }
 
-// ================= EVENT LISTENER FÜR DAS 'X' =================
+/*// ================= EVENT LISTENER FÜR DAS 'X' =================
 // Wird einmal beim Laden der Seite registriert (Löst Problem 1: X funktioniert nicht)
 document.addEventListener("DOMContentLoaded", () => {
     const closeBtn = document.getElementById("pw-popup-close");
