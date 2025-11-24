@@ -91,7 +91,9 @@ function askPassword(area, onSuccess) {
     input.value = "";
     input.focus();
 
-    const submit = () => {
+    const submit = (e) => {
+        if (e && e.preventDefault) e.preventDefault(); 
+        if (e && e.stopPropagation) e.stopPropagation();
         if (input.value === PASSWORDS[area]) {
             localStorage.setItem("auth_" + area, "true");
             closePopupClean();
