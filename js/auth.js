@@ -8,22 +8,30 @@ const PASSWORDS = {
 };
 
 // ================= HILFSFUNKTION ZUM SAUBEREN SCHLIESSEN =================
-// Diese Funktion schließt das Pop-up sauber und entfernt ALLE temporären Listener,
-// damit es danach fehlerfrei wieder geöffnet werden kann (Löst Problem 2).
+// Diese Funktion schließt das Passwort-Pop-up sauber und entfernt ALLE temporären Listener.
 function closePopupClean() {
     const popup = document.getElementById("pw-popup");
     const input = document.getElementById("pw-popup-input");
     const btnOpen = document.getElementById("pw-popup-confirm");
     const btnCancel = document.getElementById("pw-popup-cancel");
 
-// Funktion zum Anzeigen von stylischen Fehlern (ersetzt alert)
+    // 1. Pop-up verstecken
+    if (popup) popup.classList.add("hidden");
+    if (input) input.value = "";
+
+    // 2. WICHTIG: Temporäre Listener entfernen
+    if (btnOpen) btnOpen.onclick = null;
+    if (input) input.onkeydown = null;
+    if (btnCancel) btnCancel.onclick = null;
+}
+
+// 🔑 NEU: GLOBALE FUNKTION ZUM ANZEIGEN VON FEHLERN (Löst das Problem)
 function showError(message) {
     const errorPopup = document.getElementById('error-popup');
     const errorMessage = document.getElementById('error-message');
     const closeBtn = document.getElementById('error-popup-close');
     
     if (!errorPopup) {
-        // Fallback, falls das Modal nicht gefunden wird (WICHTIG!)
         alert(message);
         return;
     }
@@ -38,17 +46,6 @@ function showError(message) {
         const pwInput = document.getElementById("pw-popup-input");
         if(pwInput) pwInput.focus();
     };
-}
-
-    // 1. Pop-up verstecken (mit CSS-Klasse, die zu nav.js passt)
-    if (popup) popup.classList.add("hidden");
-    if (input) input.value = "";
-
-    // 2. WICHTIG: Temporäre Listener entfernen, um Dopplungen zu vermeiden (Löst Problem 2)
-    if (btnOpen) btnOpen.onclick = null;
-    if (input) input.onkeydown = null;
-    if (btnCancel) btnCancel.onclick = null;
-    // Der Listener für das 'X' (unten in DOMContentLoaded) bleibt bestehen, das ist OK.
 }
 
 
@@ -76,10 +73,11 @@ function askPassword(area, onSuccess) {
     const submit = () => {
         if (input.value === PASSWORDS[area]) {
             localStorage.setItem("auth_" + area, "true");
-            closePopupClean(); // Nutzt die saubere Schließfunktion
+            closePopupClean();
             onSuccess();
         } else {
-            showError("❌ Falsches Passwort!"); // <--- MUSS VORHANDEN SEIN!
+            // ✅ Jetzt kann showError gefunden werden
+            showError("❌ Falsches Passwort!"); 
             input.value = "";
         }
     };
@@ -93,7 +91,6 @@ function askPassword(area, onSuccess) {
     };
 
     // Cancel-Button (wird jedes Mal neu zugewiesen)
-    // Ersetzt das alte "popup.style.display = 'none';" durch die saubere Funktion (Löst Problem 3)
     btnCancel.onclick = closePopupClean;
 }
 
