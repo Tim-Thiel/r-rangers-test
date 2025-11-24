@@ -431,3 +431,15 @@ footer {
     text-align:center;
     margin-top: 10px;
 }
+
+/* --------------------------------------------
+   DOWNLOAD BUTTON KORREKTUR
+--------------------------------------------- */
+/* ✅ KORREKTUR für den Button "Ausgewählte Bilder herunterladen" */
+body > button[onclick="downloadSelected()"] {
+    display: block; /* Macht den Button zu einem Block-Element */
+    margin: 20px auto; /* Zentriert den Button horizontal (sehr wichtig!) */
+    max-width: 98%; /* Stellt sicher, dass er nicht über den Bildschirm ragt */
+    width: 300px; /* Gibt ihm eine feste, aber begrenzte Breite */
+    text-align: center;
+}
