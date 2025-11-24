@@ -25,7 +25,7 @@ function closePopupClean() {
     if (btnCancel) btnCancel.onclick = null;
 }
 
-// 🔑 NEU: GLOBALE FUNKTION ZUM ANZEIGEN VON FEHLERN (Löst das Problem)
+// 🔑 GLOBALE FUNKTION ZUM ANZEIGEN VON FEHLERN
 function showError(message) {
     const errorPopup = document.getElementById('error-popup');
     const errorMessage = document.getElementById('error-message');
@@ -36,16 +36,37 @@ function showError(message) {
         return;
     }
     
-    errorMessage.textContent = message;
-    errorPopup.classList.remove('hidden');
-    
-    // Listener für das Schließen (wird jedes Mal neu gesetzt)
-    closeBtn.onclick = () => {
+    // 1. Definiere die Funktion zum Schließen des Pop-ups und Aufräumen
+    const closeErrorClean = () => {
         errorPopup.classList.add('hidden');
+        
+        // WICHTIG: Den Keyboard-Listener wieder entfernen!
+        document.removeEventListener('keydown', handleEnterKey);
+
         // Fokus zurück auf das Passwort-Feld setzen
         const pwInput = document.getElementById("pw-popup-input");
         if(pwInput) pwInput.focus();
     };
+
+    // 2. Definiere den Handler für die Enter-Taste
+    const handleEnterKey = (e) => {
+        // Prüfen, ob die Enter-Taste gedrückt wurde
+        if (e.key === 'Enter') {
+            e.preventDefault(); // Verhindert ggf. ungewünschtes Absenden des Formulars
+            closeErrorClean();
+        }
+    };
+    
+    // 3. Zeige das Pop-up an
+    errorMessage.textContent = message;
+    errorPopup.classList.remove('hidden');
+    
+    // 4. Weise die Listener zu
+    // Schließen-Button (nutzt die zentrale Aufräum-Funktion)
+    closeBtn.onclick = closeErrorClean;
+    
+    // NEU: Keyboard-Listener hinzufügen, solange das Pop-up sichtbar ist
+    document.addEventListener('keydown', handleEnterKey);
 }
 
 
