@@ -46,4 +46,11 @@ document.body.insertAdjacentHTML("beforeend", `
             openArea(area, url);
         });
     });
+
+    // NEU: Listener für das 'X' (Schließen-Button) sofort registrieren
+    // WICHTIG: Die Funktion closePopupClean() MUSS in der auth.js GLOBAL sein.
+    const closeBtn = document.getElementById("pw-popup-close");
+    if (closeBtn) {
+        closeBtn.addEventListener('click', closePopupClean);
+    }
 });
