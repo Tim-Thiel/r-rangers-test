@@ -7,8 +7,10 @@ const PASSWORDS = {
     privat: "privat"
 };
 
-// ================= HILFSFUNKTION ZUM SAUBEREN SCHLIESSEN =================
+// ================= GLOBALE HILFSFUNKTIONEN ZUM SCHLIESSEN =================
+
 // Diese Funktion schließt das Passwort-Pop-up sauber und entfernt ALLE temporären Listener.
+// WICHTIG: Muss global sein, damit script.js darauf zugreifen kann.
 function closePopupClean() {
     const popup = document.getElementById("pw-popup");
     const input = document.getElementById("pw-popup-input");
@@ -25,41 +27,38 @@ function closePopupClean() {
     if (btnCancel) btnCancel.onclick = null;
 }
 
-// 🔑 GLOBALE FUNKTION ZUM ANZEIGEN VON FEHLERN
+// ✅ NEU: Globale Funktion zum Schließen des Fehler-Pop-ups. 
+// WICHTIG: Wird vom zentralen ESC-Handler in script.js benötigt.
+function closeErrorPopup() {
+    const errorPopup = document.getElementById('error-popup');
+    if (errorPopup) errorPopup.classList.add('hidden');
+    
+    // Optional: Fokus zurück auf das Passwort-Feld setzen
+    const pwInput = document.getElementById("pw-popup-input");
+    if(pwInput) pwInput.focus();
+}
+
+
+// 🔑 GLOBALE FUNKTION ZUM ANZEIGEN VON FEHLERN (verwendet die neue closeErrorPopup)
 function showError(message) {
     const errorPopup = document.getElementById('error-popup');
     const errorMessage = document.getElementById('error-message');
-    const closeBtn = document.getElementById('error-popup-close'); // Der Schließen-Button
+    const closeBtn = document.getElementById('error-popup-close'); 
 
     if (!errorPopup) {
         alert(message);
         return;
     }
 
-    // 1. Definiere die Funktion zum Schließen des Pop-ups und Aufräumen
-    // WIR BRAUCHEN KEINE KEYDOWN LISTENER LOGIK MEHR HIER!
-    const closeErrorClean = () => {
-        errorPopup.classList.add('hidden');
-        
-        // Fokus zurück auf das Passwort-Feld setzen
-        const pwInput = document.getElementById("pw-popup-input");
-        if(pwInput) pwInput.focus();
-    };
-
-    // 2. Zeige das Pop-up an
+    // Zeige das Pop-up an
     errorMessage.textContent = message;
     errorPopup.classList.remove('hidden');
     
-    // 3. Weise den Listener zu
-    // Schließen-Button (nutzt die zentrale Aufräum-Funktion)
-    closeBtn.onclick = closeErrorClean;
+    // Schließen-Button (nutzt die globale Aufräum-Funktion)
+    closeBtn.onclick = closeErrorPopup;
 
-    // ✅ DER FIX: Fokus auf den Schließen-Button setzen. 
-    // Die Enter-Taste löst jetzt den onclick-Handler des Buttons aus.
+    // Fokus auf den Schließen-Button setzen. 
     closeBtn.focus();
-    
-    // Die gesamte document.addEventListener('keydown', handleEnterKey) Logik
-    // ist jetzt obsolet und muss aus showError entfernt werden.
 }
 
 
@@ -92,7 +91,6 @@ function askPassword(area, onSuccess) {
             closePopupClean();
             onSuccess();
         } else {
-            // ✅ Jetzt kann showError gefunden werden
             showError("❌ Falsches Passwort!"); 
             input.value = "";
         }
