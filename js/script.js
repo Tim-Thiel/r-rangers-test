@@ -332,44 +332,24 @@ document.addEventListener("DOMContentLoaded", () => {
         toggleScrollButton();
     }
 });
-// ================= GLOBALE TASTENSTEUERUNG (NEU für ESC) =================
-// Diese Funktion schließt das oberste sichtbare Pop-up mit ESC
+// ================= GLOBALE TASTENSTEUERUNG (NUR SCRIPT.JS) =================
 document.addEventListener("keydown", (e) => {
     if (e.key === 'Escape') {
-        // Reihenfolge ist wichtig: Das Pop-up, das zuletzt geöffnet wurde, zuerst schließen
-
+        
         // 1. Download-Bestätigungs-Modal
-        const downloadModal = document.getElementById('downloadModal');
-        if (downloadModal && !downloadModal.classList.contains('hidden')) {
+        const modalOverlay = document.getElementById('downloadModal');
+        if (modalOverlay && !modalOverlay.classList.contains('hidden')) {
             closeDownloadModal();
             return; 
         }
 
-        // 2. Fehler-Pop-up (z.B. falsches Passwort, Download Fehler)
-        const errorPopup = document.getElementById('error-popup'); // ID aus auth.js
-        if (errorPopup && !errorPopup.classList.contains('hidden')) {
-            // Ruft die Funktion aus auth.js auf
-            if (typeof closeErrorPopup === 'function') {
-                closeErrorPopup();
-                return;
-            }
-        }
-        
-        // 3. Passwort-Eingabe-Pop-up
-        const passwordModal = document.getElementById("pw-popup"); // ID aus auth.js
-        if (passwordModal && !passwordModal.classList.contains('hidden')) {
-            // Ruft die Funktion closePopupClean() aus auth.js auf
-            if (typeof closePopupClean === 'function') {
-                closePopupClean();
-                return;
-            }
-        }
-        
-        // 4. Lightbox / Bildansicht
-        const lightbox = document.getElementById("lightbox"); // ID aus script.js
+        // 2. Lightbox
+        const lightbox = document.getElementById("lightbox");
         if (lightbox && !lightbox.classList.contains("hidden")) {
             closeLightbox();
             return;
         }
+        
+        // Hinweis: Passwort-Popups werden jetzt direkt in auth.js behandelt.
     }
 });
