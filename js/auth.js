@@ -29,44 +29,37 @@ function closePopupClean() {
 function showError(message) {
     const errorPopup = document.getElementById('error-popup');
     const errorMessage = document.getElementById('error-message');
-    const closeBtn = document.getElementById('error-popup-close');
-    
+    const closeBtn = document.getElementById('error-popup-close'); // Der Schließen-Button
+
     if (!errorPopup) {
         alert(message);
         return;
     }
-    
+
     // 1. Definiere die Funktion zum Schließen des Pop-ups und Aufräumen
+    // WIR BRAUCHEN KEINE KEYDOWN LISTENER LOGIK MEHR HIER!
     const closeErrorClean = () => {
         errorPopup.classList.add('hidden');
         
-        // WICHTIG: Den Keyboard-Listener wieder entfernen!
-        document.removeEventListener('keydown', handleEnterKey);
-
         // Fokus zurück auf das Passwort-Feld setzen
         const pwInput = document.getElementById("pw-popup-input");
         if(pwInput) pwInput.focus();
     };
 
-    // 2. Definiere den Handler für die Enter-Taste
-    const handleEnterKey = (e) => {
-        // Prüfen, ob die Enter-Taste gedrückt wurde
-        if (e.key === 'Enter') {
-            e.preventDefault(); // Verhindert ggf. ungewünschtes Absenden des Formulars
-            closeErrorClean();
-        }
-    };
-    
-    // 3. Zeige das Pop-up an
+    // 2. Zeige das Pop-up an
     errorMessage.textContent = message;
     errorPopup.classList.remove('hidden');
     
-    // 4. Weise die Listener zu
+    // 3. Weise den Listener zu
     // Schließen-Button (nutzt die zentrale Aufräum-Funktion)
     closeBtn.onclick = closeErrorClean;
+
+    // ✅ DER FIX: Fokus auf den Schließen-Button setzen. 
+    // Die Enter-Taste löst jetzt den onclick-Handler des Buttons aus.
+    closeBtn.focus();
     
-    // NEU: Keyboard-Listener hinzufügen, solange das Pop-up sichtbar ist
-    document.addEventListener('keydown', handleEnterKey);
+    // Die gesamte document.addEventListener('keydown', handleEnterKey) Logik
+    // ist jetzt obsolet und muss aus showError entfernt werden.
 }
 
 
