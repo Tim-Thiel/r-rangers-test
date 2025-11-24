@@ -7,39 +7,36 @@ const PASSWORDS = {
     privat: "privat"
 };
 
-// ================= GLOBALE HILFSFUNKTIONEN ZUM SCHLIESSEN =================
+// ================= GLOBALE SCHLIESS-FUNKTIONEN =================
 
-// Diese Funktion schließt das Passwort-Pop-up sauber und entfernt ALLE temporären Listener.
-// WICHTIG: Muss global sein, damit script.js darauf zugreifen kann.
+// 1. Schließt das Fehler-Popup
+function closeErrorPopup() {
+    const errorPopup = document.getElementById('error-popup');
+    if (errorPopup) errorPopup.classList.add('hidden');
+    
+    // Fokus zurück auf das Passwort-Feld setzen
+    const pwInput = document.getElementById("pw-popup-input");
+    if(pwInput) pwInput.focus();
+}
+
+// 2. Schließt das Passwort-Eingabe-Popup sauber
 function closePopupClean() {
     const popup = document.getElementById("pw-popup");
     const input = document.getElementById("pw-popup-input");
     const btnOpen = document.getElementById("pw-popup-confirm");
     const btnCancel = document.getElementById("pw-popup-cancel");
 
-    // 1. Pop-up verstecken
+    // Pop-up verstecken
     if (popup) popup.classList.add("hidden");
     if (input) input.value = "";
 
-    // 2. WICHTIG: Temporäre Listener entfernen
+    // Temporäre Listener entfernen
     if (btnOpen) btnOpen.onclick = null;
     if (input) input.onkeydown = null;
     if (btnCancel) btnCancel.onclick = null;
 }
 
-// ✅ NEU: Globale Funktion zum Schließen des Fehler-Pop-ups. 
-// WICHTIG: Wird vom zentralen ESC-Handler in script.js benötigt.
-function closeErrorPopup() {
-    const errorPopup = document.getElementById('error-popup');
-    if (errorPopup) errorPopup.classList.add('hidden');
-    
-    // Optional: Fokus zurück auf das Passwort-Feld setzen
-    const pwInput = document.getElementById("pw-popup-input");
-    if(pwInput) pwInput.focus();
-}
-
-
-// 🔑 GLOBALE FUNKTION ZUM ANZEIGEN VON FEHLERN (verwendet die neue closeErrorPopup)
+// ================= FEHLER ANZEIGE =================
 function showError(message) {
     const errorPopup = document.getElementById('error-popup');
     const errorMessage = document.getElementById('error-message');
@@ -50,19 +47,14 @@ function showError(message) {
         return;
     }
 
-    // Zeige das Pop-up an
     errorMessage.textContent = message;
     errorPopup.classList.remove('hidden');
     
-    // Schließen-Button (nutzt die globale Aufräum-Funktion)
     closeBtn.onclick = closeErrorPopup;
-
-    // Fokus auf den Schließen-Button setzen. 
     closeBtn.focus();
 }
 
-
-// ================= MAIN LOGIC =================
+// ================= HAUPTLOGIK =================
 function checkAccess(area) {
     return localStorage.getItem("auth_" + area) === "true";
 }
@@ -78,7 +70,6 @@ function askPassword(area, onSuccess) {
         return;
     }
 
-    // Zeigt das Pop-up an
     popup.classList.remove("hidden");
     input.value = "";
     input.focus();
@@ -86,6 +77,7 @@ function askPassword(area, onSuccess) {
     const submit = (e) => {
         if (e && e.preventDefault) e.preventDefault(); 
         if (e && e.stopPropagation) e.stopPropagation();
+        
         if (input.value === PASSWORDS[area]) {
             localStorage.setItem("auth_" + area, "true");
             closePopupClean();
@@ -96,19 +88,15 @@ function askPassword(area, onSuccess) {
         }
     };
 
-    // Open-Button (wird jedes Mal neu zugewiesen)
     btnOpen.onclick = submit;
 
-    // Enter-Taste (wird jedes Mal neu zugewiesen)
     input.onkeydown = (e) => {
         if (e.key === "Enter") submit(e);
     };
 
-    // Cancel-Button (wird jedes Mal neu zugewiesen)
     btnCancel.onclick = closePopupClean;
 }
 
-// Öffnet einen Bereich sicher
 function openArea(area, url) {
     if (checkAccess(area)) {
         window.location.href = url;
@@ -118,3 +106,21 @@ function openArea(area, url) {
         });
     }
 }
+
+// ================= NEU: EIGENER ESC-HANDLER FÜR AUTH =================
+document.addEventListener("keydown", (e) => {
+    if (e.key === 'Escape') {
+        // 1. Fehler-Popup schließen (höchste Priorität)
+        const errorPopup = document.getElementById('error-popup');
+        if (errorPopup && !errorPopup.classList.contains('hidden')) {
+            closeErrorPopup();
+            return; // Stoppt hier, damit nicht auch das Passwort-Fenster zugeht
+        }
+
+        // 2. Passwort-Popup schließen
+        const pwPopup = document.getElementById("pw-popup");
+        if (pwPopup && !pwPopup.classList.contains('hidden')) {
+            closePopupClean();
+        }
+    }
+});
