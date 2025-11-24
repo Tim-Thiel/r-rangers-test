@@ -79,9 +79,8 @@ function askPassword(area, onSuccess) {
             closePopupClean(); // Nutzt die saubere Schließfunktion
             onSuccess();
         } else {
-            ashowError("❌ Falsches Passwort!"); // <--- NEU: Ruft das stylische Pop-up auf
+            showError("❌ Falsches Passwort!"); // <--- MUSS VORHANDEN SEIN!
             input.value = "";
-            input.focus(); // Bleibt im Feld, auch wenn das Fehler-Modal geschlossen wird
         }
     };
 
