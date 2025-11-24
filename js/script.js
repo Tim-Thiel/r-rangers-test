@@ -26,7 +26,7 @@ let currentIndex = 0;
 const modalOverlay = document.getElementById('downloadModal');
 const startDownloadBtn = document.getElementById('startDownloadBtn');
 let downloadAction = null; // Speichert die Funktion, die beim Klick auf 'Download starten' ausgeführt wird
-let downloadEnterHandler = null; // ✅ NEU: Speichert den temporären Enter-Key Handler
+let downloadEnterHandler = null; // Speichert den temporären Enter-Key Handler
 
 // ================= Hilfsfunktionen =================
 function logError(msg, obj) {
@@ -40,7 +40,7 @@ function closeDownloadModal() {
     // Wichtig: Entfernt den alten Click-Listener
     if (startDownloadBtn && downloadAction) startDownloadBtn.removeEventListener('click', downloadAction);
     
-    // ✅ NEU: Entfernt den Enter-Key Listener
+    // Entfernt den Enter-Key Listener
     if (downloadEnterHandler) {
         document.removeEventListener('keydown', downloadEnterHandler);
         downloadEnterHandler = null;
@@ -62,7 +62,7 @@ function showDownloadPrompt(actionFunction) {
         actionFunction(); // Führt die eigentliche Download-Logik aus
     };
 
-    // ✅ NEU: Definiert den Handler für die Enter-Taste
+    // Definiert den Handler für die Enter-Taste
     downloadEnterHandler = (e) => {
         if (e.key === 'Enter') {
             e.preventDefault(); 
@@ -76,12 +76,32 @@ function showDownloadPrompt(actionFunction) {
     // Fügt den Listener hinzu, der die gespeicherte Aktion startet (Click)
     startDownloadBtn.addEventListener('click', downloadAction); 
     
-    // ✅ NEU: Fügt den Enter-Key Listener hinzu
+    // Fügt den Enter-Key Listener hinzu
     document.addEventListener('keydown', downloadEnterHandler);
 
-    // ✅ NEU: Fokus auf den Button setzen, damit er optisch als aktiv hervorgehoben wird (gute UX)
+    // Fokus auf den Button setzen
     startDownloadBtn.focus();
 }
+
+// ✅ NEU: Funktion zum Auswählen/Abwählen aller Checkboxen
+function toggleAllCheckboxes() {
+    const checkboxes = document.querySelectorAll("input[type=checkbox]");
+    const toggleBtn = document.getElementById('toggleAllBtn');
+    
+    // Prüfen, ob bereits alle ausgewählt sind, um den Umschalt-Zustand zu bestimmen
+    const allChecked = Array.from(checkboxes).every(checkbox => checkbox.checked);
+
+    checkboxes.forEach(checkbox => {
+        // Umschalt-Logik
+        checkbox.checked = !allChecked;
+    });
+
+    // Button-Text anpassen
+    if (toggleBtn) {
+        toggleBtn.textContent = allChecked ? "Alle auswählen" : "Alle abwählen";
+    }
+}
+
 
 // === NEU: Einzel-Download Logik ===
 async function triggerSingleDownload(originalUrl, filename) {
@@ -94,7 +114,6 @@ async function triggerSingleDownload(originalUrl, filename) {
         a.click();
     } catch (err) {
         console.error("Download fehlgeschlagen", err);
-        // Hinweis: Hier könnte ebenfalls showError() genutzt werden
         alert("Download fehlgeschlagen."); 
     }
 }
@@ -162,7 +181,7 @@ async function loadGallery() {
         downloadLink.textContent = "Download";
         downloadLink.className = "download-btn";
 
-        // NEU: Ruft das Modal auf und übergibt die Download-Funktion als Callback
+        // Ruft das Modal auf und übergibt die Download-Funktion als Callback
         downloadLink.addEventListener("click", (e) => {
             e.preventDefault();
             showDownloadPrompt(() => triggerSingleDownload(originalUrl, file.name));
@@ -178,11 +197,11 @@ async function loadGallery() {
 }
 
 // ================= ZIP-Download =================
-// NEU: Die eigentliche Logik (wird vom Modal-Button aufgerufen)
+// Die eigentliche Logik (wird vom Modal-Button aufgerufen)
 async function triggerZipDownload() {
     const checkboxes = document.querySelectorAll("input[type=checkbox]:checked");
     
-    // Doppelte Prüfung, falls der Button enabled war (Alert durch showError ersetzt)
+    // Doppelte Prüfung, falls der Button enabled war
     if (checkboxes.length === 0) { 
         showError("🖼️ Fehler: Es wurde kein Bild ausgewählt."); 
         return; 
@@ -208,12 +227,12 @@ async function triggerZipDownload() {
     link.click();
 }
 
-// NEU: Öffnet das Modal, bevor der eigentliche Download startet (KORRIGIERT für showError)
+// Öffnet das Modal, bevor der eigentliche Download startet
 async function downloadSelected() {
     const checkboxes = document.querySelectorAll("input[type=checkbox]:checked");
     
     if (checkboxes.length === 0) {
-        // ✅ Rufe die gestylte Fehlerfunktion auf!
+        // Rufe die gestylte Fehlerfunktion auf!
         showError("🖼️ Bitte wähle mindestens ein Bild zum Herunterladen aus!"); 
         return; 
     }
@@ -273,7 +292,7 @@ function setupLightboxControls() {
 // ================= Init =================
 document.addEventListener("DOMContentLoaded", () => {
     loadGallery();
-    // NEU: Listener für das Schließen des Modals über das X
+    // Listener für das Schließen des Modals über das X
     const modalCloseBtn = document.querySelector('.modal-close');
     if(modalCloseBtn) modalCloseBtn.addEventListener('click', closeDownloadModal);
 });
@@ -302,8 +321,6 @@ function scrollToTop() {
 
 // Event Listener zur Initialisierung nach dem Laden
 document.addEventListener("DOMContentLoaded", () => {
-    // ... (deine bestehende loadGallery Logik ist hier) ...
-
     const button = document.getElementById("scrollToTopBtn");
     if (button) {
         // Bei Klick nach oben scrollen
