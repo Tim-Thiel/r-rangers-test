@@ -1,1 +1,75 @@
 
+/* 
+1. <title> und <h1> ändern!
+2. in [BEREICH].html einfügen:
+    <div class="card" onclick="location.href='[BEREICH]/[TITEL DER AKTION].html'">
+        <img src="../../bilder/[BEREICH]/[TITEL DER AKTION]/thumbs/[BILDNAME].jpg" alt="[TITEL DER AKTION]">
+        <h3>[TITEL DER AKTION]</h3>
+    </div>
+3. Bildordner erstellen und Bilder hochladen!
+*/
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>R-Rangers – [TITEL DER AKTION]</title>
+
+<link rel="stylesheet" href="../../css/style.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="../../js/auth.js"></script>
+<script src="../../js/nav.js" defer></script>
+<script src="../../js/script.js" defer></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+</head>
+
+<body>
+
+<h1>[TITEL DER AKTION]</h1>
+
+<div style="text-align: center; margin-bottom: 20px;">
+    <button id="toggleAllBtn" onclick="toggleAllCheckboxes()">Alle auswählen</button> 
+    <button onclick="downloadSelected()">Ausgewählte Bilder herunterladen</button>
+</div>
+
+<div id="gallery" class="gallery"></div>
+
+<div id="lightbox" class="lightbox hidden">
+    <span class="lightbox-close">&times;</span>
+    <img id="lightbox-img" src="" alt="">
+    <div class="lightbox-nav">
+        <span class="lightbox-prev">&#10094;</span>
+        <span class="lightbox-next">&#10095;</span>
+    </div>
+</div>
+
+<button id="scrollToTopBtn" aria-label="Nach oben scrollen" title="Nach oben scrollen" style="display:none;">
+    <i class="fas fa-arrow-up"></i>
+</button>
+    
+<div id="downloadModal" class="modal-overlay hidden">
+    <div class="modal-content">
+        <span class="modal-close" onclick="closeDownloadModal()">&times;</span>
+        <h3>Wichtiger Download-Hinweis!</h3>
+        
+        <p>
+            <span style="font-size: 1.2rem; display: block; margin-bottom: 10px;">⚠️ <strong>Achtung: Nur für private Nutzung!</strong></span>
+        </p>
+        
+        <p>
+            Die Bilder dürfen <strong>nicht veröffentlicht</strong> oder an Dritte weitergegeben werden.
+        </p>
+        
+        <p>
+            Bestätige die Einhaltung dieser Regelung mit "Download starten".
+        </p>
+        
+        <button id="startDownloadBtn" class="download-btn">Download starten</button>
+    </div>
+</div>
+</body>
+</html>
+
