@@ -30,6 +30,16 @@ document.body.insertAdjacentHTML("beforeend", `
         </div>
     </div>
 `);
+    // NEU: Fehler-Popup GLOBAL einfügen
+document.body.insertAdjacentHTML("beforeend", `
+    <div id="error-popup" class="modal-overlay hidden" style="z-index: 10000;">
+        <div class="modal-content" style="max-width: 300px; padding: 20px;">
+            <h3 style="color: red;">Fehler</h3>
+            <p id="error-message" style="margin: 15px 0;">Falsches Passwort!</p>
+            <button id="error-popup-close" class="download-btn" style="background: #666;">Schließen</button>
+        </div>
+    </div>
+`);
 
     // CSS laden
     const link = document.createElement("link");
