@@ -183,7 +183,13 @@ async function triggerZipDownload() {
 // NEU: Öffnet das Modal, bevor der eigentliche Download startet
 async function downloadSelected() {
     const checkboxes = document.querySelectorAll("input[type=checkbox]:checked");
-    if (checkboxes.length === 0) { alert("Bitte wähle mindestens ein Bild aus."); return; }
+    
+    if (checkboxes.length === 0) {
+        // ✅ NEU: Rufe die gestylte Fehlerfunktion auf!
+        // Hier wird die global in auth.js definierte Funktion verwendet.
+        showError("🖼️ Bitte wähle mindestens ein Bild zum Herunterladen aus!"); 
+        return; 
+    }
     
     // Startet den Download-Prompt, der dann triggerZipDownload() aufruft
     showDownloadPrompt(triggerZipDownload);
