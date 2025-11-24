@@ -16,6 +16,29 @@ function closePopupClean() {
     const btnOpen = document.getElementById("pw-popup-confirm");
     const btnCancel = document.getElementById("pw-popup-cancel");
 
+    // Funktion zum Anzeigen von stylischen Fehlern (ersetzt alert)
+function showError(message) {
+    const errorPopup = document.getElementById('error-popup');
+    const errorMessage = document.getElementById('error-message');
+    const closeBtn = document.getElementById('error-popup-close');
+    
+    if (!errorPopup) {
+        // Fallback, falls das Modal nicht gefunden wird
+        alert(message);
+        return;
+    }
+    
+    errorMessage.textContent = message;
+    errorPopup.classList.remove('hidden');
+    
+    // Listener für das Schließen (wird jedes Mal neu gesetzt, da es temporär ist)
+    closeBtn.onclick = () => {
+        errorPopup.classList.add('hidden');
+        // Fokus zurück auf das Passwort-Feld setzen
+        document.getElementById("pw-popup-input").focus(); 
+    };
+}
+
     // 1. Pop-up verstecken (mit CSS-Klasse, die zu nav.js passt)
     if (popup) popup.classList.add("hidden");
     if (input) input.value = "";
@@ -55,8 +78,9 @@ function askPassword(area, onSuccess) {
             closePopupClean(); // Nutzt die saubere Schließfunktion
             onSuccess();
         } else {
-            alert("❌ Falsches Passwort.");
+            ashowError("❌ Falsches Passwort!"); // <--- NEU: Ruft das stylische Pop-up auf
             input.value = "";
+            input.focus(); // Bleibt im Feld, auch wenn das Fehler-Modal geschlossen wird
         }
     };
 
@@ -83,14 +107,3 @@ function openArea(area, url) {
         });
     }
 }
-
-/*// ================= EVENT LISTENER FÜR DAS 'X' =================
-// Wird einmal beim Laden der Seite registriert (Löst Problem 1: X funktioniert nicht)
-document.addEventListener("DOMContentLoaded", () => {
-    const closeBtn = document.getElementById("pw-popup-close");
-    
-    // Beim Klick auf das 'X' (Schließen-Button) wird sauber geschlossen
-    if (closeBtn) {
-        closeBtn.addEventListener('click', closePopupClean);
-    }
-}); */
