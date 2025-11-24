@@ -110,7 +110,7 @@ function askPassword(area, onSuccess) {
 
     // Enter-Taste (wird jedes Mal neu zugewiesen)
     input.onkeydown = (e) => {
-        if (e.key === "Enter") submit();
+        if (e.key === "Enter") submit(e);
     };
 
     // Cancel-Button (wird jedes Mal neu zugewiesen)
