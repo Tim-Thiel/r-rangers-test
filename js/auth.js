@@ -93,4 +93,4 @@ document.addEventListener("DOMContentLoaded", () => {
     if (closeBtn) {
         closeBtn.addEventListener('click', closePopupClean);
     }
-});
+}); */
