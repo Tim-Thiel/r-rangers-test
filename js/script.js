@@ -1,4 +1,4 @@
-/* script.js — Alles Fix & Fertig */
+/* script.js — Alles Fix & Fertig inkl. Handy-Zurück-Fix */
 
 const cloudName = "db4arm1o7"; 
 let galleryImages = [];    
@@ -36,13 +36,23 @@ window.downloadSelected = function() {
 };
 
 window.closeDownloadModal = function() {
-    if (modalOverlay) modalOverlay.classList.add('hidden');
+    if (modalOverlay) {
+        modalOverlay.classList.add('hidden');
+        // Wenn das Modal manuell geschlossen wird, bereinigen wir den Verlaufseintrag
+        if (window.history.state && window.history.state.popup) {
+            window.history.back();
+        }
+    }
 };
 
 window.openLightbox = function(idx) {
     currentIndex = idx;
     const lb = document.getElementById("lightbox");
-    if (lb) lb.classList.remove("hidden");
+    if (lb) {
+        lb.classList.remove("hidden");
+        // NEU: Virtuellen Eintrag im Verlauf erstellen für die Handy-Zurück-Taste
+        window.history.pushState({ popup: "lightbox" }, "");
+    }
     updateLightboxImage();
 };
 
@@ -84,7 +94,6 @@ async function loadGallery() {
                 <a href="#" class="download-btn">Download</a>
             `;
 
-            // Hier lag der Fehler: Das Event-Muss INNERHALB der Schleife an card gebunden werden
             card.querySelector(".download-btn").addEventListener("click", (e) => {
                 e.preventDefault();
                 showModalContent("Wichtiger Download-Hinweis!", downloadHinweisHTML, true, () => triggerSingleDownload(originalUrl, cleanName));
@@ -97,17 +106,15 @@ async function loadGallery() {
 
 function updateLightboxImage() {
     const lbImg = document.getElementById("lightbox-img");
-    const lbContainer = document.getElementById("lightbox"); // Der Container für die Klasse
+    const lbContainer = document.getElementById("lightbox");
     if (!lbImg || !lbContainer) return;
     
-    // 1. Spinner einschalten & Bild unsichtbar machen
     lbContainer.classList.add("loading");
     lbImg.style.opacity = "0"; 
     
     lbImg.src = galleryImages[currentIndex];
     
     lbImg.onload = () => { 
-        // 2. Spinner ausschalten & Bild einblenden, wenn fertig geladen
         lbContainer.classList.remove("loading");
         lbImg.style.opacity = "1"; 
     };
@@ -187,12 +194,27 @@ function showModalContent(title, html, showButton, action = null) {
     
     if (showButton) {
         startDownloadBtn.style.display = "inline-block";
-        startDownloadBtn.onclick = () => action(); // Führt die Download-Funktion aus
+        startDownloadBtn.onclick = () => action();
     } else {
         startDownloadBtn.style.display = "none";
     }
     modalOverlay.classList.remove('hidden');
+    // NEU: Verlaufseintrag für das Modal
+    window.history.pushState({ popup: "modal" }, "");
 }
+
+// === BACK-BUTTON HANDLING (Handy-Fix) ===
+window.addEventListener("popstate", (event) => {
+    // Schließe Lightbox
+    const lb = document.getElementById("lightbox");
+    if (lb && !lb.classList.contains("hidden")) {
+        lb.classList.add("hidden");
+    }
+    // Schließe Modal
+    if (modalOverlay && !modalOverlay.classList.contains("hidden")) {
+        modalOverlay.classList.add('hidden');
+    }
+});
 
 document.addEventListener("DOMContentLoaded", () => {
     modalOverlay = document.getElementById('downloadModal');
@@ -208,9 +230,16 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     document.querySelector(".lightbox-close")?.addEventListener("click", () => {
         document.getElementById("lightbox").classList.add("hidden");
+        // Verlauf korrigieren, wenn manuell über X geschlossen wird
+        if (window.history.state && window.history.state.popup) {
+            window.history.back();
+        }
     });
     document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape") { window.closeDownloadModal(); document.getElementById("lightbox")?.classList.add("hidden"); }
+        if (e.key === "Escape") { 
+            window.closeDownloadModal(); 
+            document.getElementById("lightbox")?.classList.add("hidden"); 
+        }
         const lb = document.getElementById("lightbox");
         if (lb && !lb.classList.contains("hidden")) {
             if (e.key === "ArrowRight") { currentIndex = (currentIndex + 1) % galleryImages.length; updateLightboxImage(); }
