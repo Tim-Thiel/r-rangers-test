@@ -1,15 +1,12 @@
-/* script.js — Finaler Fix für Tim */
-
 const cloudName = "db4arm1o7"; 
 let galleryImages = [];    
 let originalImages = [];   
 let currentIndex = 0;
 
-// Diese Variablen definieren wir hier, weisen sie aber erst in DOMContentLoaded zu
 let modalOverlay;
 let startDownloadBtn;
 
-// === GLOBALE FUNKTIONEN (Für HTML onclick verfügbar) ===
+// === GLOBALE FUNKTIONEN ===
 
 window.toggleAllCheckboxes = function() {
     const boxes = document.querySelectorAll(".img-checkbox");
@@ -23,10 +20,12 @@ window.toggleAllCheckboxes = function() {
 window.downloadSelected = function() {
     const checked = document.querySelectorAll(".img-checkbox:checked");
     if (checked.length === 0) {
-        alert("Bitte wähle zuerst Bilder aus!");
+        // Zeigt das Modal mit einer Warnung statt Browser-Alert
+        showModalContent("Achtung!", "Bitte wähle zuerst mindestens ein Bild aus, das du herunterladen möchtest.", false);
         return;
     }
-    showDownloadPrompt(triggerZipDownload);
+    // Zeigt das Modal mit dem normalen Hinweis
+    showModalContent("Wichtiger Download-Hinweis!", "Die Bilder dürfen nicht veröffentlicht oder an Dritte weitergegeben werden. Bestätige die Einhaltung mit 'Download starten'.", true, triggerZipDownload);
 };
 
 window.closeDownloadModal = function() {
@@ -35,13 +34,12 @@ window.closeDownloadModal = function() {
 
 window.openLightbox = function(idx) {
     currentIndex = idx;
-    const lbImg = document.getElementById("lightbox-img");
-    if (lbImg) lbImg.src = galleryImages[currentIndex];
+    updateLightboxImage();
     const lb = document.getElementById("lightbox");
     if (lb) lb.classList.remove("hidden");
 };
 
-// === INTERNE FUNKTIONEN ===
+// === INTERNE LOGIK ===
 
 async function loadGallery() {
     const gallery = document.getElementById("gallery");
@@ -61,7 +59,9 @@ async function loadGallery() {
 
         files.forEach((file, idx) => {
             const thumbUrl = `https://res.cloudinary.com/${cloudName}/image/upload/w_400,c_scale,f_auto,q_auto:eco/v${file.version}/${file.public_id}.${file.format}`;
-            const lightboxUrl = `https://res.cloudinary.com/${cloudName}/image/upload/w_1600,c_limit,f_auto,q_auto:eco/v${file.version}/${file.public_id}.${file.format}`;
+            
+            // SPEED-FIX: q_auto:low und f_auto für schnellstes Laden in der Lightbox
+            const lightboxUrl = `https://res.cloudinary.com/${cloudName}/image/upload/w_1600,c_limit,f_auto,q_auto:low/v${file.version}/${file.public_id}.${file.format}`;
             const originalUrl = `https://res.cloudinary.com/${cloudName}/image/upload/v${file.version}/${file.public_id}.${file.format}`;
 
             galleryImages.push(lightboxUrl); 
@@ -76,17 +76,22 @@ async function loadGallery() {
                 <div class="checkbox-container">
                     <label><input type="checkbox" class="img-checkbox" value="${originalUrl}"> Bild auswählen</label>
                 </div>
-                <a href="#" class="download-btn-single">Download</a>
+                <a href="#" class="dl-single">Download</a>
             `;
 
-            card.querySelector(".download-btn-single").addEventListener("click", (e) => {
+            card.querySelector(".dl-single").addEventListener("click", (e) => {
                 e.preventDefault();
-                showDownloadPrompt(() => triggerSingleDownload(originalUrl, cleanName));
+                showModalContent("Download-Bestätigung", "Möchtest du dieses Bild für die private Nutzung herunterladen?", true, () => triggerSingleDownload(originalUrl, cleanName));
             });
 
             gallery.appendChild(card);
         });
-    } catch (err) { console.error("Fehler beim Laden:", err); }
+    } catch (err) { console.error("Galerie-Ladefehler:", err); }
+}
+
+function updateLightboxImage() {
+    const lbImg = document.getElementById("lightbox-img");
+    if (lbImg) lbImg.src = galleryImages[currentIndex];
 }
 
 async function triggerSingleDownload(url, filename) {
@@ -98,64 +103,75 @@ async function triggerSingleDownload(url, filename) {
 async function triggerZipDownload() {
     const checked = document.querySelectorAll(".img-checkbox:checked");
     const zip = new JSZip();
-    const folder = zip.folder("Ranger_Bilder");
-
     for (let box of checked) {
         const resp = await fetch(box.value);
         const blob = await resp.blob();
-        folder.file(box.value.split('/').pop(), blob);
+        zip.file(box.value.split('/').pop(), blob);
     }
-
     const content = await zip.generateAsync({type: "blob"});
     saveAs(content, "ranger_auswahl.zip");
 }
 
-function showDownloadPrompt(action) {
-    if (!modalOverlay) { action(); return; }
+// === MODAL STEUERUNG ===
+
+function showModalContent(title, text, showButton, action = null) {
+    if (!modalOverlay) return;
+    
+    // Wir tauschen den Text im vorhandenen Modal aus
+    modalOverlay.querySelector("h3").textContent = title;
+    modalOverlay.querySelector("p").innerHTML = text; // innerHTML für <strong> tags
+    
+    if (showButton) {
+        startDownloadBtn.style.display = "inline-block";
+        startDownloadBtn.onclick = () => {
+            modalOverlay.classList.add('hidden');
+            action();
+        };
+    } else {
+        startDownloadBtn.style.display = "none";
+    }
+    
     modalOverlay.classList.remove('hidden');
-    startDownloadBtn.onclick = () => {
-        modalOverlay.classList.add('hidden');
-        action();
-    };
 }
 
 // === INITIALISIERUNG ===
 
 document.addEventListener("DOMContentLoaded", () => {
-    // Jetzt erst die DOM-Elemente holen
     modalOverlay = document.getElementById('downloadModal');
     startDownloadBtn = document.getElementById('startDownloadBtn');
 
     loadGallery();
     
+    // Lightbox Navigation
     document.querySelector(".lightbox-next")?.addEventListener("click", (e) => { 
         e.stopPropagation(); 
         currentIndex = (currentIndex + 1) % galleryImages.length;
-        document.getElementById("lightbox-img").src = galleryImages[currentIndex];
+        updateLightboxImage();
     });
 
     document.querySelector(".lightbox-prev")?.addEventListener("click", (e) => { 
         e.stopPropagation(); 
         currentIndex = (currentIndex - 1 + galleryImages.length) % galleryImages.length;
-        document.getElementById("lightbox-img").src = galleryImages[currentIndex];
+        updateLightboxImage();
     });
 
     document.querySelector(".lightbox-close")?.addEventListener("click", () => {
         document.getElementById("lightbox").classList.add("hidden");
     });
     
+    // ESCAPE TASTE FIX
     document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+            // Schließt Modal
+            if (modalOverlay) modalOverlay.classList.add('hidden');
+            // Schließt Lightbox
+            document.getElementById("lightbox")?.classList.add("hidden");
+        }
+        // Pfeiltasten für Lightbox
         const lb = document.getElementById("lightbox");
         if (lb && !lb.classList.contains("hidden")) {
-            if (e.key === "ArrowRight") {
-                currentIndex = (currentIndex + 1) % galleryImages.length;
-                document.getElementById("lightbox-img").src = galleryImages[currentIndex];
-            }
-            if (e.key === "ArrowLeft") {
-                currentIndex = (currentIndex - 1 + galleryImages.length) % galleryImages.length;
-                document.getElementById("lightbox-img").src = galleryImages[currentIndex];
-            }
-            if (e.key === "Escape") document.getElementById("lightbox").classList.add("hidden");
+            if (e.key === "ArrowRight") { currentIndex = (currentIndex + 1) % galleryImages.length; updateLightboxImage(); }
+            if (e.key === "ArrowLeft") { currentIndex = (currentIndex - 1 + galleryImages.length) % galleryImages.length; updateLightboxImage(); }
         }
     });
 });
