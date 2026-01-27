@@ -1,14 +1,15 @@
-/* script.js — Fix für ReferenceError */
+/* script.js — Finaler Fix für Tim */
 
 const cloudName = "db4arm1o7"; 
 let galleryImages = [];    
 let originalImages = [];   
 let currentIndex = 0;
 
-const modalOverlay = document.getElementById('downloadModal');
-const startDownloadBtn = document.getElementById('startDownloadBtn');
+// Diese Variablen definieren wir hier, weisen sie aber erst in DOMContentLoaded zu
+let modalOverlay;
+let startDownloadBtn;
 
-// === DIESE FUNKTIONEN MÜSSEN GLOBAL SEIN ===
+// === GLOBALE FUNKTIONEN (Für HTML onclick verfügbar) ===
 
 window.toggleAllCheckboxes = function() {
     const boxes = document.querySelectorAll(".img-checkbox");
@@ -32,7 +33,15 @@ window.closeDownloadModal = function() {
     if (modalOverlay) modalOverlay.classList.add('hidden');
 };
 
-// === GALERIE LADEN ===
+window.openLightbox = function(idx) {
+    currentIndex = idx;
+    const lbImg = document.getElementById("lightbox-img");
+    if (lbImg) lbImg.src = galleryImages[currentIndex];
+    const lb = document.getElementById("lightbox");
+    if (lb) lb.classList.remove("hidden");
+};
+
+// === INTERNE FUNKTIONEN ===
 
 async function loadGallery() {
     const gallery = document.getElementById("gallery");
@@ -67,10 +76,10 @@ async function loadGallery() {
                 <div class="checkbox-container">
                     <label><input type="checkbox" class="img-checkbox" value="${originalUrl}"> Bild auswählen</label>
                 </div>
-                <a href="#" class="download-btn">Download</a>
+                <a href="#" class="download-btn-single">Download</a>
             `;
 
-            card.querySelector(".download-btn").addEventListener("click", (e) => {
+            card.querySelector(".download-btn-single").addEventListener("click", (e) => {
                 e.preventDefault();
                 showDownloadPrompt(() => triggerSingleDownload(originalUrl, cleanName));
             });
@@ -79,8 +88,6 @@ async function loadGallery() {
         });
     } catch (err) { console.error("Fehler beim Laden:", err); }
 }
-
-// === DOWNLOADS ===
 
 async function triggerSingleDownload(url, filename) {
     const resp = await fetch(url);
@@ -103,31 +110,6 @@ async function triggerZipDownload() {
     saveAs(content, "ranger_auswahl.zip");
 }
 
-// === LIGHTBOX ===
-
-window.openLightbox = function(idx) {
-    currentIndex = idx;
-    const lbImg = document.getElementById("lightbox-img");
-    if (lbImg) lbImg.src = galleryImages[currentIndex];
-    document.getElementById("lightbox").classList.remove("hidden");
-};
-
-function closeLightbox() {
-    document.getElementById("lightbox").classList.add("hidden");
-}
-
-function showNext() {
-    currentIndex = (currentIndex + 1) % galleryImages.length;
-    document.getElementById("lightbox-img").src = galleryImages[currentIndex];
-}
-
-function showPrev() {
-    currentIndex = (currentIndex - 1 + galleryImages.length) % galleryImages.length;
-    document.getElementById("lightbox-img").src = galleryImages[currentIndex];
-}
-
-// === HILFSFUNKTIONEN ===
-
 function showDownloadPrompt(action) {
     if (!modalOverlay) { action(); return; }
     modalOverlay.classList.remove('hidden');
@@ -137,19 +119,43 @@ function showDownloadPrompt(action) {
     };
 }
 
+// === INITIALISIERUNG ===
+
 document.addEventListener("DOMContentLoaded", () => {
+    // Jetzt erst die DOM-Elemente holen
+    modalOverlay = document.getElementById('downloadModal');
+    startDownloadBtn = document.getElementById('startDownloadBtn');
+
     loadGallery();
     
-    document.querySelector(".lightbox-next")?.addEventListener("click", (e) => { e.stopPropagation(); showNext(); });
-    document.querySelector(".lightbox-prev")?.addEventListener("click", (e) => { e.stopPropagation(); showPrev(); });
-    document.querySelector(".lightbox-close")?.addEventListener("click", closeLightbox);
+    document.querySelector(".lightbox-next")?.addEventListener("click", (e) => { 
+        e.stopPropagation(); 
+        currentIndex = (currentIndex + 1) % galleryImages.length;
+        document.getElementById("lightbox-img").src = galleryImages[currentIndex];
+    });
+
+    document.querySelector(".lightbox-prev")?.addEventListener("click", (e) => { 
+        e.stopPropagation(); 
+        currentIndex = (currentIndex - 1 + galleryImages.length) % galleryImages.length;
+        document.getElementById("lightbox-img").src = galleryImages[currentIndex];
+    });
+
+    document.querySelector(".lightbox-close")?.addEventListener("click", () => {
+        document.getElementById("lightbox").classList.add("hidden");
+    });
     
     document.addEventListener("keydown", (e) => {
         const lb = document.getElementById("lightbox");
         if (lb && !lb.classList.contains("hidden")) {
-            if (e.key === "ArrowRight") showNext();
-            if (e.key === "ArrowLeft") showPrev();
-            if (e.key === "Escape") closeLightbox();
+            if (e.key === "ArrowRight") {
+                currentIndex = (currentIndex + 1) % galleryImages.length;
+                document.getElementById("lightbox-img").src = galleryImages[currentIndex];
+            }
+            if (e.key === "ArrowLeft") {
+                currentIndex = (currentIndex - 1 + galleryImages.length) % galleryImages.length;
+                document.getElementById("lightbox-img").src = galleryImages[currentIndex];
+            }
+            if (e.key === "Escape") document.getElementById("lightbox").classList.add("hidden");
         }
     });
 });
