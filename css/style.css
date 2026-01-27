@@ -91,24 +91,26 @@ h1, h2 { text-align: center; color: var(--ranger-blue); margin-top: 20px; font-w
     box-shadow: var(--shadow-hover);
 }
 
-/* Abstände innerhalb der Karten straffen */
-.landing-card img, .card img, .gallery-item img {
+/* Standard Bilder (z.B. in der Galerie) */
+.gallery-item img {
     width: 100%;
     border-radius: 8px;
     object-fit: cover;
-    margin-bottom: 10px; /* Reduziert von 15px */
+    margin-bottom: 10px;
 }
 
-.landing-card img {
-    width: calc(100% + 40px);
-    margin: -20px -20px 10px -20px; /* Unten auch auf 10px reduziert */
+/* FIX: Bilder auf Startseite UND Aktionen ohne Rand oben/seitlich */
+.landing-card img, .card img {
+    width: calc(100% + 40px); /* Padding der Karte (2x 20px) ausgleichen */
+    margin: -20px -20px 10px -20px; /* Bild nach oben und zu den Seiten schieben */
     height: 250px;
-    border-radius: 12px 12px 0 0;
+    border-radius: 12px 12px 0 0; /* Ecken nur oben abrunden */
+    object-fit: cover;
 }
 
 /* Überschriften in Karten kompakter */
 .landing-card h3, .card h3, .gallery-item h3 {
-    margin: 5px 0; /* Minimaler Abstand oben und unten */
+    margin: 5px 0; 
     color: var(--ranger-blue);
 }
 
@@ -130,7 +132,7 @@ button, .download-btn, #download-selected {
     display: inline-block;
     text-decoration: none;
     width: fit-content;
-    margin: 5px auto 0 auto; /* Margin oben reduziert */
+    margin: 5px auto 0 auto; 
 }
 
 button:hover, .download-btn:hover, #download-selected:hover {
@@ -139,7 +141,7 @@ button:hover, .download-btn:hover, #download-selected:hover {
 
 .checkbox-container {
     display: flex; justify-content: center; align-items: center;
-    gap: 8px; margin-top: 5px; /* Margin oben reduziert */
+    gap: 8px; margin-top: 5px; 
 }
 
 /* --------------------------------------------
