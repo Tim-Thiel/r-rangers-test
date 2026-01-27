@@ -112,6 +112,26 @@ button:hover,
     cursor: pointer;
 }
 
+/* Stellt sicher, dass Download-Links in der Galerie wie Buttons aussehen */
+.gallery-item .download-btn {
+    display: block;             /* Nimmt volle Breite ein oder ist zentriert */
+    width: fit-content;         /* Passt sich dem Text an */
+    margin: 10px auto 0 auto;   /* Zentriert unter dem Bild */
+    text-decoration: none;      /* Entfernt den Unterstrich */
+    background: var(--ranger-blue);
+    color: white !important;    /* Erzwingt weiße Schrift */
+    padding: 8px 15px;
+    border-radius: var(--radius);
+    font-size: 14px;
+    font-weight: bold;
+    box-shadow: var(--shadow);
+}
+
+.gallery-item .download-btn:hover {
+    background: var(--ranger-blue-dark);
+    box-shadow: var(--shadow-hover);
+}
+
 /* --------------------------------------------
    LIGHTBOX (Optimiert)
 --------------------------------------------- */
