@@ -12,307 +12,170 @@
     --shadow-hover: 0 6px 20px rgba(0,0,0,0.15);
     --radius: 12px;
 }
+
 /* --------------------------------------------
    Globales Layout
 --------------------------------------------- */
 body {
-    margin: 0;
-    padding: 0;
+    margin: 0; padding: 0;
     font-family: "Segoe UI", Arial, sans-serif;
     background: var(--light-bg);
     color: var(--text-dark);
 }
-/* --------------------------------------------
-   Kopfzeilen / Titel
---------------------------------------------- */
-h1, h2 {
-    text-align: center;
-    color: var(--ranger-blue);
-    margin-top: 20px;
-    font-weight: 700;
-}
+
+h1, h2 { text-align: center; color: var(--ranger-blue); margin-top: 20px; font-weight: 700; }
+
 /* --------------------------------------------
    Buttons
 --------------------------------------------- */
-button,
-.download-btn,
-#download-selected {
+button, .download-btn, #download-selected {
     background: var(--ranger-blue);
-    color: white;
-    border: none;
-    padding: 12px 20px;
-    font-size: 16px;
-    border-radius: var(--radius);
-    cursor: pointer;
-    transition: 0.25s;
-    box-shadow: var(--shadow);
-    display: inline-block;
+    color: white; border: none; padding: 12px 20px;
+    font-size: 16px; border-radius: var(--radius);
+    cursor: pointer; transition: 0.25s; box-shadow: var(--shadow);
+    display: inline-block; text-decoration: none;
 }
-.download-btn {
-    text-decoration: none; 
-}
-button:hover,
-.download-btn:hover,
-#download-selected:hover {
+
+button:hover, .download-btn:hover, #download-selected:hover {
     background: var(--ranger-blue-dark);
     box-shadow: var(--shadow-hover);
 }
-button:disabled,
-#download-selected:disabled {
-    background: #999;
-    cursor: not-allowed;
-    box-shadow: none;
-}
+
 /* --------------------------------------------
-   Galerie Layout
+   Galerie & Karten (Zentrierung Fix)
 --------------------------------------------- */
 .gallery {
-    max-width: 2000px;
-    margin: 20px auto;
-    display: grid;
-    gap: 20px;
-    padding: 10px;
+    max-width: 2000px; margin: 20px auto;
+    display: grid; gap: 20px; padding: 10px;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
 }
-/* --------------------------------------------
-   Einzelnes Bild / Karte
---------------------------------------------- */
+
 .gallery-item {
     background: var(--card-bg);
     border-radius: var(--radius);
     box-shadow: var(--shadow); 
-    padding: 10px;
+    padding: 15px;
     transition: transform 0.3s, box-shadow 0.3s;
-    cursor: pointer;
+    display: flex; /* NEU: Für einfache Zentrierung */
+    flex-direction: column;
+    align-items: center; /* Zentriert Button und Checkbox horizontal */
 }
+
 .gallery-item:hover {
     transform: translateY(-5px); 
     box-shadow: 0 15px 25px rgba(0, 85, 170, 0.25); 
 }
-.gallery-item img {
-    width: 100%;
-    border-radius: var(--radius);
-    transition: opacity 0.3s ease; /* Für weiches Einblenden */
-}
+
+.gallery-item img { width: 100%; border-radius: var(--radius); }
+
 .checkbox-container {
-    display: flex;
-    justify-content: center; /* Zentriert die Checkbox */
-    align-items: center;
-    gap: 10px;
-    margin-top: 8px;
-}
-.checkbox-container input {
-    width: 20px;
-    height: 20px;
-    cursor: pointer;
-}
-/* --------------------------------------------
-   Footer
---------------------------------------------- */
-footer {
-    margin-top: 40px;
-    padding: 25px;
-    text-align: center;
-    background: var(--ranger-blue);
-    color: white;
-}
-/* --- LIGHTBOX (Spinner Fix) --- */
-.lightbox {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(0,0,0,0.95);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-    transition: opacity 0.3s ease;
-}
-.lightbox.hidden {
-    opacity: 0;
-    pointer-events: none;
+    display: flex; align-items: center;
+    gap: 10px; margin: 12px 0;
 }
 
-/* Der blaue Spinner (Wird nur angezeigt, wenn Klasse .loading aktiv ist) */
+/* --------------------------------------------
+   LIGHTBOX (Spinner & Pfeile)
+--------------------------------------------- */
+.lightbox {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.95); display: flex;
+    justify-content: center; align-items: center; z-index: 9999;
+}
+.lightbox.hidden { opacity: 0; pointer-events: none; }
+
 .lightbox.loading::before {
-    content: "";
-    position: absolute;
-    width: 60px; height: 60px;
+    content: ""; position: absolute; width: 60px; height: 60px;
     border: 6px solid rgba(255, 255, 255, 0.1);
-    border-top: 6px solid var(--ranger-blue);
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    z-index: 10005;
+    border-top: 6px solid var(--ranger-blue); border-radius: 50%;
+    animation: spin 1s linear infinite; z-index: 10005;
 }
 @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-.lightbox img {
-    max-width: 90%;
-    max-height: 85%;
-    border-radius: 12px;
-    box-shadow: 0 0 20px rgba(0,0,0,0.6);
-    position: relative;
-    z-index: 10000;
-}
-.lightbox-close {
-    position: absolute;
-    top: 25px; right: 40px;
-    font-size: 45px; color: #fff;
-    cursor: pointer; font-weight: bold;
-    z-index: 10010;
-}
-.lightbox-nav span {
-    position: absolute;
-    top: 50%; transform: translateY(-50%);
-    font-size: 60px; color: #fff;
-    cursor: pointer; padding: 10px;
-    transition: 0.3s; user-select: none;
-    z-index: 10010;
-}
+.lightbox img { max-width: 90%; max-height: 85%; border-radius: 12px; }
+.lightbox-close { position: absolute; top: 25px; right: 40px; font-size: 45px; color: #fff; cursor: pointer; }
+.lightbox-nav span { position: absolute; top: 50%; transform: translateY(-50%); font-size: 60px; color: #fff; cursor: pointer; transition: 0.3s; }
 .lightbox-prev { left: 40px; }
 .lightbox-next { right: 40px; }
-.lightbox-nav span:hover {
-    color: var(--ranger-blue); /* Pfeile werden beim Hover blau */
-    transform: translateY(-50%) scale(1.2);
-}
+.lightbox-nav span:hover { color: var(--ranger-blue); }
 
 /* --------------------------------------------
-   DOWNLOAD MODAL (HINWEIS-POPUP)
+   MODAL (X-Button Fix & Fortschritt)
 --------------------------------------------- */
 .modal-overlay {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(0, 0, 0, 0.7);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 9990;
-    opacity: 1;
-    transition: opacity 0.3s ease;
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.7); display: flex;
+    justify-content: center; align-items: center; z-index: 9990;
 }
-.modal-overlay.hidden {
-    opacity: 0;
-    pointer-events: none;
-}
+.modal-overlay.hidden { opacity: 0; pointer-events: none; }
+
 .modal-content {
-    background: white;
-    padding: 30px;
-    border-radius: var(--radius);
-    max-width: 450px;
-    text-align: center;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-    position: relative;
-}
-#modalBody strong {
-    color: var(--ranger-blue); /* Wichtige Texte im Modal werden blau */
+    background: white; padding: 35px 30px 30px 30px; /* Oben etwas mehr Platz für das X */
+    border-radius: var(--radius); max-width: 450px; width: 90%;
+    text-align: center; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    position: relative; /* Wichtig für das Kreuz */
 }
 
-/* Fortschrittsbalken Design */
+/* Das Kreuz im Modal - Jetzt wieder oben rechts */
+.modal-close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 32px;
+    color: #999;
+    cursor: pointer;
+    line-height: 1;
+}
+.modal-close:hover { color: var(--ranger-blue); }
+
+#modalBody strong { color: var(--ranger-blue); }
+
 .progress-container {
     width: 100%; background: #eee; border-radius: 10px;
     margin: 20px 0; overflow: hidden; display: none;
 }
-.progress-bar {
-    width: 0%; height: 15px; background: var(--ranger-blue);
-    transition: width 0.3s;
-}
+.progress-bar { width: 0%; height: 15px; background: var(--ranger-blue); transition: width 0.3s; }
 
-/* ================================================
-   STYLES VON index.html (Startseite-Menü)
-   ================================================ */
-.landing-card img {
-    width: calc(100% + 50px);
-    margin: -25px -25px 15px -25px;
-    height: 200px;
-    object-fit: cover;
-    border-top-left-radius: 12px;
-    border-top-right-radius: 12px;
-}
+/* --------------------------------------------
+   Startseite & Info-Box
+--------------------------------------------- */
 .landing-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 30px;
-    margin: 40px 0;
-    justify-content: center;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px; margin: 40px 0; justify-content: center;
 }
 .landing-card {
-    display: flex;
-    flex-direction: column;
-    text-align: center;
-    padding: 25px; 
-    background-color: #f9f9f9; 
-    border: 1px solid #ddd;
-    border-radius: 12px;
-    text-decoration: none; 
-    color: var(--text-dark); 
-    transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+    display: flex; flex-direction: column; text-align: center;
+    padding: 25px; background: #f9f9f9; border: 1px solid #ddd;
+    border-radius: 12px; text-decoration: none; color: var(--text-dark);
+    transition: transform 0.3s, box-shadow 0.3s;
 }
-.landing-card:hover {
-    transform: translateY(-5px); 
-    box-shadow: 0 15px 25px rgba(0, 85, 170, 0.25); 
-    border-color: var(--ranger-blue);
-}
+.landing-card:hover { transform: translateY(-5px); border-color: var(--ranger-blue); }
+.landing-card img { width: calc(100% + 50px); margin: -25px -25px 15px -25px; height: 200px; object-fit: cover; border-top-left-radius: 12px; border-top-right-radius: 12px; }
+
 .info-box {
-    margin-top: 25px;
-    padding: 15px 20px;
-    background: rgba(241, 196, 15, 0.15); /* Ranger-Gold transparent */
-    border-left: 5px solid var(--ranger-gold);
-    border-radius: 8px;
-    font-size: 16px;
-    max-width: 650px;
-    line-height: 1.4;
-    margin-left: auto;
-    margin-right: auto;
-    text-align: center;
+    margin: 25px auto; padding: 15px 20px;
+    background: rgba(241, 196, 15, 0.15); border-left: 5px solid var(--ranger-gold);
+    border-radius: 8px; max-width: 650px; text-align: center;
 }
 
-/* ================================================
-   Listen-Ansicht (Karten)
-   ================================================ */
-.card {
-    background: #f3f7ff;
-    padding: 15px;
-    border-radius: 12px;
-    cursor: pointer;
-    transition: transform 0.3s, box-shadow 0.3s; 
-    border: none; 
-}
-.card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 25px rgba(0, 85, 170, 0.25); 
-    background: #e6f0ff;
-}
-.grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
-}
-.card img {
-    width: 100%;
-    border-radius: 8px;
-}
-.card h3 {
-    text-align:center;
-    margin-top: 10px;
-}
+/* --------------------------------------------
+   Listen & Karten
+--------------------------------------------- */
+.card { background: #f3f7ff; padding: 15px; border-radius: 12px; cursor: pointer; transition: transform 0.3s; }
+.card:hover { transform: translateY(-5px); box-shadow: 0 15px 25px rgba(0, 85, 170, 0.25); background: #e6f0ff; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+.card img { width: 100%; border-radius: 8px; }
+.card h3 { text-align:center; margin-top: 10px; }
 
-/* Scroll To Top Button */
+/* Scroll To Top */
 #scrollToTopBtn {
-    position: fixed; bottom: 30px; right: 30px;
-    z-index: 9000;
-    background-color: var(--ranger-blue);
-    color: white; border: none; border-radius: 50%;
-    width: 50px; height: 50px; font-size: 24px;
+    position: fixed; bottom: 30px; right: 30px; z-index: 9000;
+    background: var(--ranger-blue); color: white; border: none;
+    border-radius: 50%; width: 50px; height: 50px;
     display: flex; justify-content: center; align-items: center;
-    cursor: pointer; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
 }
 
-/* Zentrierter Download Button auf Galerieseiten */
+/* Zentraler Download Button */
 body > button[onclick="downloadSelected()"] {
-    display: block;
-    margin: 20px auto;
-    max-width: 98%;
-    width: 300px;
-    text-align: center;
+    display: block; margin: 20px auto; width: 300px; text-align: center;
 }
