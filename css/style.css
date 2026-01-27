@@ -45,9 +45,9 @@ button:hover, .download-btn:hover, #download-selected:hover {
    Galerie & Karten (Zentrierung Fix)
 --------------------------------------------- */
 .gallery {
-    max-width: 2000px; margin: 20px auto;
-    display: grid; gap: 20px; padding: 10px;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        padding: 0 15px;
+        gap: 15px;
+    }
 }
 
 .gallery-item {
@@ -157,6 +157,14 @@ button:hover, .download-btn:hover, #download-selected:hover {
     border-radius: 8px; max-width: 650px; text-align: center;
 }
 
+.landing-grid, .grid, .gallery {
+    max-width: 1400px;
+    margin: 20px auto;
+    padding: 0 20px; /* Erzeugt den Abstand links und rechts zum Browserrand */
+    display: grid;
+    gap: 30px;
+}
+
 /* --------------------------------------------
    Listen & Karten
 --------------------------------------------- */
@@ -175,7 +183,19 @@ button:hover, .download-btn:hover, #download-selected:hover {
     cursor: pointer;
 }
 
-/* Zentraler Download Button */
-body > button[onclick="downloadSelected()"] {
-    display: block; margin: 20px auto; width: 300px; text-align: center;
+#toggleAllBtn {
+    min-width: 180px; /* Verhindert das "Zusammenziehen" bei Textänderung */
+    text-align: center;
 }
+
+@media (max-width: 600px) {
+    /* Alle Haupt-Buttons auf volle Breite, damit nichts springt */
+    #toggleAllBtn, 
+    #download-selected,
+    body > button[onclick="downloadSelected()"] {
+        width: 100% !important; /* Volle Breite auf dem Handy */
+        max-width: none;
+        margin: 10px 0; /* Abstand zwischen den Buttons */
+        display: block;
+        box-sizing: border-box; /* Damit Padding die Breite nicht sprengt */
+    }
