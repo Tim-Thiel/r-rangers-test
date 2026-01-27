@@ -66,7 +66,9 @@ async function loadGallery() {
         const downloadLink = document.createElement("a");
         downloadLink.href = originalUrl;
         // Dateiname aus der public_id generieren
-        const fileName = `${file.public_id.split('/').pop()}.${file.format}`;
+        const fileName = file.public_id.includes('/') 
+    ? `${file.public_id.split('/').pop()}.${file.format}` 
+    : `${file.public_id}.${file.format}`;
         downloadLink.textContent = "Download";
         downloadLink.className = "download-btn";
 
