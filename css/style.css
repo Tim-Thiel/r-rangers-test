@@ -91,7 +91,7 @@ h1, h2 { text-align: center; color: var(--ranger-blue); margin-top: 20px; font-w
     box-shadow: var(--shadow-hover);
 }
 
-/* Standard Bilder (z.B. in der Galerie) */
+/* Galerie Bilder */
 .gallery-item img {
     width: 100%;
     border-radius: 8px;
@@ -99,50 +99,35 @@ h1, h2 { text-align: center; color: var(--ranger-blue); margin-top: 20px; font-w
     margin-bottom: 10px;
 }
 
-/* FIX: Bilder auf Startseite UND Aktionen ohne Rand oben/seitlich */
+/* FIX: PRÄZISES 3:2 FORMAT FÜR KATEGORIEN */
 .landing-card img, .card img {
-    width: calc(100% + 40px); /* Padding der Karte (2x 20px) ausgleichen */
-    margin: -20px -20px 10px -20px; /* Bild nach oben und zu den Seiten schieben */
-    height: 250px;
-    border-radius: 12px 12px 0 0; /* Ecken nur oben abrunden */
+    width: calc(100% + 40px);
+    margin: -20px -20px 10px -20px;
+    
+    /* Umstellung auf dein Foto-Format: */
+    aspect-ratio: 3 / 2; 
+    height: auto; 
+    
+    border-radius: 12px 12px 0 0;
     object-fit: cover;
 }
 
-/* Überschriften in Karten kompakter */
-.landing-card h3, .card h3, .gallery-item h3 {
-    margin: 5px 0; 
-    color: var(--ranger-blue);
-}
-
-/* Textabsätze in Karten kompakter */
-.landing-card p, .card p, .gallery-item p {
-    margin: 5px 0 10px 0;
-    font-size: 0.95em;
-    line-height: 1.3;
-}
+/* Texte kompakt halten */
+.landing-card h3, .card h3, .gallery-item h3 { margin: 5px 0; color: var(--ranger-blue); }
+.landing-card p, .card p, .gallery-item p { margin: 5px 0 10px 0; font-size: 0.95em; line-height: 1.3; }
 
 /* --------------------------------------------
    Buttons & Checkboxen
 --------------------------------------------- */
 button, .download-btn, #download-selected {
-    background: var(--ranger-blue);
-    color: white; border: none; padding: 10px 20px;
-    font-size: 15px; border-radius: 8px;
-    cursor: pointer; transition: 0.25s;
-    display: inline-block;
-    text-decoration: none;
-    width: fit-content;
+    background: var(--ranger-blue); color: white; border: none; padding: 10px 20px;
+    font-size: 15px; border-radius: 8px; cursor: pointer; transition: 0.25s;
+    display: inline-block; text-decoration: none; width: fit-content;
     margin: 5px auto 0 auto; 
 }
 
-button:hover, .download-btn:hover, #download-selected:hover {
-    background: var(--ranger-blue-dark);
-}
-
-.checkbox-container {
-    display: flex; justify-content: center; align-items: center;
-    gap: 8px; margin-top: 5px; 
-}
+button:hover, .download-btn:hover, #download-selected:hover { background: var(--ranger-blue-dark); }
+.checkbox-container { display: flex; justify-content: center; align-items: center; gap: 8px; margin-top: 5px; }
 
 /* --------------------------------------------
    LIGHTBOX & MODAL
@@ -166,5 +151,4 @@ button:hover, .download-btn:hover, #download-selected:hover {
 --------------------------------------------- */
 @media (max-width: 600px) {
     .landing-grid, .grid, .gallery { padding: 0 15px !important; }
-    .landing-grid { grid-template-columns: 1fr; }
 }
