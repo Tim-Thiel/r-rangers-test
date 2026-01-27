@@ -18,7 +18,7 @@ document.body.insertAdjacentHTML("beforeend", `
     <div id="pw-popup" class="modal-overlay hidden">
         <div class="modal-content">
             <span id="pw-popup-close" class="modal-close">&times;</span>
-            <h3>🔐 Zugang erforderlich</h3>
+            <h3>🔐 Passwort erforderlich</h3>
             
             <input id="pw-popup-input" type="password" placeholder="Passwort"
                 style="width:90%; padding:10px; border-radius:8px; margin: 15px 0;">
