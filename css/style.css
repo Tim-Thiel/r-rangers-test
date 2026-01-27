@@ -52,7 +52,7 @@ button,
     transition: 0.25s;
     box-shadow: var(--shadow);
     display: inline-block;
-    text-decoration: none; /* Entfernt Unterstreichung bei <a> Links */
+    text-decoration: none;
     font-weight: 600;
 }
 
@@ -112,14 +112,14 @@ button:hover,
     cursor: pointer;
 }
 
-/* Stellt sicher, dass Download-Links in der Galerie wie Buttons aussehen */
+/* Spezieller Button-Look für Galerie-Links */
 .gallery-item .download-btn {
-    display: block;             /* Nimmt volle Breite ein oder ist zentriert */
-    width: fit-content;         /* Passt sich dem Text an */
-    margin: 10px auto 0 auto;   /* Zentriert unter dem Bild */
-    text-decoration: none;      /* Entfernt den Unterstrich */
+    display: block;
+    width: fit-content;
+    margin: 10px auto 0 auto;
+    text-decoration: none;
     background: var(--ranger-blue);
-    color: white !important;    /* Erzwingt weiße Schrift */
+    color: white !important;
     padding: 8px 15px;
     border-radius: var(--radius);
     font-size: 14px;
@@ -127,13 +127,8 @@ button:hover,
     box-shadow: var(--shadow);
 }
 
-.gallery-item .download-btn:hover {
-    background: var(--ranger-blue-dark);
-    box-shadow: var(--shadow-hover);
-}
-
 /* --------------------------------------------
-   LIGHTBOX (Optimiert)
+   LIGHTBOX (Optimiert & Blaues Design)
 --------------------------------------------- */
 .lightbox {
     position: fixed;
@@ -154,14 +149,14 @@ button:hover,
     pointer-events: none;
 }
 
-/* Lade-Spinner für die Lightbox */
+/* Blaues Lade-Spinner für die Lightbox */
 .lightbox::before {
     content: "";
     position: absolute;
     width: 50px;
     height: 50px;
     border: 5px solid #333;
-    border-top: 5px solid var(--ranger-gold);
+    border-top: 5px solid var(--ranger-blue); /* Geändert auf Blau */
     border-radius: 50%;
     animation: spin 1s linear infinite;
 }
@@ -208,12 +203,12 @@ button:hover,
 .lightbox-next { right: 20px; }
 
 .lightbox-nav span:hover {
-    color: var(--ranger-gold);
+    color: var(--ranger-blue); /* Geändert auf Blau */
     transform: translateY(-50%) scale(1.2);
 }
 
 /* --------------------------------------------
-   DOWNLOAD MODAL (Fix für doppelte Texte)
+   DOWNLOAD MODAL (Einheitliches Blau)
 --------------------------------------------- */
 .modal-overlay {
     position: fixed;
@@ -253,7 +248,7 @@ button:hover,
 }
 
 #modalBody strong {
-    color: #d32f2f; /* Rot für Warnungen */
+    color: var(--ranger-blue); /* Wichtige Hinweise jetzt in Blau statt Rot */
 }
 
 .modal-close {
