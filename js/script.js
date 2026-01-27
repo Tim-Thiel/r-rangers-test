@@ -1,13 +1,38 @@
-/* script.js — Finale Version für Tim */
+/* script.js — Fix für ReferenceError */
 
 const cloudName = "db4arm1o7"; 
 let galleryImages = [];    
 let originalImages = [];   
 let currentIndex = 0;
 
-// Elemente aus deinem HTML
 const modalOverlay = document.getElementById('downloadModal');
 const startDownloadBtn = document.getElementById('startDownloadBtn');
+
+// === DIESE FUNKTIONEN MÜSSEN GLOBAL SEIN ===
+
+window.toggleAllCheckboxes = function() {
+    const boxes = document.querySelectorAll(".img-checkbox");
+    if (boxes.length === 0) return;
+    const allChecked = Array.from(boxes).every(cb => cb.checked);
+    boxes.forEach(cb => cb.checked = !allChecked);
+    const btn = document.getElementById('toggleAllBtn');
+    if (btn) btn.textContent = allChecked ? "Alle auswählen" : "Alle abwählen";
+};
+
+window.downloadSelected = function() {
+    const checked = document.querySelectorAll(".img-checkbox:checked");
+    if (checked.length === 0) {
+        alert("Bitte wähle zuerst Bilder aus!");
+        return;
+    }
+    showDownloadPrompt(triggerZipDownload);
+};
+
+window.closeDownloadModal = function() {
+    if (modalOverlay) modalOverlay.classList.add('hidden');
+};
+
+// === GALERIE LADEN ===
 
 async function loadGallery() {
     const gallery = document.getElementById("gallery");
@@ -19,7 +44,6 @@ async function loadGallery() {
     try {
         const response = await fetch(listUrl);
         const data = await response.json();
-        // Sortierung nach Dateiname
         const files = data.resources.sort((a, b) => a.public_id.localeCompare(b.public_id));
 
         gallery.innerHTML = "";
@@ -56,48 +80,12 @@ async function loadGallery() {
     } catch (err) { console.error("Fehler beim Laden:", err); }
 }
 
-// === BUTTON-FUNKTIONEN AUS DEINEM HTML ===
-
-// Wird von deinem Button "Alle auswählen" aufgerufen
-function toggleAllCheckboxes() {
-    const boxes = document.querySelectorAll(".img-checkbox");
-    if (boxes.length === 0) return;
-    
-    // Prüfen, ob gerade alle ausgewählt sind
-    const allChecked = Array.from(boxes).every(cb => cb.checked);
-    
-    // Wenn alle voll sind -> alle leeren. Sonst -> alle füllen.
-    boxes.forEach(cb => cb.checked = !allChecked);
-    
-    // Button-Text anpassen
-    const btn = document.getElementById('toggleAllBtn');
-    if (btn) btn.textContent = allChecked ? "Alle auswählen" : "Alle abwählen";
-}
-
-// Wird von deinem Button "Ausgewählte Bilder herunterladen" aufgerufen
-function downloadSelected() {
-    const checked = document.querySelectorAll(".img-checkbox:checked");
-    if (checked.length === 0) {
-        alert("Bitte wähle zuerst mindestens ein Bild aus.");
-        return;
-    }
-    // Zeigt dein Modal mit dem rechtlichen Hinweis
-    showDownloadPrompt(triggerZipDownload);
-}
-
-// === DOWNLOAD LOGIK ===
+// === DOWNLOADS ===
 
 async function triggerSingleDownload(url, filename) {
     const resp = await fetch(url);
     const blob = await resp.blob();
-    if (window.saveAs) {
-        window.saveAs(blob, filename);
-    } else {
-        const a = document.createElement("a");
-        a.href = URL.createObjectURL(blob);
-        a.download = filename;
-        a.click();
-    }
+    saveAs(blob, filename);
 }
 
 async function triggerZipDownload() {
@@ -105,37 +93,24 @@ async function triggerZipDownload() {
     const zip = new JSZip();
     const folder = zip.folder("Ranger_Bilder");
 
-    // Lade-Anzeige (optionaler Hinweis in der Konsole)
-    console.log("ZIP wird erstellt...");
-
     for (let box of checked) {
         const resp = await fetch(box.value);
         const blob = await resp.blob();
-        const name = box.value.split('/').pop();
-        folder.file(name, blob);
+        folder.file(box.value.split('/').pop(), blob);
     }
 
     const content = await zip.generateAsync({type: "blob"});
-    
-    // Hier wird FileSaver.js (saveAs) benötigt!
-    if (window.saveAs) {
-        window.saveAs(content, "ranger_auswahl.zip");
-    } else {
-        const link = document.createElement("a");
-        link.href = URL.createObjectURL(content);
-        link.download = "ranger_auswahl.zip";
-        link.click();
-    }
+    saveAs(content, "ranger_auswahl.zip");
 }
 
 // === LIGHTBOX ===
 
-function openLightbox(idx) {
+window.openLightbox = function(idx) {
     currentIndex = idx;
     const lbImg = document.getElementById("lightbox-img");
-    lbImg.src = galleryImages[currentIndex];
+    if (lbImg) lbImg.src = galleryImages[currentIndex];
     document.getElementById("lightbox").classList.remove("hidden");
-}
+};
 
 function closeLightbox() {
     document.getElementById("lightbox").classList.add("hidden");
@@ -151,7 +126,7 @@ function showPrev() {
     document.getElementById("lightbox-img").src = galleryImages[currentIndex];
 }
 
-// === MODAL ===
+// === HILFSFUNKTIONEN ===
 
 function showDownloadPrompt(action) {
     if (!modalOverlay) { action(); return; }
@@ -162,16 +137,9 @@ function showDownloadPrompt(action) {
     };
 }
 
-function closeDownloadModal() {
-    if (modalOverlay) modalOverlay.classList.add('hidden');
-}
-
-// === START ===
-
 document.addEventListener("DOMContentLoaded", () => {
     loadGallery();
     
-    // Lightbox Events
     document.querySelector(".lightbox-next")?.addEventListener("click", (e) => { e.stopPropagation(); showNext(); });
     document.querySelector(".lightbox-prev")?.addEventListener("click", (e) => { e.stopPropagation(); showPrev(); });
     document.querySelector(".lightbox-close")?.addEventListener("click", closeLightbox);
