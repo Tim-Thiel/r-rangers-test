@@ -5,12 +5,12 @@ async function loadGallery() {
     const gallery = document.getElementById("gallery");
     if (!gallery) return;
 
-    // Wir nutzen den Tag, um alle Bilder einer Seite zu finden
-    // Der Tag muss in Cloudinary exakt so heißen wie deine HTML-Seite (pageName)
-    const tag = pageName; 
+    // Sicherstellen, dass pageName hier bekannt ist
+    const currentPage = window.location.pathname.split("/").pop().replace(".html", "") || "index";
+    const tag = currentPage; 
     
-    // Cloudinary URL für die Liste der Bilder mit diesem Tag
-    // WICHTIG: "Resource list" muss in Cloudinary aktiviert sein!
+    console.log("Suche in Cloudinary nach Tag:", tag); // Zum Testen in der Konsole
+
     const listUrl = `https://res.cloudinary.com/${cloudName}/image/list/${tag}.json`;
 
     let response;
