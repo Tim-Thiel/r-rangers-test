@@ -34,13 +34,13 @@ async function loadGallery() {
     originalImages = [];
 
     files.forEach((file, idx) => {
-        // Cloudinary URLs zusammenbauen
-        // 'f_auto,q_auto' optimiert die Bilder automatisch (Dateigröße!)
+        // Wir bauen die URL genau so zusammen, wie Cloudinary sie braucht
         const thumbUrl = `https://res.cloudinary.com/${cloudName}/image/upload/w_400,c_scale,f_auto,q_auto/v${file.version}/${file.public_id}.${file.format}`;
-        
-        // Die Original-URL für den Download (mit fl_attachment für direkten Download)
+    
+        // Die Original-URL für den Download
         const originalUrl = `https://res.cloudinary.com/${cloudName}/image/upload/fl_attachment/v${file.version}/${file.public_id}.${file.format}`;
 
+       
         galleryImages.push(thumbUrl);
         originalImages.push(originalUrl);
 
