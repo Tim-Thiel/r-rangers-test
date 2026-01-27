@@ -42,110 +42,33 @@ button:hover, .download-btn:hover, #download-selected:hover {
 }
 
 /* --------------------------------------------
-   Galerie & Karten (Zentrierung Fix)
+   Layout Container (ABSTAND ZUM RAND FIX)
 --------------------------------------------- */
+/* Diese Regel sorgt für den Abstand auf ALLEN Seiten */
+.landing-grid, .grid, .gallery {
+    display: grid;
+    margin: 40px auto;
+    padding: 0 20px; /* Hier ist dein Rand-Abstand */
+    max-width: 1400px;
+    box-sizing: border-box;
+}
+
+/* Startseite & Listen (Aktionen, Team, Privat) */
+.landing-grid, .grid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+}
+
+/* Galerie-Bilder (Desktop-Größe Fix) */
 .gallery {
     max-width: 2000px;
-    margin: 20px auto;
-    display: grid;
-    gap: 20px;
-    padding: 0 20px; /* Abstand zum Rand */
-    /* Hier ist der entscheidende Teil für die Bildgröße: */
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-}
-
-.gallery-item {
-    background: var(--card-bg);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow); 
-    padding: 15px;
-    transition: transform 0.3s, box-shadow 0.3s;
-    display: flex; /* NEU: Für einfache Zentrierung */
-    flex-direction: column;
-    align-items: center; /* Zentriert Button und Checkbox horizontal */
-}
-
-.gallery-item:hover {
-    transform: translateY(-5px); 
-    box-shadow: 0 15px 25px rgba(0, 85, 170, 0.25); 
-}
-
-.gallery-item img { width: 100%; border-radius: var(--radius); }
-
-.checkbox-container {
-    display: flex; align-items: center;
-    gap: 10px; margin: 12px 0;
+    gap: 20px;
 }
 
 /* --------------------------------------------
-   LIGHTBOX (Spinner & Pfeile)
+   Einzelne Karten & Bilder
 --------------------------------------------- */
-.lightbox {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.95); display: flex;
-    justify-content: center; align-items: center; z-index: 9999;
-}
-.lightbox.hidden { opacity: 0; pointer-events: none; }
-
-.lightbox.loading::before {
-    content: ""; position: absolute; width: 60px; height: 60px;
-    border: 6px solid rgba(255, 255, 255, 0.1);
-    border-top: 6px solid var(--ranger-blue); border-radius: 50%;
-    animation: spin 1s linear infinite; z-index: 10005;
-}
-@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-.lightbox img { max-width: 90%; max-height: 85%; border-radius: 12px; }
-.lightbox-close { position: absolute; top: 25px; right: 40px; font-size: 45px; color: #fff; cursor: pointer; }
-.lightbox-nav span { position: absolute; top: 50%; transform: translateY(-50%); font-size: 60px; color: #fff; cursor: pointer; transition: 0.3s; }
-.lightbox-prev { left: 40px; }
-.lightbox-next { right: 40px; }
-.lightbox-nav span:hover { color: var(--ranger-blue); }
-
-/* --------------------------------------------
-   MODAL (X-Button Fix & Fortschritt)
---------------------------------------------- */
-.modal-overlay {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0, 0, 0, 0.7); display: flex;
-    justify-content: center; align-items: center; z-index: 9990;
-}
-.modal-overlay.hidden { opacity: 0; pointer-events: none; }
-
-.modal-content {
-    background: white; padding: 35px 30px 30px 30px; /* Oben etwas mehr Platz für das X */
-    border-radius: var(--radius); max-width: 450px; width: 90%;
-    text-align: center; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-    position: relative; /* Wichtig für das Kreuz */
-}
-
-/* Das Kreuz im Modal - Jetzt wieder oben rechts */
-.modal-close {
-    position: absolute;
-    top: 10px;
-    right: 15px;
-    font-size: 32px;
-    color: #999;
-    cursor: pointer;
-    line-height: 1;
-}
-.modal-close:hover { color: var(--ranger-blue); }
-
-#modalBody strong { color: var(--ranger-blue); }
-
-.progress-container {
-    width: 100%; background: #eee; border-radius: 10px;
-    margin: 20px 0; overflow: hidden; display: none;
-}
-.progress-bar { width: 0%; height: 15px; background: var(--ranger-blue); transition: width 0.3s; }
-
-/* --------------------------------------------
-   Startseite & Info-Box
---------------------------------------------- */
-.landing-grid {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 30px; margin: 40px 0; justify-content: center;
-}
 .landing-card {
     display: flex; flex-direction: column; text-align: center;
     padding: 25px; background: #f9f9f9; border: 1px solid #ddd;
@@ -155,57 +78,90 @@ button:hover, .download-btn:hover, #download-selected:hover {
 .landing-card:hover { transform: translateY(-5px); border-color: var(--ranger-blue); }
 .landing-card img { width: calc(100% + 50px); margin: -25px -25px 15px -25px; height: 200px; object-fit: cover; border-top-left-radius: 12px; border-top-right-radius: 12px; }
 
+.gallery-item {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow); 
+    padding: 15px;
+    transition: transform 0.3s, box-shadow 0.3s;
+    display: flex; flex-direction: column;
+    align-items: center; 
+}
+.gallery-item:hover { transform: translateY(-5px); box-shadow: 0 15px 25px rgba(0, 85, 170, 0.25); }
+.gallery-item img { width: 100%; border-radius: var(--radius); }
+
+.card { background: #f3f7ff; padding: 15px; border-radius: 12px; cursor: pointer; transition: transform 0.3s; }
+.card:hover { transform: translateY(-5px); box-shadow: 0 15px 25px rgba(0, 85, 170, 0.25); background: #e6f0ff; }
+.card img { width: 100%; border-radius: 8px; }
+.card h3 { text-align:center; margin-top: 10px; }
+
+/* --------------------------------------------
+   Elemente (Checkbox, Info, ScrollTop)
+--------------------------------------------- */
+.checkbox-container { display: flex; align-items: center; gap: 10px; margin: 12px 0; }
 .info-box {
     margin: 25px auto; padding: 15px 20px;
     background: rgba(241, 196, 15, 0.15); border-left: 5px solid var(--ranger-gold);
     border-radius: 8px; max-width: 650px; text-align: center;
 }
-
-.landing-grid, .grid, .gallery {
-        padding: 0 15px;
-    }
-}
-
-.landing-grid, .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 30px;
-    padding: 0 20px; /* Abstand zum Rand hinzugefügt */
-    margin: 40px auto;
-    max-width: 1400px;
-}
-
-/* --------------------------------------------
-   Listen & Karten
---------------------------------------------- */
-.card { background: #f3f7ff; padding: 15px; border-radius: 12px; cursor: pointer; transition: transform 0.3s; }
-.card:hover { transform: translateY(-5px); box-shadow: 0 15px 25px rgba(0, 85, 170, 0.25); background: #e6f0ff; }
-.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
-.card img { width: 100%; border-radius: 8px; }
-.card h3 { text-align:center; margin-top: 10px; }
-
-/* Scroll To Top */
 #scrollToTopBtn {
     position: fixed; bottom: 30px; right: 30px; z-index: 9000;
     background: var(--ranger-blue); color: white; border: none;
     border-radius: 50%; width: 50px; height: 50px;
-    display: flex; justify-content: center; align-items: center;
-    cursor: pointer;
+    display: flex; justify-content: center; align-items: center; cursor: pointer;
 }
 
-#toggleAllBtn {
-    min-width: 180px; /* Verhindert das "Zusammenziehen" bei Textänderung */
-    text-align: center;
+/* --------------------------------------------
+   LIGHTBOX
+--------------------------------------------- */
+.lightbox {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.95); display: flex;
+    justify-content: center; align-items: center; z-index: 9999;
 }
+.lightbox.hidden { opacity: 0; pointer-events: none; }
+.lightbox.loading::before {
+    content: ""; position: absolute; width: 60px; height: 60px;
+    border: 6px solid rgba(255, 255, 255, 0.1);
+    border-top: 6px solid var(--ranger-blue); border-radius: 50%;
+    animation: spin 1s linear infinite; z-index: 10005;
+}
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+.lightbox img { max-width: 90%; max-height: 85%; border-radius: 12px; }
+.lightbox-close { position: absolute; top: 25px; right: 40px; font-size: 45px; color: #fff; cursor: pointer; }
+.lightbox-nav span { position: absolute; top: 50%; transform: translateY(-50%); font-size: 60px; color: #fff; cursor: pointer; transition: 0.3s; }
+.lightbox-prev { left: 40px; }
+.lightbox-next { right: 40px; }
+.lightbox-nav span:hover { color: var(--ranger-blue); }
+
+/* --------------------------------------------
+   MODAL & FORTSCHRITT
+--------------------------------------------- */
+.modal-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.7); display: flex;
+    justify-content: center; align-items: center; z-index: 9990;
+}
+.modal-overlay.hidden { opacity: 0; pointer-events: none; }
+.modal-content {
+    background: white; padding: 35px 30px 30px 30px;
+    border-radius: var(--radius); max-width: 450px; width: 90%;
+    text-align: center; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    position: relative;
+}
+.modal-close { position: absolute; top: 10px; right: 15px; font-size: 32px; color: #999; cursor: pointer; line-height: 1; }
+.modal-close:hover { color: var(--ranger-blue); }
+#modalBody strong { color: var(--ranger-blue); }
+.progress-container { width: 100%; background: #eee; border-radius: 10px; margin: 20px 0; overflow: hidden; display: none; }
+.progress-bar { width: 0%; height: 15px; background: var(--ranger-blue); transition: width 0.3s; }
+
+/* --------------------------------------------
+   MOBILE OPTIMIERUNG
+--------------------------------------------- */
+#toggleAllBtn { min-width: 180px; text-align: center; }
 
 @media (max-width: 600px) {
-    /* Buttons untereinander, aber in normaler Größe zentriert */
-    #toggleAllBtn, 
-    #download-selected,
-    body > button[onclick="downloadSelected()"] {
-        display: block;      /* Erzwingt eine neue Zeile */
-        width: auto;         /* Button wird nur so breit wie der Text */
-        min-width: 200px;    /* Aber eine gewisse Mindestbreite, damit es stabil bleibt */
-        margin: 10px auto;   /* Zentriert den Button und gibt Abstand nach oben/unten */
-        box-sizing: border-box;
-    }
+    /* Abstand zum Rand auf dem Handy */
+    .landing-grid, .grid, .gallery {
+        padding: 0 15px !important;
+        margin: 20px auto;
