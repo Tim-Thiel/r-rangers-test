@@ -149,20 +149,28 @@ button:hover,
     pointer-events: none;
 }
 
-/* Blaues Lade-Spinner für die Lightbox - Jetzt absolut im Vordergrund */
-.lightbox::before {
+/* Der Spinner wird nur angezeigt, wenn die Lightbox auch die Klasse 'loading' hat */
+.lightbox.loading::before {
     content: "";
     position: absolute;
+    top: 50%;
+    left: 50%;
     width: 60px;
     height: 60px;
-    border: 6px solid rgba(255, 255, 255, 0.1); /* Ganz schwacher heller Ring */
-    border-top: 6px solid var(--ranger-blue);    /* Kräftiges Ranger-Blau */
+    margin-top: -30px; /* Zentrierungshilfe */
+    margin-left: -30px;
+    border: 6px solid rgba(255, 255, 255, 0.2); 
+    border-top: 6px solid var(--ranger-blue);   
     border-radius: 50%;
     animation: spin 1s linear infinite;
-    z-index: 10001; /* Höher als das Bild (10000) */
-    pointer-events: none; /* Man kann durch den Spinner durchklicken */
+    z-index: 10005;
+    display: block;
 }
 
+/* Wenn nicht geladen wird, blenden wir das Pseudo-Element aus */
+.lightbox:not(.loading)::before {
+    display: none;
+}
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
