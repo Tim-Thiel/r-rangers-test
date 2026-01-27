@@ -25,13 +25,26 @@ window.downloadSelected = function() {
         showModalContent("Achtung!", "<p>Bitte wähle zuerst mindestens ein Bild aus.</p>", false);
         return;
     }
+    // Einheitlicher Text für ZIP
     showModalContent(
         "Wichtiger Download-Hinweis!", 
-        "<p>⚠️ <strong>Nur für private Nutzung!</strong></p><p>Die Bilder dürfen <strong>nicht veröffentlicht</strong> werden.</p><p>Bestätige die Einhaltung mit 'Download starten'.</p>", 
+        "<p>⚠️ <strong>Nur für private Nutzung!</strong></p><p>Die Bilder dürfen <strong>nicht veröffentlicht</strong> oder <strong>an Dritte weitergegeben</strong> werden.</p><p>Bestätige die Einhaltung dieser Regelung mit 'Download starten'.</p>", 
         true, 
         triggerZipDownload
     );
 };
+
+// In der loadGallery Funktion beim Erstellen des Buttons:
+card.querySelector(".download-btn").addEventListener("click", (e) => {
+    e.preventDefault();
+    // Einheitlicher Text für Einzel-Download
+    showModalContent(
+        "Wichtiger Download-Hinweis!", 
+        "<p>⚠️ <strong>Nur für private Nutzung!</strong></p><p>Die Bilder dürfen <strong>nicht veröffentlicht</strong> oder <strong>an Dritte weitergegeben</strong> werden.</p><p>Bestätige die Einhaltung dieser Regelung mit 'Download starten'.</p>", 
+        true, 
+        () => triggerSingleDownload(originalUrl, cleanName)
+    );
+});
 
 window.closeDownloadModal = function() {
     if (modalOverlay) modalOverlay.classList.add('hidden');
@@ -106,9 +119,23 @@ function updateLightboxImage() {
 }
 
 async function triggerSingleDownload(url, filename) {
-    const resp = await fetch(url);
-    const blob = await resp.blob();
-    saveAs(blob, filename);
+    const bodyElem = document.getElementById("modalBody");
+    const startBtn = document.getElementById("startDownloadBtn");
+    
+    startBtn.style.display = "none";
+    bodyElem.innerHTML = `<p>Bild wird heruntergeladen...</p><span id="statusText">Bitte warten...</span>`;
+
+    try {
+        const resp = await fetch(url);
+        const blob = await resp.blob();
+        saveAs(blob, filename);
+        
+        document.getElementById("statusText").innerText = "Fertig!";
+        setTimeout(() => closeDownloadModal(), 800);
+    } catch (err) {
+        console.error("Fehler:", err);
+        bodyElem.innerHTML = "<p>Fehler beim Download.</p>";
+    }
 }
 
 async function triggerZipDownload() {
