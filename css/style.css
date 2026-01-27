@@ -165,3 +165,16 @@ button:hover, .download-btn:hover, #download-selected:hover {
     .landing-grid, .grid, .gallery {
         padding: 0 15px !important;
         margin: 20px auto;
+    }
+
+    /* Buttons untereinander zentriert */
+    #toggleAllBtn, 
+    #download-selected,
+    body > button[onclick="downloadSelected()"] {
+        display: block;
+        width: auto;
+        min-width: 220px;
+        margin: 10px auto;
+        box-sizing: border-box;
+    }
+}
