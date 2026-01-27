@@ -1,4 +1,4 @@
-/* script.js — Fix für doppelte Texte & Modal-Steuerung */
+/* script.js — Einheitlicher Download-Hinweis */
 
 const cloudName = "db4arm1o7"; 
 let galleryImages = [];    
@@ -29,6 +29,7 @@ window.downloadSelected = function() {
         );
         return;
     }
+    // Hinweis für ZIP-Download
     showModalContent(
         "Wichtiger Download-Hinweis!", 
         "<p>⚠️ <strong>Nur für private Nutzung!</strong></p><p>Die Bilder dürfen <strong>nicht veröffentlicht</strong> oder an Dritte weitergegeben werden.</p><p>Bestätige die Einhaltung dieser Regelung mit 'Download starten'.</p>", 
@@ -83,14 +84,15 @@ async function loadGallery() {
                 <div class="checkbox-container">
                     <label><input type="checkbox" class="img-checkbox" value="${originalUrl}"> Bild auswählen</label>
                 </div>
-                <a href="#" class="dl-single">Download</a>
+                <a href="#" class="download-btn">Download</a>
             `;
 
-            card.querySelector(".dl-single").addEventListener("click", (e) => {
+            card.querySelector(".download-btn").addEventListener("click", (e) => {
                 e.preventDefault();
+                // ✅ JETZT MIT DEM GLEICHEN HINWEIS WIE BEIM ZIP
                 showModalContent(
-                    "Download-Bestätigung", 
-                    "<p>Möchtest du dieses Bild für die private Nutzung herunterladen?</p>", 
+                    "Wichtiger Download-Hinweis!", 
+                    "<p>⚠️ <strong>Nur für private Nutzung!</strong></p><p>Die Bilder dürfen <strong>nicht veröffentlicht</strong> oder an Dritte weitergegeben werden.</p><p>Bestätige die Einhaltung dieser Regelung mit 'Download starten'.</p>", 
                     true, 
                     () => triggerSingleDownload(originalUrl, cleanName)
                 );
@@ -104,7 +106,7 @@ async function loadGallery() {
 function updateLightboxImage() {
     const lbImg = document.getElementById("lightbox-img");
     if (!lbImg) return;
-    lbImg.style.opacity = "0.3"; // Zeigt, dass geladen wird
+    lbImg.style.opacity = "0.4"; 
     lbImg.src = galleryImages[currentIndex];
     lbImg.onload = () => { lbImg.style.opacity = "1"; };
 }
@@ -127,14 +129,16 @@ async function triggerZipDownload() {
     saveAs(content, "ranger_auswahl.zip");
 }
 
-// === MODAL STEUERUNG (SAUBER) ===
+// === MODAL STEUERUNG ===
 
 function showModalContent(title, html, showButton, action = null) {
     if (!modalOverlay) return;
     
-    // Wir setzen Titel und Body gezielt
-    document.getElementById("modalTitle").textContent = title;
-    document.getElementById("modalBody").innerHTML = html;
+    const titleElem = document.getElementById("modalTitle") || modalOverlay.querySelector("h3");
+    const bodyElem = document.getElementById("modalBody") || modalOverlay.querySelector(".modal-content p");
+    
+    if (titleElem) titleElem.textContent = title;
+    if (bodyElem) bodyElem.innerHTML = html;
     
     if (showButton) {
         startDownloadBtn.style.display = "inline-block";
