@@ -54,7 +54,7 @@ h1, h2 { text-align: center; color: var(--ranger-blue); margin-top: 20px; font-w
 
 /* STARTSEITE: Zentriert & Größere Karten */
 .landing-grid {
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); /* Größer: 350px */
+    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); /* Größer: 350px */
     justify-content: center; /* Zentriert die Karten, wenn Platz übrig ist */
     max-width: 1600px; /* Damit 3 Karten schön nebeneinander passen */
 }
