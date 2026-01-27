@@ -52,20 +52,17 @@ h1, h2 { text-align: center; color: var(--ranger-blue); margin-top: 20px; font-w
     gap: 30px;
 }
 
-/* STARTSEITE: Zentriert & Größere Karten */
 .landing-grid {
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); /* Größer: 350px */
-    justify-content: center; /* Zentriert die Karten, wenn Platz übrig ist */
-    max-width: 1600px; /* Damit 3 Karten schön nebeneinander passen */
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    justify-content: center;
+    max-width: 1600px;
 }
 
-/* GALERIE: Viele Bilder nebeneinander */
 .gallery {
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 20px;
 }
 
-/* AKTIONEN/LISTEN */
 .grid {
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
 }
@@ -94,18 +91,32 @@ h1, h2 { text-align: center; color: var(--ranger-blue); margin-top: 20px; font-w
     box-shadow: var(--shadow-hover);
 }
 
+/* Abstände innerhalb der Karten straffen */
 .landing-card img, .card img, .gallery-item img {
     width: 100%;
     border-radius: 8px;
     object-fit: cover;
-    margin-bottom: 15px;
+    margin-bottom: 10px; /* Reduziert von 15px */
 }
 
 .landing-card img {
     width: calc(100% + 40px);
-    margin: -20px -20px 15px -20px;
-    height: 250px; /* Bild auf Startseite etwas höher */
+    margin: -20px -20px 10px -20px; /* Unten auch auf 10px reduziert */
+    height: 250px;
     border-radius: 12px 12px 0 0;
+}
+
+/* Überschriften in Karten kompakter */
+.landing-card h3, .card h3, .gallery-item h3 {
+    margin: 5px 0; /* Minimaler Abstand oben und unten */
+    color: var(--ranger-blue);
+}
+
+/* Textabsätze in Karten kompakter */
+.landing-card p, .card p, .gallery-item p {
+    margin: 5px 0 10px 0;
+    font-size: 0.95em;
+    line-height: 1.3;
 }
 
 /* --------------------------------------------
@@ -119,7 +130,7 @@ button, .download-btn, #download-selected {
     display: inline-block;
     text-decoration: none;
     width: fit-content;
-    margin: 10px auto 0 auto;
+    margin: 5px auto 0 auto; /* Margin oben reduziert */
 }
 
 button:hover, .download-btn:hover, #download-selected:hover {
@@ -128,7 +139,7 @@ button:hover, .download-btn:hover, #download-selected:hover {
 
 .checkbox-container {
     display: flex; justify-content: center; align-items: center;
-    gap: 8px; margin-top: 10px;
+    gap: 8px; margin-top: 5px; /* Margin oben reduziert */
 }
 
 /* --------------------------------------------
@@ -153,5 +164,5 @@ button:hover, .download-btn:hover, #download-selected:hover {
 --------------------------------------------- */
 @media (max-width: 600px) {
     .landing-grid, .grid, .gallery { padding: 0 15px !important; }
-    .landing-grid { grid-template-columns: 1fr; } /* Auf dem Handy untereinander */
+    .landing-grid { grid-template-columns: 1fr; }
 }
