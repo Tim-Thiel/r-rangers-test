@@ -97,13 +97,18 @@ async function loadGallery() {
 
 function updateLightboxImage() {
     const lbImg = document.getElementById("lightbox-img");
-    if (!lbImg) return;
+    const lbContainer = document.getElementById("lightbox"); // Der Container für die Klasse
+    if (!lbImg || !lbContainer) return;
     
-    // Bild wird unsichtbar, damit der Spinner (der drüber liegt) wirkt
+    // 1. Spinner einschalten & Bild unsichtbar machen
+    lbContainer.classList.add("loading");
     lbImg.style.opacity = "0"; 
+    
     lbImg.src = galleryImages[currentIndex];
     
     lbImg.onload = () => { 
+        // 2. Spinner ausschalten & Bild einblenden, wenn fertig geladen
+        lbContainer.classList.remove("loading");
         lbImg.style.opacity = "1"; 
     };
 }
