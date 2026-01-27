@@ -1,3 +1,5 @@
+/* script.js — Fix für doppelte Texte & Modal-Steuerung */
+
 const cloudName = "db4arm1o7"; 
 let galleryImages = [];    
 let originalImages = [];   
@@ -20,12 +22,19 @@ window.toggleAllCheckboxes = function() {
 window.downloadSelected = function() {
     const checked = document.querySelectorAll(".img-checkbox:checked");
     if (checked.length === 0) {
-        // Zeigt das Modal mit einer Warnung statt Browser-Alert
-        showModalContent("Achtung!", "Bitte wähle zuerst mindestens ein Bild aus, das du herunterladen möchtest.", false);
+        showModalContent(
+            "Achtung!", 
+            "<p>Bitte wähle zuerst mindestens ein Bild aus, das du herunterladen möchtest.</p>", 
+            false
+        );
         return;
     }
-    // Zeigt das Modal mit dem normalen Hinweis
-    showModalContent("Wichtiger Download-Hinweis!", "Die Bilder dürfen nicht veröffentlicht oder an Dritte weitergegeben werden. Bestätige die Einhaltung mit 'Download starten'.", true, triggerZipDownload);
+    showModalContent(
+        "Wichtiger Download-Hinweis!", 
+        "<p>⚠️ <strong>Nur für private Nutzung!</strong></p><p>Die Bilder dürfen <strong>nicht veröffentlicht</strong> oder an Dritte weitergegeben werden.</p><p>Bestätige die Einhaltung dieser Regelung mit 'Download starten'.</p>", 
+        true, 
+        triggerZipDownload
+    );
 };
 
 window.closeDownloadModal = function() {
@@ -34,9 +43,9 @@ window.closeDownloadModal = function() {
 
 window.openLightbox = function(idx) {
     currentIndex = idx;
-    updateLightboxImage();
     const lb = document.getElementById("lightbox");
     if (lb) lb.classList.remove("hidden");
+    updateLightboxImage();
 };
 
 // === INTERNE LOGIK ===
@@ -59,8 +68,6 @@ async function loadGallery() {
 
         files.forEach((file, idx) => {
             const thumbUrl = `https://res.cloudinary.com/${cloudName}/image/upload/w_400,c_scale,f_auto,q_auto:eco/v${file.version}/${file.public_id}.${file.format}`;
-            
-            // SPEED-FIX: q_auto:low und f_auto für schnellstes Laden in der Lightbox
             const lightboxUrl = `https://res.cloudinary.com/${cloudName}/image/upload/w_1600,c_limit,f_auto,q_auto:low/v${file.version}/${file.public_id}.${file.format}`;
             const originalUrl = `https://res.cloudinary.com/${cloudName}/image/upload/v${file.version}/${file.public_id}.${file.format}`;
 
@@ -81,17 +88,25 @@ async function loadGallery() {
 
             card.querySelector(".dl-single").addEventListener("click", (e) => {
                 e.preventDefault();
-                showModalContent("Download-Bestätigung", "Möchtest du dieses Bild für die private Nutzung herunterladen?", true, () => triggerSingleDownload(originalUrl, cleanName));
+                showModalContent(
+                    "Download-Bestätigung", 
+                    "<p>Möchtest du dieses Bild für die private Nutzung herunterladen?</p>", 
+                    true, 
+                    () => triggerSingleDownload(originalUrl, cleanName)
+                );
             });
 
             gallery.appendChild(card);
         });
-    } catch (err) { console.error("Galerie-Ladefehler:", err); }
+    } catch (err) { console.error("Fehler:", err); }
 }
 
 function updateLightboxImage() {
     const lbImg = document.getElementById("lightbox-img");
-    if (lbImg) lbImg.src = galleryImages[currentIndex];
+    if (!lbImg) return;
+    lbImg.style.opacity = "0.3"; // Zeigt, dass geladen wird
+    lbImg.src = galleryImages[currentIndex];
+    lbImg.onload = () => { lbImg.style.opacity = "1"; };
 }
 
 async function triggerSingleDownload(url, filename) {
@@ -112,14 +127,14 @@ async function triggerZipDownload() {
     saveAs(content, "ranger_auswahl.zip");
 }
 
-// === MODAL STEUERUNG ===
+// === MODAL STEUERUNG (SAUBER) ===
 
-function showModalContent(title, text, showButton, action = null) {
+function showModalContent(title, html, showButton, action = null) {
     if (!modalOverlay) return;
     
-    // Wir tauschen den Text im vorhandenen Modal aus
-    modalOverlay.querySelector("h3").textContent = title;
-    modalOverlay.querySelector("p").innerHTML = text; // innerHTML für <strong> tags
+    // Wir setzen Titel und Body gezielt
+    document.getElementById("modalTitle").textContent = title;
+    document.getElementById("modalBody").innerHTML = html;
     
     if (showButton) {
         startDownloadBtn.style.display = "inline-block";
@@ -142,7 +157,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     loadGallery();
     
-    // Lightbox Navigation
     document.querySelector(".lightbox-next")?.addEventListener("click", (e) => { 
         e.stopPropagation(); 
         currentIndex = (currentIndex + 1) % galleryImages.length;
@@ -159,15 +173,11 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("lightbox").classList.add("hidden");
     });
     
-    // ESCAPE TASTE FIX
     document.addEventListener("keydown", (e) => {
         if (e.key === "Escape") {
-            // Schließt Modal
-            if (modalOverlay) modalOverlay.classList.add('hidden');
-            // Schließt Lightbox
+            window.closeDownloadModal();
             document.getElementById("lightbox")?.classList.add("hidden");
         }
-        // Pfeiltasten für Lightbox
         const lb = document.getElementById("lightbox");
         if (lb && !lb.classList.contains("hidden")) {
             if (e.key === "ArrowRight") { currentIndex = (currentIndex + 1) % galleryImages.length; updateLightboxImage(); }
