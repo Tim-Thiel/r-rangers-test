@@ -113,9 +113,16 @@ async function loadGallery() {
 function updateLightboxImage() {
     const lbImg = document.getElementById("lightbox-img");
     if (!lbImg) return;
-    lbImg.style.opacity = "0.4"; 
+    
+    // Das Bild wird fast unsichtbar, damit der Spinner (der dahinter/darüber liegt) wirkt
+    lbImg.style.opacity = "0"; 
+    
     lbImg.src = galleryImages[currentIndex];
-    lbImg.onload = () => { lbImg.style.opacity = "1"; };
+    
+    // Erst wenn das neue Bild geladen ist, wird es wieder eingeblendet
+    lbImg.onload = () => { 
+        lbImg.style.opacity = "1"; 
+    };
 }
 
 async function triggerSingleDownload(url, filename) {
