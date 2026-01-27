@@ -59,8 +59,8 @@ h1, h2 { text-align: center; color: var(--ranger-blue); margin-top: 20px; font-w
 }
 
 .gallery {
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); /* Etwas kleinere Spalten für mehr Bilder */
+    gap: 15px; /* Engeres Raster für die Galerie */
 }
 
 .grid {
@@ -86,48 +86,47 @@ h1, h2 { text-align: center; color: var(--ranger-blue); margin-top: 20px; font-w
     cursor: pointer;
 }
 
+/* Speziell für die Galerie: Weniger Padding, damit mehr Bild zu sehen ist */
+.gallery-item {
+    padding: 12px; 
+}
+
 .landing-card:hover, .card:hover, .gallery-item:hover {
     transform: translateY(-4px); 
     box-shadow: var(--shadow-hover);
 }
 
-/* Galerie Bilder */
-.gallery-item img {
+/* FIX: 3:2 FORMAT ÜBERALL */
+.landing-card img, .card img, .gallery-item img {
     width: 100%;
-    border-radius: 8px;
+    aspect-ratio: 3 / 2;
     object-fit: cover;
-    margin-bottom: 10px;
+    border-radius: 8px;
 }
 
-/* FIX: PRÄZISES 3:2 FORMAT FÜR KATEGORIEN */
+/* Startseite & Aktionen: Bilder ohne Rand oben */
 .landing-card img, .card img {
     width: calc(100% + 40px);
     margin: -20px -20px 10px -20px;
-    
-    /* Umstellung auf dein Foto-Format: */
-    aspect-ratio: 3 / 2; 
-    height: auto; 
-    
     border-radius: 12px 12px 0 0;
-    object-fit: cover;
 }
 
 /* Texte kompakt halten */
-.landing-card h3, .card h3, .gallery-item h3 { margin: 5px 0; color: var(--ranger-blue); }
-.landing-card p, .card p, .gallery-item p { margin: 5px 0 10px 0; font-size: 0.95em; line-height: 1.3; }
+.landing-card h3, .card h3, .gallery-item h3 { margin: 5px 0; color: var(--ranger-blue); font-size: 1.1em; }
+.landing-card p, .card p, .gallery-item p { margin: 5px 0 10px 0; font-size: 0.9em; line-height: 1.3; }
 
 /* --------------------------------------------
    Buttons & Checkboxen
 --------------------------------------------- */
 button, .download-btn, #download-selected {
     background: var(--ranger-blue); color: white; border: none; padding: 10px 20px;
-    font-size: 15px; border-radius: 8px; cursor: pointer; transition: 0.25s;
+    font-size: 14px; border-radius: 8px; cursor: pointer; transition: 0.25s;
     display: inline-block; text-decoration: none; width: fit-content;
     margin: 5px auto 0 auto; 
 }
 
 button:hover, .download-btn:hover, #download-selected:hover { background: var(--ranger-blue-dark); }
-.checkbox-container { display: flex; justify-content: center; align-items: center; gap: 8px; margin-top: 5px; }
+.checkbox-container { display: flex; justify-content: center; align-items: center; gap: 8px; margin-top: 5px; font-size: 0.9em; }
 
 /* --------------------------------------------
    LIGHTBOX & MODAL
