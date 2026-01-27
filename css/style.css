@@ -333,3 +333,26 @@ footer {
     background: var(--ranger-blue);
     color: white;
 }
+/* Fortschrittsanzeige im Modal */
+.progress-container {
+    width: 100%;
+    background-color: #eee;
+    border-radius: 10px;
+    margin: 15px 0;
+    overflow: hidden;
+    display: none; /* Standardmäßig aus */
+}
+
+.progress-bar {
+    width: 0%;
+    height: 20px;
+    background-color: var(--ranger-blue);
+    transition: width 0.3s ease;
+}
+
+#statusText {
+    font-weight: bold;
+    color: var(--ranger-blue);
+    margin-top: 5px;
+    display: block;
+}
