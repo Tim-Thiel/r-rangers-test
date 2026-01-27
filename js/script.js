@@ -114,19 +114,55 @@ async function triggerSingleDownload(url, filename) {
 async function triggerZipDownload() {
     const checked = document.querySelectorAll(".img-checkbox:checked");
     const zip = new JSZip();
+    const total = checked.length;
     
-    // DYNAMISCHER DATEINAME: Holt sich den Text aus der H1 Überschrift
-    let pageTitle = document.querySelector("h1") ? document.querySelector("h1").innerText : "Ranger_Bilder";
-    let safeFileName = pageTitle.replace(/\s+/g, '_') + ".zip"; // Ersetzt Leerzeichen durch Unterstriche
+    // UI-Elemente im Modal für den Fortschritt vorbereiten
+    const bodyElem = document.getElementById("modalBody");
+    const startBtn = document.getElementById("startDownloadBtn");
+    
+    startBtn.style.display = "none"; // Button während Download verstecken
+    bodyElem.innerHTML = `
+        <p>Bilder werden für den Download vorbereitet...</p>
+        <div class="progress-container" style="display: block;">
+            <div id="pBar" class="progress-bar"></div>
+        </div>
+        <span id="statusText">0 von ${total} Bildern geladen</span>
+    `;
 
+    const pBar = document.getElementById("pBar");
+    const sText = document.getElementById("statusText");
+    
+    // Dynamischer Dateiname
+    let pageTitle = document.querySelector("h1") ? document.querySelector("h1").innerText : "Ranger_Bilder";
+    let safeFileName = pageTitle.replace(/\s+/g, '_') + ".zip";
+
+    let count = 0;
     for (let box of checked) {
-        const resp = await fetch(box.value);
-        const blob = await resp.blob();
-        zip.file(box.value.split('/').pop(), blob);
+        try {
+            const resp = await fetch(box.value);
+            const blob = await resp.blob();
+            // Den Dateinamen aus der URL extrahieren
+            const fileName = box.value.split('/').pop().split('?')[0];
+            zip.file(fileName, blob);
+            
+            count++;
+            // Fortschritt aktualisieren
+            const percent = (count / total) * 100;
+            pBar.style.width = percent + "%";
+            sText.innerText = `${count} von ${total} Bildern geladen`;
+        } catch (err) {
+            console.error("Download-Fehler bei Bild:", box.value);
+        }
     }
     
+    sText.innerText = "ZIP-Archiv wird erstellt...";
     const content = await zip.generateAsync({type: "blob"});
     saveAs(content, safeFileName);
+    
+    // Modal nach Erfolg schließen
+    setTimeout(() => {
+        closeDownloadModal();
+    }, 1000);
 }
 
 function showModalContent(title, html, showButton, action = null) {
