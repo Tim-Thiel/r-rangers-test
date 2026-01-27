@@ -149,16 +149,18 @@ button:hover,
     pointer-events: none;
 }
 
-/* Blaues Lade-Spinner für die Lightbox */
+/* Blaues Lade-Spinner für die Lightbox - Jetzt absolut im Vordergrund */
 .lightbox::before {
     content: "";
     position: absolute;
     width: 60px;
     height: 60px;
-    border: 6px solid #555; /* Dunklerer Hintergrundring */
-    border-top: 6px solid var(--ranger-blue); /* Kräftiger blauer Balken */
+    border: 6px solid rgba(255, 255, 255, 0.1); /* Ganz schwacher heller Ring */
+    border-top: 6px solid var(--ranger-blue);    /* Kräftiges Ranger-Blau */
     border-radius: 50%;
     animation: spin 1s linear infinite;
+    z-index: 10001; /* Höher als das Bild (10000) */
+    pointer-events: none; /* Man kann durch den Spinner durchklicken */
 }
 
 @keyframes spin {
