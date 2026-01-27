@@ -1,4 +1,4 @@
-/* script.js — Einheitlicher Download-Hinweis */
+/* script.js — Dynamischer Dateiname & Button-Fix */
 
 const cloudName = "db4arm1o7"; 
 let galleryImages = [];    
@@ -22,17 +22,12 @@ window.toggleAllCheckboxes = function() {
 window.downloadSelected = function() {
     const checked = document.querySelectorAll(".img-checkbox:checked");
     if (checked.length === 0) {
-        showModalContent(
-            "Achtung!", 
-            "<p>Bitte wähle zuerst mindestens ein Bild aus, das du herunterladen möchtest.</p>", 
-            false
-        );
+        showModalContent("Achtung!", "<p>Bitte wähle zuerst mindestens ein Bild aus.</p>", false);
         return;
     }
-    // Hinweis für ZIP-Download
     showModalContent(
         "Wichtiger Download-Hinweis!", 
-        "<p>⚠️ <strong>Nur für private Nutzung!</strong></p><p>Die Bilder dürfen <strong>nicht veröffentlicht</strong> oder an Dritte weitergegeben werden.</p><p>Bestätige die Einhaltung dieser Regelung mit 'Download starten'.</p>", 
+        "<p>⚠️ <strong>Nur für private Nutzung!</strong></p><p>Die Bilder dürfen <strong>nicht veröffentlicht</strong> werden.</p><p>Bestätige die Einhaltung mit 'Download starten'.</p>", 
         true, 
         triggerZipDownload
     );
@@ -82,17 +77,16 @@ async function loadGallery() {
             card.innerHTML = `
                 <img src="${thumbUrl}" alt="${cleanName}" onclick="openLightbox(${idx})" loading="lazy">
                 <div class="checkbox-container">
-                    <label><input type="checkbox" class="img-checkbox" value="${originalUrl}"> Bild auswählen</label>
+                    <label><input type="checkbox" class="img-checkbox" value="${originalUrl}"> Auswählen</label>
                 </div>
                 <a href="#" class="download-btn">Download</a>
             `;
 
             card.querySelector(".download-btn").addEventListener("click", (e) => {
                 e.preventDefault();
-                // ✅ JETZT MIT DEM GLEICHEN HINWEIS WIE BEIM ZIP
                 showModalContent(
                     "Wichtiger Download-Hinweis!", 
-                    "<p>⚠️ <strong>Nur für private Nutzung!</strong></p><p>Die Bilder dürfen <strong>nicht veröffentlicht</strong> oder an Dritte weitergegeben werden.</p><p>Bestätige die Einhaltung dieser Regelung mit 'Download starten'.</p>", 
+                    "<p>⚠️ <strong>Nur für private Nutzung!</strong></p><p>Die Bilder dürfen nicht veröffentlicht werden.</p><p>Bestätige die Einhaltung mit 'Download starten'.</p>", 
                     true, 
                     () => triggerSingleDownload(originalUrl, cleanName)
                 );
@@ -120,26 +114,27 @@ async function triggerSingleDownload(url, filename) {
 async function triggerZipDownload() {
     const checked = document.querySelectorAll(".img-checkbox:checked");
     const zip = new JSZip();
+    
+    // DYNAMISCHER DATEINAME: Holt sich den Text aus der H1 Überschrift
+    let pageTitle = document.querySelector("h1") ? document.querySelector("h1").innerText : "Ranger_Bilder";
+    let safeFileName = pageTitle.replace(/\s+/g, '_') + ".zip"; // Ersetzt Leerzeichen durch Unterstriche
+
     for (let box of checked) {
         const resp = await fetch(box.value);
         const blob = await resp.blob();
         zip.file(box.value.split('/').pop(), blob);
     }
+    
     const content = await zip.generateAsync({type: "blob"});
-    saveAs(content, "ranger_auswahl.zip");
+    saveAs(content, safeFileName);
 }
-
-// === MODAL STEUERUNG ===
 
 function showModalContent(title, html, showButton, action = null) {
     if (!modalOverlay) return;
-    
     const titleElem = document.getElementById("modalTitle") || modalOverlay.querySelector("h3");
     const bodyElem = document.getElementById("modalBody") || modalOverlay.querySelector(".modal-content p");
-    
     if (titleElem) titleElem.textContent = title;
     if (bodyElem) bodyElem.innerHTML = html;
-    
     if (showButton) {
         startDownloadBtn.style.display = "inline-block";
         startDownloadBtn.onclick = () => {
@@ -149,39 +144,25 @@ function showModalContent(title, html, showButton, action = null) {
     } else {
         startDownloadBtn.style.display = "none";
     }
-    
     modalOverlay.classList.remove('hidden');
 }
-
-// === INITIALISIERUNG ===
 
 document.addEventListener("DOMContentLoaded", () => {
     modalOverlay = document.getElementById('downloadModal');
     startDownloadBtn = document.getElementById('startDownloadBtn');
-
     loadGallery();
     
     document.querySelector(".lightbox-next")?.addEventListener("click", (e) => { 
-        e.stopPropagation(); 
-        currentIndex = (currentIndex + 1) % galleryImages.length;
-        updateLightboxImage();
+        e.stopPropagation(); currentIndex = (currentIndex + 1) % galleryImages.length; updateLightboxImage();
     });
-
     document.querySelector(".lightbox-prev")?.addEventListener("click", (e) => { 
-        e.stopPropagation(); 
-        currentIndex = (currentIndex - 1 + galleryImages.length) % galleryImages.length;
-        updateLightboxImage();
+        e.stopPropagation(); currentIndex = (currentIndex - 1 + galleryImages.length) % galleryImages.length; updateLightboxImage();
     });
-
     document.querySelector(".lightbox-close")?.addEventListener("click", () => {
         document.getElementById("lightbox").classList.add("hidden");
     });
-    
     document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape") {
-            window.closeDownloadModal();
-            document.getElementById("lightbox")?.classList.add("hidden");
-        }
+        if (e.key === "Escape") { window.closeDownloadModal(); document.getElementById("lightbox")?.classList.add("hidden"); }
         const lb = document.getElementById("lightbox");
         if (lb && !lb.classList.contains("hidden")) {
             if (e.key === "ArrowRight") { currentIndex = (currentIndex + 1) % galleryImages.length; updateLightboxImage(); }
