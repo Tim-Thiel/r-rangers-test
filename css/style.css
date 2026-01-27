@@ -8,8 +8,9 @@
     --light-bg: #f5f7fa;
     --card-bg: #ffffff;
     --text-dark: #222;
-    --shadow: 0 4px 12px rgba(0,0,0,0.1);
-    --shadow-hover: 0 6px 20px rgba(0,0,0,0.15);
+    --border-color: #ddd;
+    --shadow: 0 4px 12px rgba(0,0,0,0.08);
+    --shadow-hover: 0 15px 25px rgba(0, 85, 170, 0.25);
     --radius: 12px;
 }
 
@@ -26,6 +27,63 @@ body {
 h1, h2 { text-align: center; color: var(--ranger-blue); margin-top: 20px; font-weight: 700; }
 
 /* --------------------------------------------
+   EINHEITLICHES KARTEN-DESIGN (Look & Feel)
+   Gilt für Startseite, Listen und Galerie
+--------------------------------------------- */
+.landing-card, .card, .gallery-item {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 20px;
+    text-decoration: none;
+    color: var(--text-dark);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+}
+
+/* Gemeinsamer Hover-Effekt */
+.landing-card:hover, .card:hover, .gallery-item:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-hover);
+    border-color: var(--ranger-blue);
+    background: #ffffff; /* Verhindert Farbstiche beim Hover */
+}
+
+/* Bilder innerhalb der Karten */
+.landing-card img, .card img, .gallery-item img {
+    width: 100%;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+/* Spezielle Anpassung für die Startseite (Bild oben bündig) */
+.landing-card img {
+    width: calc(100% + 40px);
+    margin: -20px -20px 15px -20px;
+    height: 200px;
+    border-radius: 11px 11px 0 0;
+}
+
+/* --------------------------------------------
+   Layout Container (Raster & Abstände)
+--------------------------------------------- */
+.landing-grid, .grid, .gallery {
+    display: grid;
+    margin: 40px auto;
+    padding: 0 20px;
+    max-width: 1400px;
+    box-sizing: border-box;
+    gap: 30px;
+}
+
+/* Spalten-Logik */
+.landing-grid, .grid { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+.gallery { grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
+
+/* --------------------------------------------
    Buttons
 --------------------------------------------- */
 button, .download-btn, #download-selected {
@@ -38,72 +96,23 @@ button, .download-btn, #download-selected {
 
 button:hover, .download-btn:hover, #download-selected:hover {
     background: var(--ranger-blue-dark);
-    box-shadow: var(--shadow-hover);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.2);
 }
 
 /* --------------------------------------------
-   Layout Container (ABSTAND ZUM RAND FIX)
+   Zusatz-Elemente
 --------------------------------------------- */
-/* Diese Regel sorgt für den Abstand auf ALLEN Seiten */
-.landing-grid, .grid, .gallery {
-    display: grid;
-    margin: 40px auto;
-    padding: 0 20px; /* Hier ist dein Rand-Abstand */
-    max-width: 1400px;
-    box-sizing: border-box;
+.checkbox-container { 
+    display: flex; justify-content: center; align-items: center; 
+    gap: 10px; margin: 15px 0 0 0; 
 }
 
-/* Startseite & Listen (Aktionen, Team, Privat) */
-.landing-grid, .grid {
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 30px;
-}
-
-/* Galerie-Bilder (Desktop-Größe Fix) */
-.gallery {
-    max-width: 2000px;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 20px;
-}
-
-/* --------------------------------------------
-   Einzelne Karten & Bilder
---------------------------------------------- */
-.landing-card {
-    display: flex; flex-direction: column; text-align: center;
-    padding: 25px; background: #f9f9f9; border: 1px solid #ddd;
-    border-radius: 12px; text-decoration: none; color: var(--text-dark);
-    transition: transform 0.3s, box-shadow 0.3s;
-}
-.landing-card:hover { transform: translateY(-5px); border-color: var(--ranger-blue); }
-.landing-card img { width: calc(100% + 50px); margin: -25px -25px 15px -25px; height: 200px; object-fit: cover; border-top-left-radius: 12px; border-top-right-radius: 12px; }
-
-.gallery-item {
-    background: var(--card-bg);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow); 
-    padding: 15px;
-    transition: transform 0.3s, box-shadow 0.3s;
-    display: flex; flex-direction: column;
-    align-items: center; 
-}
-.gallery-item:hover { transform: translateY(-5px); box-shadow: 0 15px 25px rgba(0, 85, 170, 0.25); }
-.gallery-item img { width: 100%; border-radius: var(--radius); }
-
-.card { background: #f3f7ff; padding: 15px; border-radius: 12px; cursor: pointer; transition: transform 0.3s; }
-.card:hover { transform: translateY(-5px); box-shadow: 0 15px 25px rgba(0, 85, 170, 0.25); background: #e6f0ff; }
-.card img { width: 100%; border-radius: 8px; }
-.card h3 { text-align:center; margin-top: 10px; }
-
-/* --------------------------------------------
-   Elemente (Checkbox, Info, ScrollTop)
---------------------------------------------- */
-.checkbox-container { display: flex; align-items: center; gap: 10px; margin: 12px 0; }
 .info-box {
     margin: 25px auto; padding: 15px 20px;
     background: rgba(241, 196, 15, 0.15); border-left: 5px solid var(--ranger-gold);
     border-radius: 8px; max-width: 650px; text-align: center;
 }
+
 #scrollToTopBtn {
     position: fixed; bottom: 30px; right: 30px; z-index: 9000;
     background: var(--ranger-blue); color: white; border: none;
@@ -112,69 +121,31 @@ button:hover, .download-btn:hover, #download-selected:hover {
 }
 
 /* --------------------------------------------
-   LIGHTBOX
+   LIGHTBOX & MODAL (Bleiben wie gehabt)
 --------------------------------------------- */
-.lightbox {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.95); display: flex;
-    justify-content: center; align-items: center; z-index: 9999;
-}
+.lightbox { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); display: flex; justify-content: center; align-items: center; z-index: 9999; }
 .lightbox.hidden { opacity: 0; pointer-events: none; }
-.lightbox.loading::before {
-    content: ""; position: absolute; width: 60px; height: 60px;
-    border: 6px solid rgba(255, 255, 255, 0.1);
-    border-top: 6px solid var(--ranger-blue); border-radius: 50%;
-    animation: spin 1s linear infinite; z-index: 10005;
-}
+.lightbox.loading::before { content: ""; position: absolute; width: 60px; height: 60px; border: 6px solid rgba(255, 255, 255, 0.1); border-top: 6px solid var(--ranger-blue); border-radius: 50%; animation: spin 1s linear infinite; z-index: 10005; }
 @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 .lightbox img { max-width: 90%; max-height: 85%; border-radius: 12px; }
 .lightbox-close { position: absolute; top: 25px; right: 40px; font-size: 45px; color: #fff; cursor: pointer; }
 .lightbox-nav span { position: absolute; top: 50%; transform: translateY(-50%); font-size: 60px; color: #fff; cursor: pointer; transition: 0.3s; }
-.lightbox-prev { left: 40px; }
-.lightbox-next { right: 40px; }
 .lightbox-nav span:hover { color: var(--ranger-blue); }
+.lightbox-prev { left: 40px; } .lightbox-next { right: 40px; }
 
-/* --------------------------------------------
-   MODAL & FORTSCHRITT
---------------------------------------------- */
-.modal-overlay {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0, 0, 0, 0.7); display: flex;
-    justify-content: center; align-items: center; z-index: 9990;
-}
+.modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); display: flex; justify-content: center; align-items: center; z-index: 9990; }
 .modal-overlay.hidden { opacity: 0; pointer-events: none; }
-.modal-content {
-    background: white; padding: 35px 30px 30px 30px;
-    border-radius: var(--radius); max-width: 450px; width: 90%;
-    text-align: center; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-    position: relative;
-}
-.modal-close { position: absolute; top: 10px; right: 15px; font-size: 32px; color: #999; cursor: pointer; line-height: 1; }
-.modal-close:hover { color: var(--ranger-blue); }
-#modalBody strong { color: var(--ranger-blue); }
+.modal-content { background: white; padding: 35px 30px 30px 30px; border-radius: var(--radius); max-width: 450px; width: 90%; text-align: center; position: relative; }
+.modal-close { position: absolute; top: 10px; right: 15px; font-size: 32px; color: #999; cursor: pointer; }
 .progress-container { width: 100%; background: #eee; border-radius: 10px; margin: 20px 0; overflow: hidden; display: none; }
 .progress-bar { width: 0%; height: 15px; background: var(--ranger-blue); transition: width 0.3s; }
 
 /* --------------------------------------------
    MOBILE OPTIMIERUNG
 --------------------------------------------- */
-#toggleAllBtn { min-width: 180px; text-align: center; }
-
 @media (max-width: 600px) {
-    /* Abstand zum Rand auf dem Handy */
-    .landing-grid, .grid, .gallery {
-        padding: 0 15px !important;
-        margin: 20px auto;
-    }
-
-    /* Buttons untereinander zentriert */
-    #toggleAllBtn, 
-    #download-selected,
-    body > button[onclick="downloadSelected()"] {
-        display: block;
-        width: auto;
-        min-width: 220px;
-        margin: 10px auto;
-        box-sizing: border-box;
+    .landing-grid, .grid, .gallery { padding: 0 15px !important; }
+    #toggleAllBtn, #download-selected, body > button[onclick="downloadSelected()"] {
+        display: block; width: auto; min-width: 220px; margin: 10px auto;
     }
 }
