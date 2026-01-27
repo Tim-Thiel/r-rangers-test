@@ -1,17 +1,17 @@
-/* script.js — Optimierte Ladezeiten & volle Kompatibilität */
+/* script.js — Finale Version für Tim */
 
 const cloudName = "db4arm1o7"; 
 let galleryImages = [];    
 let originalImages = [];   
 let currentIndex = 0;
 
+// Elemente aus deinem HTML
 const modalOverlay = document.getElementById('downloadModal');
 const startDownloadBtn = document.getElementById('startDownloadBtn');
 
 async function loadGallery() {
     const gallery = document.getElementById("gallery");
     const tag = document.body.getAttribute("data-action");
-    
     if (!gallery || !tag) return;
 
     const listUrl = `https://res.cloudinary.com/${cloudName}/image/list/${tag}.json`;
@@ -19,6 +19,7 @@ async function loadGallery() {
     try {
         const response = await fetch(listUrl);
         const data = await response.json();
+        // Sortierung nach Dateiname
         const files = data.resources.sort((a, b) => a.public_id.localeCompare(b.public_id));
 
         gallery.innerHTML = "";
@@ -26,13 +27,8 @@ async function loadGallery() {
         originalImages = [];
 
         files.forEach((file, idx) => {
-            // Galerie-Vorschau: 400px breit, Auto-Format & Auto-Qualität
             const thumbUrl = `https://res.cloudinary.com/${cloudName}/image/upload/w_400,c_scale,f_auto,q_auto:eco/v${file.version}/${file.public_id}.${file.format}`;
-            
-            // LIGHTBOX OPTIMIERUNG: 1600px, aber mit 'q_auto:eco' für extrem schnelles Laden!
-            // 'f_auto' wählt das beste Format (z.B. WebP), was die Datei massiv verkleinert.
             const lightboxUrl = `https://res.cloudinary.com/${cloudName}/image/upload/w_1600,c_limit,f_auto,q_auto:eco/v${file.version}/${file.public_id}.${file.format}`;
-            
             const originalUrl = `https://res.cloudinary.com/${cloudName}/image/upload/v${file.version}/${file.public_id}.${file.format}`;
 
             galleryImages.push(lightboxUrl); 
@@ -57,23 +53,51 @@ async function loadGallery() {
 
             gallery.appendChild(card);
         });
-    } catch (err) { console.error("Fehler:", err); }
+    } catch (err) { console.error("Fehler beim Laden:", err); }
 }
 
-// Diese Funktion heißt jetzt so wie in deinem HTML (downloadSelected)
-async function downloadSelected() {
+// === BUTTON-FUNKTIONEN AUS DEINEM HTML ===
+
+// Wird von deinem Button "Alle auswählen" aufgerufen
+function toggleAllCheckboxes() {
+    const boxes = document.querySelectorAll(".img-checkbox");
+    if (boxes.length === 0) return;
+    
+    // Prüfen, ob gerade alle ausgewählt sind
+    const allChecked = Array.from(boxes).every(cb => cb.checked);
+    
+    // Wenn alle voll sind -> alle leeren. Sonst -> alle füllen.
+    boxes.forEach(cb => cb.checked = !allChecked);
+    
+    // Button-Text anpassen
+    const btn = document.getElementById('toggleAllBtn');
+    if (btn) btn.textContent = allChecked ? "Alle auswählen" : "Alle abwählen";
+}
+
+// Wird von deinem Button "Ausgewählte Bilder herunterladen" aufgerufen
+function downloadSelected() {
     const checked = document.querySelectorAll(".img-checkbox:checked");
     if (checked.length === 0) {
-        alert("Bitte wähle zuerst Bilder aus!");
+        alert("Bitte wähle zuerst mindestens ein Bild aus.");
         return;
     }
+    // Zeigt dein Modal mit dem rechtlichen Hinweis
     showDownloadPrompt(triggerZipDownload);
 }
+
+// === DOWNLOAD LOGIK ===
 
 async function triggerSingleDownload(url, filename) {
     const resp = await fetch(url);
     const blob = await resp.blob();
-    saveAs(blob, filename);
+    if (window.saveAs) {
+        window.saveAs(blob, filename);
+    } else {
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = filename;
+        a.click();
+    }
 }
 
 async function triggerZipDownload() {
@@ -81,15 +105,30 @@ async function triggerZipDownload() {
     const zip = new JSZip();
     const folder = zip.folder("Ranger_Bilder");
 
+    // Lade-Anzeige (optionaler Hinweis in der Konsole)
+    console.log("ZIP wird erstellt...");
+
     for (let box of checked) {
         const resp = await fetch(box.value);
         const blob = await resp.blob();
-        folder.file(box.value.split('/').pop(), blob);
+        const name = box.value.split('/').pop();
+        folder.file(name, blob);
     }
 
     const content = await zip.generateAsync({type: "blob"});
-    saveAs(content, "ranger_auswahl.zip");
+    
+    // Hier wird FileSaver.js (saveAs) benötigt!
+    if (window.saveAs) {
+        window.saveAs(content, "ranger_auswahl.zip");
+    } else {
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(content);
+        link.download = "ranger_auswahl.zip";
+        link.click();
+    }
 }
+
+// === LIGHTBOX ===
 
 function openLightbox(idx) {
     currentIndex = idx;
@@ -112,7 +151,10 @@ function showPrev() {
     document.getElementById("lightbox-img").src = galleryImages[currentIndex];
 }
 
+// === MODAL ===
+
 function showDownloadPrompt(action) {
+    if (!modalOverlay) { action(); return; }
     modalOverlay.classList.remove('hidden');
     startDownloadBtn.onclick = () => {
         modalOverlay.classList.add('hidden');
@@ -120,16 +162,16 @@ function showDownloadPrompt(action) {
     };
 }
 
-function toggleAllCheckboxes() {
-    const boxes = document.querySelectorAll(".img-checkbox");
-    const allChecked = Array.from(boxes).every(cb => cb.checked);
-    boxes.forEach(cb => cb.checked = !allChecked);
-    document.getElementById('toggleAllBtn').textContent = allChecked ? "Alle auswählen" : "Alle abwählen";
+function closeDownloadModal() {
+    if (modalOverlay) modalOverlay.classList.add('hidden');
 }
+
+// === START ===
 
 document.addEventListener("DOMContentLoaded", () => {
     loadGallery();
     
+    // Lightbox Events
     document.querySelector(".lightbox-next")?.addEventListener("click", (e) => { e.stopPropagation(); showNext(); });
     document.querySelector(".lightbox-prev")?.addEventListener("click", (e) => { e.stopPropagation(); showPrev(); });
     document.querySelector(".lightbox-close")?.addEventListener("click", closeLightbox);
