@@ -1,30 +1,35 @@
-/* script.js — Optimierte Version für Tim */
+/* script.js — Vollständige Version für Tim */
 
+// === CONFIG ===
 const cloudName = "db4arm1o7"; 
 
-let galleryImages = [];    
-let originalImages = [];   
+// ================= Globale Variablen =================
+let galleryImages = [];    // URLs für die Lightbox (groß)
+let originalImages = [];   // URLs für den Download (Original)
 let currentIndex = 0;
 
 const modalOverlay = document.getElementById('downloadModal');
 const startDownloadBtn = document.getElementById('startDownloadBtn');
-let downloadAction = null; 
 
+// ================= Galerie laden =================
 async function loadGallery() {
     const gallery = document.getElementById("gallery");
-    if (!gallery) return;
-
     const tag = document.body.getAttribute("data-action");
-    if (!tag) return;
+    
+    if (!gallery || !tag) {
+        console.error("Fehler: Galerie-Container oder data-action Attribut fehlt.");
+        return;
+    }
 
-    // Wir rufen die Liste ab
     const listUrl = `https://res.cloudinary.com/${cloudName}/image/list/${tag}.json`;
 
     try {
         const response = await fetch(listUrl);
+        if (!response.ok) throw new Error("Cloudinary Liste konnte nicht geladen werden.");
+        
         const data = await response.json();
         
-        // SORTIERUNG: Cloudinary liefert oft unsortiert. Wir sortieren nach public_id (Dateiname)
+        // SORTIERUNG: Damit DSC01120 vor DSC01121 kommt
         const files = data.resources.sort((a, b) => a.public_id.localeCompare(b.public_id));
 
         gallery.innerHTML = "";
@@ -32,100 +37,82 @@ async function loadGallery() {
         originalImages = [];
 
         files.forEach((file, idx) => {
-            // Vorschau-Bild (w_400)
+            // 1. Thumbnail für die Übersicht (400px)
             const thumbUrl = `https://res.cloudinary.com/${cloudName}/image/upload/w_400,c_scale,f_auto,q_auto/v${file.version}/${file.public_id}.${file.format}`;
             
-            // LIGHTBOX-URL: Hier nehmen wir eine größere Auflösung (z.B. 1600px) statt dem Thumbnail!
+            // 2. Lightbox-Bild (1600px für scharfe Ansicht)
             const lightboxUrl = `https://res.cloudinary.com/${cloudName}/image/upload/w_1600,c_limit,f_auto,q_auto/v${file.version}/${file.public_id}.${file.format}`;
             
-            // Original für Download & ZIP
+            // 3. Original für Download
             const originalUrl = `https://res.cloudinary.com/${cloudName}/image/upload/v${file.version}/${file.public_id}.${file.format}`;
 
             galleryImages.push(lightboxUrl); 
             originalImages.push(originalUrl);
 
+            // Dateiname ohne Pfad und ohne Suffix
+            const cleanName = file.public_id.split('/').pop() + "." + file.format;
+
             const card = document.createElement("div");
             card.className = "gallery-item";
+            card.innerHTML = `
+                <img src="${thumbUrl}" alt="${cleanName}" onclick="openLightbox(${idx})" loading="lazy">
+                <div class="checkbox-container">
+                    <label><input type="checkbox" class="img-checkbox" value="${originalUrl}"> Bild auswählen</label>
+                </div>
+                <a href="#" class="download-btn">Download</a>
+            `;
 
-            const img = document.createElement("img");
-            img.src = thumbUrl;
-            img.dataset.index = idx;
-            img.loading = "lazy";
-            img.onclick = () => openLightbox(idx); // Direkter Aufruf für bessere Stabilität
-
-            const checkboxContainer = document.createElement("div");
-            checkboxContainer.className = "checkbox-container";
-            const checkbox = document.createElement("input");
-            checkbox.type = "checkbox";
-            checkbox.className = "img-checkbox"; // Klasse für einfacheres Finden
-            checkbox.value = originalUrl;
-            
-            const label = document.createElement("label");
-            label.appendChild(checkbox);
-            label.appendChild(document.createTextNode(" Bild auswählen"));
-            checkboxContainer.appendChild(label);
-
-            const downloadLink = document.createElement("a");
-            downloadLink.href = "#";
-            // DATEINAME FIX: Wir nehmen nur den letzten Teil nach dem Schrägstrich
-            const cleanFileName = file.public_id.split('/').pop() + "." + file.format;
-            downloadLink.textContent = "Download";
-            downloadLink.className = "download-btn";
-            downloadLink.onclick = (e) => {
+            // Download-Event für den Button in der Karte
+            card.querySelector(".download-btn").addEventListener("click", (e) => {
                 e.preventDefault();
-                showDownloadPrompt(() => triggerSingleDownload(originalUrl, cleanFileName));
-            };
+                showDownloadPrompt(() => triggerSingleDownload(originalUrl, cleanName));
+            });
 
-            card.appendChild(img);
-            card.appendChild(checkboxContainer);
-            card.appendChild(downloadLink);
             gallery.appendChild(card);
         });
 
-        console.log("Galerie geladen und sortiert.");
+        console.log(`${files.length} Bilder geladen und sortiert.`);
     } catch (err) {
-        console.error("Fehler:", err);
+        console.error("Fehler beim Laden:", err);
+        gallery.innerHTML = "<p>Galerie konnte nicht geladen werden.</p>";
     }
 }
 
-// FIX: ZIP-DOWNLOAD (JSZip muss im HTML eingebunden sein!)
-async function triggerZipDownload() {
-    const checkboxes = document.querySelectorAll(".img-checkbox:checked");
-    if (checkboxes.length === 0) return;
-
-    const zip = new JSZip();
-    const folderZip = zip.folder("Ranger_Bilder");
-
-    for (let box of checkboxes) {
-        const url = box.value;
-        const filename = url.split('/').pop();
-        try {
-            const resp = await fetch(url);
-            const blob = await resp.blob();
-            folderZip.file(filename, blob);
-        } catch (e) { console.error("Download-Fehler für ZIP:", e); }
-    }
-
-    const content = await zip.generateAsync({ type: "blob" });
-    saveAs(content, "ranger_auswahl.zip"); // Nutzt FileSaver.js falls vorhanden, sonst Fallback:
-}
-
+// ================= Downloads =================
 async function triggerSingleDownload(url, filename) {
-    const resp = await fetch(url);
-    const blob = await resp.blob();
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = filename;
-    link.click();
+    try {
+        const resp = await fetch(url);
+        const blob = await resp.blob();
+        saveAs(blob, filename); // Nutzt FileSaver.js
+    } catch (e) { console.error("Download fehlgeschlagen", e); }
 }
 
-// LIGHTBOX FIX
-function openLightbox(index) {
-    currentIndex = index;
-    const lb = document.getElementById("lightbox");
+async function triggerZipDownload() {
+    const checked = document.querySelectorAll(".img-checkbox:checked");
+    if (checked.length === 0) return;
+    
+    const zip = new JSZip();
+    const folder = zip.folder("Ranger_Bilder");
+
+    for (let box of checked) {
+        try {
+            const resp = await fetch(box.value);
+            const blob = await resp.blob();
+            const name = box.value.split('/').pop();
+            folder.file(name, blob);
+        } catch (e) { console.error("Fehler bei ZIP-Datei:", e); }
+    }
+
+    const content = await zip.generateAsync({type: "blob"});
+    saveAs(content, "ranger_auswahl.zip");
+}
+
+// ================= Lightbox Logik =================
+function openLightbox(idx) {
+    currentIndex = idx;
     const lbImg = document.getElementById("lightbox-img");
     lbImg.src = galleryImages[currentIndex];
-    lb.classList.remove("hidden");
+    document.getElementById("lightbox").classList.remove("hidden");
 }
 
 function closeLightbox() {
@@ -142,39 +129,53 @@ function showPrev() {
     document.getElementById("lightbox-img").src = galleryImages[currentIndex];
 }
 
-// ALLE AUSWÄHLEN FIX
-function toggleAllCheckboxes() {
-    const checkboxes = document.querySelectorAll(".img-checkbox");
-    const btn = document.getElementById('toggleAllBtn');
-    // Wir prüfen den IST-Zustand anhand der ersten Box
-    const shouldCheck = !checkboxes[0].checked;
-    
-    checkboxes.forEach(cb => cb.checked = shouldCheck);
-    btn.textContent = shouldCheck ? "Alle abwählen" : "Alle auswählen";
+// ================= Hilfsfunktionen UI =================
+function showDownloadPrompt(action) {
+    if (!modalOverlay) { action(); return; }
+    modalOverlay.classList.remove('hidden');
+    startDownloadBtn.onclick = () => {
+        modalOverlay.classList.add('hidden');
+        action();
+    };
 }
 
-// INITIALISIERUNG
+function toggleAllCheckboxes() {
+    const boxes = document.querySelectorAll(".img-checkbox");
+    if (boxes.length === 0) return;
+    const allChecked = Array.from(boxes).every(cb => cb.checked);
+    boxes.forEach(cb => cb.checked = !allChecked);
+    document.getElementById('toggleAllBtn').textContent = allChecked ? "Alle auswählen" : "Alle abwählen";
+}
+
+// ================= Event Listener Start =================
 document.addEventListener("DOMContentLoaded", () => {
     loadGallery();
 
-    // Buttons verknüpfen
+    // Buttons
     document.getElementById("toggleAllBtn")?.addEventListener("click", toggleAllCheckboxes);
     document.getElementById("zipDownloadBtn")?.addEventListener("click", () => {
         const checked = document.querySelectorAll(".img-checkbox:checked");
         if (checked.length > 0) showDownloadPrompt(triggerZipDownload);
     });
 
-    // Lightbox Pfeile fixen
-    document.querySelector(".lightbox-next")?.addEventListener("click", (e) => { e.stopPropagation(); showNext(); });
-    document.querySelector(".lightbox-prev")?.addEventListener("click", (e) => { e.stopPropagation(); showPrev(); });
+    // Lightbox Steuerung
+    document.querySelector(".lightbox-next")?.addEventListener("click", (e) => {
+        e.stopPropagation();
+        showNext();
+    });
+    document.querySelector(".lightbox-prev")?.addEventListener("click", (e) => {
+        e.stopPropagation();
+        showPrev();
+    });
     document.querySelector(".lightbox-close")?.addEventListener("click", closeLightbox);
-});
 
-function showDownloadPrompt(action) {
-    modalOverlay.classList.remove('hidden');
-    // Wir überschreiben den Button-Klick jedes Mal neu
-    startDownloadBtn.onclick = () => {
-        modalOverlay.classList.add('hidden');
-        action();
-    };
-}
+    // Tastatur-Steuerung
+    document.addEventListener("keydown", (e) => {
+        const lb = document.getElementById("lightbox");
+        if (lb && !lb.classList.contains("hidden")) {
+            if (e.key === "ArrowRight") showNext();
+            if (e.key === "ArrowLeft") showPrev();
+            if (e.key === "Escape") closeLightbox();
+        }
+    });
+});
