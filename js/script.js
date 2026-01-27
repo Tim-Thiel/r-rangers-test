@@ -1,4 +1,4 @@
-/* script.js — Dynamischer Dateiname & Button-Fix */
+/* script.js — Alles Fix & Fertig */
 
 const cloudName = "db4arm1o7"; 
 let galleryImages = [];    
@@ -7,6 +7,13 @@ let currentIndex = 0;
 
 let modalOverlay;
 let startDownloadBtn;
+
+// Einheitlicher Text-Baustein für das Modal
+const downloadHinweisHTML = `
+    <p>⚠️ <strong>Nur für private Nutzung!</strong></p>
+    <p>Die Bilder dürfen <strong>nicht veröffentlicht</strong> oder <strong>an Dritte weitergegeben</strong> werden.</p>
+    <p>Bestätige die Einhaltung dieser Regelung mit 'Download starten'.</p>
+`;
 
 // === GLOBALE FUNKTIONEN ===
 
@@ -25,26 +32,8 @@ window.downloadSelected = function() {
         showModalContent("Achtung!", "<p>Bitte wähle zuerst mindestens ein Bild aus.</p>", false);
         return;
     }
-    // Einheitlicher Text für ZIP
-    showModalContent(
-        "Wichtiger Download-Hinweis!", 
-        "<p>⚠️ <strong>Nur für private Nutzung!</strong></p><p>Die Bilder dürfen <strong>nicht veröffentlicht</strong> oder <strong>an Dritte weitergegeben</strong> werden.</p><p>Bestätige die Einhaltung dieser Regelung mit 'Download starten'.</p>", 
-        true, 
-        triggerZipDownload
-    );
+    showModalContent("Wichtiger Download-Hinweis!", downloadHinweisHTML, true, triggerZipDownload);
 };
-
-// In der loadGallery Funktion beim Erstellen des Buttons:
-card.querySelector(".download-btn").addEventListener("click", (e) => {
-    e.preventDefault();
-    // Einheitlicher Text für Einzel-Download
-    showModalContent(
-        "Wichtiger Download-Hinweis!", 
-        "<p>⚠️ <strong>Nur für private Nutzung!</strong></p><p>Die Bilder dürfen <strong>nicht veröffentlicht</strong> oder <strong>an Dritte weitergegeben</strong> werden.</p><p>Bestätige die Einhaltung dieser Regelung mit 'Download starten'.</p>", 
-        true, 
-        () => triggerSingleDownload(originalUrl, cleanName)
-    );
-});
 
 window.closeDownloadModal = function() {
     if (modalOverlay) modalOverlay.classList.add('hidden');
@@ -95,31 +84,25 @@ async function loadGallery() {
                 <a href="#" class="download-btn">Download</a>
             `;
 
+            // Hier lag der Fehler: Das Event-Muss INNERHALB der Schleife an card gebunden werden
             card.querySelector(".download-btn").addEventListener("click", (e) => {
                 e.preventDefault();
-                showModalContent(
-                    "Wichtiger Download-Hinweis!", 
-                    "<p>⚠️ <strong>Nur für private Nutzung!</strong></p><p>Die Bilder dürfen nicht veröffentlicht werden.</p><p>Bestätige die Einhaltung mit 'Download starten'.</p>", 
-                    true, 
-                    () => triggerSingleDownload(originalUrl, cleanName)
-                );
+                showModalContent("Wichtiger Download-Hinweis!", downloadHinweisHTML, true, () => triggerSingleDownload(originalUrl, cleanName));
             });
 
             gallery.appendChild(card);
         });
-    } catch (err) { console.error("Fehler:", err); }
+    } catch (err) { console.error("Fehler beim Laden der Cloudinary-Liste:", err); }
 }
 
 function updateLightboxImage() {
     const lbImg = document.getElementById("lightbox-img");
     if (!lbImg) return;
     
-    // Das Bild wird fast unsichtbar, damit der Spinner (der dahinter/darüber liegt) wirkt
+    // Bild wird unsichtbar, damit der Spinner (der drüber liegt) wirkt
     lbImg.style.opacity = "0"; 
-    
     lbImg.src = galleryImages[currentIndex];
     
-    // Erst wenn das neue Bild geladen ist, wird es wieder eingeblendet
     lbImg.onload = () => { 
         lbImg.style.opacity = "1"; 
     };
@@ -130,7 +113,7 @@ async function triggerSingleDownload(url, filename) {
     const startBtn = document.getElementById("startDownloadBtn");
     
     startBtn.style.display = "none";
-    bodyElem.innerHTML = `<p>Bild wird heruntergeladen...</p><span id="statusText">Bitte warten...</span>`;
+    bodyElem.innerHTML = `<p>Bild wird vorbereitet...</p><span id="statusText">Lade Daten...</span>`;
 
     try {
         const resp = await fetch(url);
@@ -140,7 +123,6 @@ async function triggerSingleDownload(url, filename) {
         document.getElementById("statusText").innerText = "Fertig!";
         setTimeout(() => closeDownloadModal(), 800);
     } catch (err) {
-        console.error("Fehler:", err);
         bodyElem.innerHTML = "<p>Fehler beim Download.</p>";
     }
 }
@@ -150,13 +132,12 @@ async function triggerZipDownload() {
     const zip = new JSZip();
     const total = checked.length;
     
-    // UI-Elemente im Modal für den Fortschritt vorbereiten
     const bodyElem = document.getElementById("modalBody");
     const startBtn = document.getElementById("startDownloadBtn");
     
-    startBtn.style.display = "none"; // Button während Download verstecken
+    startBtn.style.display = "none";
     bodyElem.innerHTML = `
-        <p>Bilder werden für den Download vorbereitet...</p>
+        <p>Bilder werden für den ZIP-Download vorbereitet...</p>
         <div class="progress-container" style="display: block;">
             <div id="pBar" class="progress-bar"></div>
         </div>
@@ -166,7 +147,6 @@ async function triggerZipDownload() {
     const pBar = document.getElementById("pBar");
     const sText = document.getElementById("statusText");
     
-    // Dynamischer Dateiname
     let pageTitle = document.querySelector("h1") ? document.querySelector("h1").innerText : "Ranger_Bilder";
     let safeFileName = pageTitle.replace(/\s+/g, '_') + ".zip";
 
@@ -175,42 +155,34 @@ async function triggerZipDownload() {
         try {
             const resp = await fetch(box.value);
             const blob = await resp.blob();
-            // Den Dateinamen aus der URL extrahieren
             const fileName = box.value.split('/').pop().split('?')[0];
             zip.file(fileName, blob);
             
             count++;
-            // Fortschritt aktualisieren
             const percent = (count / total) * 100;
             pBar.style.width = percent + "%";
             sText.innerText = `${count} von ${total} Bildern geladen`;
-        } catch (err) {
-            console.error("Download-Fehler bei Bild:", box.value);
-        }
+        } catch (err) { console.error("Fehler bei Bild:", box.value); }
     }
     
     sText.innerText = "ZIP-Archiv wird erstellt...";
     const content = await zip.generateAsync({type: "blob"});
     saveAs(content, safeFileName);
     
-    // Modal nach Erfolg schließen
-    setTimeout(() => {
-        closeDownloadModal();
-    }, 1000);
+    setTimeout(() => closeDownloadModal(), 1000);
 }
 
 function showModalContent(title, html, showButton, action = null) {
     if (!modalOverlay) return;
     const titleElem = document.getElementById("modalTitle") || modalOverlay.querySelector("h3");
-    const bodyElem = document.getElementById("modalBody") || modalOverlay.querySelector(".modal-content p");
+    const bodyElem = document.getElementById("modalBody");
+    
     if (titleElem) titleElem.textContent = title;
     if (bodyElem) bodyElem.innerHTML = html;
+    
     if (showButton) {
         startDownloadBtn.style.display = "inline-block";
-        startDownloadBtn.onclick = () => {
-            modalOverlay.classList.add('hidden');
-            action();
-        };
+        startDownloadBtn.onclick = () => action(); // Führt die Download-Funktion aus
     } else {
         startDownloadBtn.style.display = "none";
     }
@@ -222,6 +194,7 @@ document.addEventListener("DOMContentLoaded", () => {
     startDownloadBtn = document.getElementById('startDownloadBtn');
     loadGallery();
     
+    // Lightbox-Events
     document.querySelector(".lightbox-next")?.addEventListener("click", (e) => { 
         e.stopPropagation(); currentIndex = (currentIndex + 1) % galleryImages.length; updateLightboxImage();
     });
