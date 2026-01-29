@@ -107,12 +107,22 @@ async function loadGallery() {
 function updateLightboxImage() {
     const lbImg = document.getElementById("lightbox-img");
     const lbContainer = document.getElementById("lightbox");
+    const downloadBtn = document.getElementById("lightboxDownloadBtn"); // Neu
+    
     if (!lbImg || !lbContainer) return;
     
     lbContainer.classList.add("loading");
     lbImg.style.opacity = "0"; 
     
-    lbImg.src = galleryImages[currentIndex];
+    // Den Pfad aus deinem Array holen
+    const imagePath = galleryImages[currentIndex];
+    lbImg.src = imagePath;
+    
+    // NEU: Download-Button aktualisieren
+    if (downloadBtn) {
+        downloadBtn.href = imagePath;
+        downloadBtn.download = imagePath.split('/').pop(); 
+    }
     
     lbImg.onload = () => { 
         lbContainer.classList.remove("loading");
