@@ -131,86 +131,12 @@ button:hover, .download-btn:hover, #download-selected:hover { background: var(--
 /* --------------------------------------------
    LIGHTBOX & MODAL
 --------------------------------------------- */
-.lightbox { 
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-    background: rgba(0,0,0,0.95); display: flex; 
-    flex-direction: column; justify-content: center; align-items: center; 
-    z-index: 9999; 
-}
-
+.lightbox { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); display: flex; justify-content: center; align-items: center; z-index: 9999; }
 .lightbox.hidden { opacity: 0; pointer-events: none; }
-
-.lightbox img { 
-    max-width: 90%; max-height: 80%; /* Platz für Button unten lassen */
-    border-radius: 12px; box-shadow: 0 0 30px rgba(0,0,0,0.5); 
-}
-
-/* Lade-Spinner */
-.lightbox-loader {
-    display: none; /* Standardmäßig aus */
-    border: 5px solid rgba(255, 255, 255, 0.3);
-    border-radius: 50%;
-    border-top: 5px solid var(--ranger-blue);
-    width: 50px; height: 50px;
-    animation: spin 1s linear infinite;
-    position: absolute;
-    z-index: 10001; /* Vor dem Bild */
-}
-
-/* NUR anzeigen, wenn die Lightbox die Klasse .loading hat */
-.lightbox.loading .lightbox-loader {
-    display: block;
-}
-
-/* Das Bild dezent ausblenden, während es lädt */
-#lightbox-img {
-    transition: opacity 0.3s ease;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-/* Pfeile & Hover */
-.lightbox-nav span { 
-    position: absolute; top: 50%; transform: translateY(-50%); 
-    font-size: 60px; color: #fff; cursor: pointer; 
-    transition: color 0.3s, transform 0.2s;
-    user-select: none;
-}
-
-.lightbox-nav span:hover { 
-    color: var(--ranger-blue); /* Deine gewünschte blaue Farbe */
-    transform: translateY(-50%) scale(1.1);
-}
-
-.lightbox-prev { left: 30px; }
-.lightbox-next { right: 30px; }
-
-/* Download Button in der Lightbox */
-.lightbox-download {
-    margin-top: 20px;
-    background: var(--ranger-blue);
-    color: white;
-    padding: 12px 25px;
-    text-decoration: none;
-    border-radius: 8px;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    transition: 0.3s;
-}
-
-.lightbox-download:hover {
-    background: var(--ranger-blue-dark);
-}
-
-.lightbox-close { 
-    position: absolute; top: 20px; right: 30px; 
-    font-size: 40px; color: #fff; cursor: pointer; 
-}
+.lightbox img { max-width: 90%; max-height: 85%; border-radius: 12px; }
+.lightbox-close { position: absolute; top: 25px; right: 40px; font-size: 45px; color: #fff; cursor: pointer; }
+.lightbox-nav span { position: absolute; top: 50%; transform: translateY(-50%); font-size: 60px; color: #fff; cursor: pointer; }
+.lightbox-prev { left: 40px; } .lightbox-next { right: 40px; }
 
 .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); display: flex; justify-content: center; align-items: center; z-index: 9990; }
 .modal-overlay.hidden { opacity: 0; pointer-events: none; }
