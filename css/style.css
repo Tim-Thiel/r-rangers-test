@@ -41,6 +41,12 @@ h1, h2 { text-align: center; color: var(--ranger-blue); margin-top: 20px; font-w
     box-sizing: border-box;
 }
 
+.info-box strong, 
+#modalBody strong {
+    color: var(--ranger-blue);
+    font-weight: 700; /* Damit es schön kräftig bleibt */
+}
+
 /* --------------------------------------------
    Layout Container
 --------------------------------------------- */
