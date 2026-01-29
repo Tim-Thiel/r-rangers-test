@@ -228,6 +228,23 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelector(".lightbox-prev")?.addEventListener("click", (e) => { 
         e.stopPropagation(); currentIndex = (currentIndex - 1 + galleryImages.length) % galleryImages.length; updateLightboxImage();
     });
+    // Neuer Download-Button in der Lightbox
+    const lbDownloadBtn = document.getElementById("lightbox-download-btn");
+    lbDownloadBtn?.addEventListener("click", (e) => {
+        e.preventDefault();
+        
+        // Wir holen uns die URL des aktuellen Bildes aus dem globalen Array
+        const url = originalImages[currentIndex]; 
+        const cleanName = url.split('/').pop().split('?')[0];
+
+        // Wir nutzen dein vorhandenes Modal-System
+        showModalContent(
+            "Wichtiger Download-Hinweis!", 
+            downloadHinweisHTML, 
+            true, 
+            () => triggerSingleDownload(url, cleanName)
+        );
+    });
     document.querySelector(".lightbox-close")?.addEventListener("click", () => {
         document.getElementById("lightbox").classList.add("hidden");
         // Verlauf korrigieren, wenn manuell über X geschlossen wird
