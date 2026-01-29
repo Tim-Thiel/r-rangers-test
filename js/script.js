@@ -12,7 +12,7 @@ let startDownloadBtn;
 const downloadHinweisHTML = `
     <p>⚠️ <strong>Nur für private Nutzung!</strong></p>
     <p>Die Bilder dürfen <strong>nicht veröffentlicht</strong> oder <strong>an Dritte weitergegeben</strong> werden.</p>
-    <p>Bestätige die Einhaltung dieser Regelung mit 'Download starten'.</p>
+    <p>Bestätige die Einhaltung dieser Regelung mit<br>'Download starten'.</p>
 `;
 
 // === GLOBALE FUNKTIONEN ===
