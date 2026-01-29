@@ -205,14 +205,20 @@ function showModalContent(title, html, showButton, action = null) {
 
 // === BACK-BUTTON HANDLING (Handy-Fix) ===
 window.addEventListener("popstate", (event) => {
-    // Schließe Lightbox
     const lb = document.getElementById("lightbox");
-    if (lb && !lb.classList.contains("hidden")) {
-        lb.classList.add("hidden");
+    const modal = document.getElementById('downloadModal');
+
+    // Wenn kein "popup"-State mehr da ist, alles schließen
+    if (!event.state || !event.state.popup) {
+        if (lb) lb.classList.add("hidden");
+        if (modal) modal.classList.add('hidden');
+        return;
     }
-    // Schließe Modal
-    if (modalOverlay && !modalOverlay.classList.contains("hidden")) {
-        modalOverlay.classList.add('hidden');
+
+    // Wenn der State nur noch "lightbox" ist, muss das Modal zu, aber die LB bleibt offen
+    if (event.state.popup === "lightbox") {
+        if (modal) modal.classList.add('hidden');
+        if (lb) lb.classList.remove("hidden");
     }
 });
 
@@ -254,9 +260,23 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     document.addEventListener("keydown", (e) => {
         if (e.key === "Escape") { 
-            window.closeDownloadModal(); 
-            document.getElementById("lightbox")?.classList.add("hidden"); 
+            const modal = document.getElementById('downloadModal');
+            const lb = document.getElementById("lightbox");
+
+            // Priorität 1: Modal schließen, falls offen
+            if (modal && !modal.classList.contains("hidden")) {
+                window.closeDownloadModal(); 
+            } 
+            // Priorität 2: Sonst Lightbox schließen, falls offen
+            else if (lb && !lb.classList.contains("hidden")) {
+                lb.classList.add("hidden");
+                if (window.history.state && window.history.state.popup === "lightbox") {
+                    window.history.back();
+                }
+            }
         }
+        
+        // Pfeiltasten nur für Lightbox
         const lb = document.getElementById("lightbox");
         if (lb && !lb.classList.contains("hidden")) {
             if (e.key === "ArrowRight") { currentIndex = (currentIndex + 1) % galleryImages.length; updateLightboxImage(); }
