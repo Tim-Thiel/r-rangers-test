@@ -26,58 +26,26 @@ body {
 h1, h2 { text-align: center; color: var(--ranger-blue); margin-top: 20px; font-weight: 700; }
 
 /* --------------------------------------------
-   GELBE INFO-BOX
---------------------------------------------- */
-.info-box {
-    margin: 25px auto; 
-    padding: 15px 20px;
-    background: rgba(241, 196, 15, 0.15);
-    border-left: 5px solid var(--ranger-gold);
-    border-radius: 8px; 
-    max-width: 800px; 
-    text-align: center;
-    line-height: 1.5;
-    box-sizing: border-box;
-}
-
-/* --------------------------------------------
    Layout Container
 --------------------------------------------- */
-.landing-grid, .grid, .gallery {
+.gallery {
     display: grid;
     margin: 20px auto 40px auto;
     padding: 0 40px;
     max-width: 95%;
     box-sizing: border-box;
-    gap: 30px;
-}
-
-.landing-grid {
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    justify-content: center;
-    max-width: 1600px;
-}
-
-.gallery {
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); /* Etwas kleinere Spalten für mehr Bilder */
-    gap: 15px; /* Engeres Raster für die Galerie */
-}
-
-.grid {
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 15px;
 }
 
 /* --------------------------------------------
    VEREINHEITLICHES KARTEN-DESIGN
 --------------------------------------------- */
-.landing-card, .card, .gallery-item {
+.gallery-item {
     background: var(--card-bg);
-    border: none;
     border-radius: var(--radius);
     box-shadow: var(--shadow);
-    padding: 20px;
-    text-decoration: none;
-    color: var(--text-dark);
+    padding: 12px;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     display: flex;
     flex-direction: column;
@@ -86,58 +54,86 @@ h1, h2 { text-align: center; color: var(--ranger-blue); margin-top: 20px; font-w
     cursor: pointer;
 }
 
-/* Speziell für die Galerie: Weniger Padding, damit mehr Bild zu sehen ist */
-.gallery-item {
-    padding: 12px; 
-}
-
-.landing-card:hover, .card:hover, .gallery-item:hover {
+.gallery-item:hover {
     transform: translateY(-4px); 
     box-shadow: var(--shadow-hover);
 }
 
-/* FIX: 3:2 FORMAT ÜBERALL */
-.landing-card img, .card img, .gallery-item img {
+.gallery-item img {
     width: 100%;
     aspect-ratio: 3 / 2;
     object-fit: cover;
     border-radius: 8px;
 }
 
-/* Startseite & Aktionen: Bilder ohne Rand oben */
-.landing-card img, .card img {
-    width: calc(100% + 40px);
-    margin: -20px -20px 10px -20px;
-    border-radius: 12px 12px 0 0;
-}
-
-/* Texte kompakt halten */
-.landing-card h3, .card h3, .gallery-item h3 { margin: 5px 0; color: var(--ranger-blue); font-size: 1.1em; }
-.landing-card p, .card p, .gallery-item p { margin: 5px 0 10px 0; font-size: 0.9em; line-height: 1.3; }
-
 /* --------------------------------------------
    Buttons & Checkboxen
 --------------------------------------------- */
-button, .download-btn, #download-selected {
+button, .download-btn {
     background: var(--ranger-blue); color: white; border: none; padding: 10px 20px;
     font-size: 14px; border-radius: 8px; cursor: pointer; transition: 0.25s;
     display: inline-block; text-decoration: none; width: fit-content;
     margin: 5px auto 0 auto; 
 }
 
-button:hover, .download-btn:hover, #download-selected:hover { background: var(--ranger-blue-dark); }
+button:hover, .download-btn:hover { background: var(--ranger-blue-dark); }
 .checkbox-container { display: flex; justify-content: center; align-items: center; gap: 8px; margin-top: 5px; font-size: 0.9em; }
 
 /* --------------------------------------------
    LIGHTBOX & MODAL
 --------------------------------------------- */
-.lightbox { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); display: flex; justify-content: center; align-items: center; z-index: 9999; }
-.lightbox.hidden { opacity: 0; pointer-events: none; }
-.lightbox img { max-width: 90%; max-height: 85%; border-radius: 12px; }
-.lightbox-close { position: absolute; top: 25px; right: 40px; font-size: 45px; color: #fff; cursor: pointer; }
-.lightbox-nav span { position: absolute; top: 50%; transform: translateY(-50%); font-size: 60px; color: #fff; cursor: pointer; }
-.lightbox-prev { left: 40px; } .lightbox-next { right: 40px; }
+.lightbox { 
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+    background: rgba(0,0,0,0.95); display: flex; justify-content: center; 
+    align-items: center; z-index: 9999; 
+}
 
+.lightbox.hidden { opacity: 0; pointer-events: none; }
+
+.lightbox img { 
+    max-width: 90%; max-height: 85%; 
+    border-radius: 12px; 
+    transition: opacity 0.3s ease;
+}
+
+/* DER SPINNER (ERZEUGT OHNE HTML-ÄNDERUNG) */
+.lightbox.loading::after {
+    content: "";
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    border: 5px solid rgba(255, 255, 255, 0.2);
+    border-top: 5px solid var(--ranger-blue);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    z-index: 10001;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.lightbox-close { position: absolute; top: 25px; right: 40px; font-size: 45px; color: #fff; cursor: pointer; }
+
+/* Pfeile mit blauem Hover */
+.lightbox-nav span { 
+    position: absolute; top: 50%; transform: translateY(-50%); 
+    font-size: 60px; color: #fff; cursor: pointer; 
+    transition: all 0.3s ease;
+    user-select: none;
+    z-index: 10002;
+}
+
+.lightbox-nav span:hover { 
+    color: var(--ranger-blue) !important; 
+    transform: translateY(-50%) scale(1.1);
+}
+
+.lightbox-prev { left: 40px; } 
+.lightbox-next { right: 40px; }
+
+/* Modals */
 .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); display: flex; justify-content: center; align-items: center; z-index: 9990; }
 .modal-overlay.hidden { opacity: 0; pointer-events: none; }
 .modal-content { background: white; padding: 35px 30px 30px 30px; border-radius: var(--radius); max-width: 450px; width: 90%; text-align: center; position: relative; }
@@ -145,9 +141,6 @@ button:hover, .download-btn:hover, #download-selected:hover { background: var(--
 .progress-container { width: 100%; background: #eee; border-radius: 10px; margin: 20px 0; overflow: hidden; display: none; }
 .progress-bar { width: 0%; height: 15px; background: var(--ranger-blue); transition: width 0.3s; }
 
-/* --------------------------------------------
-   MOBILE OPTIMIERUNG
---------------------------------------------- */
 @media (max-width: 600px) {
-    .landing-grid, .grid, .gallery { padding: 0 15px !important; }
+    .gallery { padding: 0 15px !important; }
 }
