@@ -86,31 +86,36 @@ async function loadGallery() {
 
             const card = document.createElement("div");
             card.className = "gallery-item";
-            card.setAttribute("onclick", `openLightbox(${idx})`);
+            
+            // Wir legen das onclick direkt auf das Element-Objekt, das ist sicherer
+            card.onclick = () => openLightbox(idx);
+
             card.innerHTML = `
-                <img src="${thumbUrl}" alt="${cleanName}" onclick="openLightbox(${idx})" loading="lazy">
+                <img src="${thumbUrl}" alt="${cleanName}" loading="lazy">
                 <div class="checkbox-container">
                     <label><input type="checkbox" class="img-checkbox" value="${originalUrl}"> Auswählen</label>
                 </div>
                 <a href="#" class="download-btn">Download</a>
             `;
 
-            card.querySelector(".download-btn").addEventListener("click", (e) => {
-                e.preventDefault();
-                showModalContent("Wichtiger Download-Hinweis!", downloadHinweisHTML, true, () => triggerSingleDownload(originalUrl, cleanName));
-            });
+            // Stoppt das Öffnen der Lightbox beim Klick auf Checkbox oder Button
+            const checkboxCont = card.querySelector(".checkbox-container");
+            const dlBtn = card.querySelector(".download-btn");
+
+            checkboxCont.onclick = (e) => e.stopPropagation();
             
-            const dlBtn = card.querySelector(`#dl-${idx}`);
-            dlBtn.addEventListener("click", (e) => {
+            dlBtn.onclick = (e) => {
                 e.preventDefault();
-                e.stopPropagation(); // Verhindert, dass die Lightbox aufgeht
-                const cleanName = file.public_id.split('/').pop() + "." + file.format;
+                e.stopPropagation();
                 showModalContent("Wichtiger Download-Hinweis!", downloadHinweisHTML, true, () => triggerSingleDownload(originalUrl, cleanName));
-            });
+            };
 
             gallery.appendChild(card);
         });
-    } catch (err) { console.error("Fehler beim Laden der Cloudinary-Liste:", err); }
+    } catch (err) { 
+        console.error("Fehler beim Laden der Cloudinary-Liste:", err);
+        gallery.innerHTML = "<p>Bilder konnten nicht geladen werden.</p>";
+    }
 }
 
 function updateLightboxImage() {
