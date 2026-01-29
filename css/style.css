@@ -23,40 +23,66 @@ body {
     color: var(--text-dark);
 }
 
-h1, h2 { text-align: center; color: var(--ranger-blue); margin-top: 20px; font-weight: 700; }
+h1 { text-align: center; color: var(--ranger-blue); margin-top: 20px; font-weight: 700; }
 
 /* --------------------------------------------
    Layout Container
 --------------------------------------------- */
-.gallery {
+.landing-grid, .grid, .gallery {
     display: grid;
     margin: 20px auto 40px auto;
     padding: 0 40px;
     max-width: 95%;
     box-sizing: border-box;
+    gap: 30px;
+}
+
+.gallery {
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
     gap: 15px;
 }
 
 /* --------------------------------------------
-   VEREINHEITLICHES KARTEN-DESIGN
+   KARTEN-DESIGN (Startseite & Aktionen)
 --------------------------------------------- */
-.gallery-item {
+.landing-card, .card {
     background: var(--card-bg);
     border-radius: var(--radius);
     box-shadow: var(--shadow);
-    padding: 12px;
+    padding: 20px;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     display: flex;
     flex-direction: column;
     align-items: center; 
     text-align: center;
     cursor: pointer;
+    overflow: hidden; /* Wichtig für die abgerundeten Ecken der Bilder */
 }
 
-.gallery-item:hover {
+.landing-card:hover, .card:hover {
     transform: translateY(-4px); 
     box-shadow: var(--shadow-hover);
+}
+
+/* BILDER BIS AN DEN RAND (Startseite & Aktionen) */
+.landing-card img, .card img {
+    width: calc(100% + 40px); /* Dehnt das Bild über das Padding aus */
+    margin: -20px -20px 15px -20px; /* Zieht das Bild nach oben und zu den Seiten */
+    aspect-ratio: 3 / 2;
+    object-fit: cover;
+    border-radius: 12px 12px 0 0; /* Nur oben abgerundet */
+}
+
+/* GALERIE-ITEMS (Die einzelnen Fotos) */
+.gallery-item {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
 }
 
 .gallery-item img {
@@ -67,20 +93,7 @@ h1, h2 { text-align: center; color: var(--ranger-blue); margin-top: 20px; font-w
 }
 
 /* --------------------------------------------
-   Buttons & Checkboxen
---------------------------------------------- */
-button, .download-btn {
-    background: var(--ranger-blue); color: white; border: none; padding: 10px 20px;
-    font-size: 14px; border-radius: 8px; cursor: pointer; transition: 0.25s;
-    display: inline-block; text-decoration: none; width: fit-content;
-    margin: 5px auto 0 auto; 
-}
-
-button:hover, .download-btn:hover { background: var(--ranger-blue-dark); }
-.checkbox-container { display: flex; justify-content: center; align-items: center; gap: 8px; margin-top: 5px; font-size: 0.9em; }
-
-/* --------------------------------------------
-   LIGHTBOX & MODAL
+   LIGHTBOX SPINNER (Rein CSS)
 --------------------------------------------- */
 .lightbox { 
     position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
@@ -96,12 +109,11 @@ button:hover, .download-btn:hover { background: var(--ranger-blue-dark); }
     transition: opacity 0.3s ease;
 }
 
-/* DER SPINNER (ERZEUGT OHNE HTML-ÄNDERUNG) */
+/* Der Spinner wird hier virtuell erzeugt */
 .lightbox.loading::after {
     content: "";
     position: absolute;
-    width: 50px;
-    height: 50px;
+    width: 50px; height: 50px;
     border: 5px solid rgba(255, 255, 255, 0.2);
     border-top: 5px solid var(--ranger-blue);
     border-radius: 50%;
@@ -114,33 +126,30 @@ button:hover, .download-btn:hover { background: var(--ranger-blue-dark); }
     100% { transform: rotate(360deg); }
 }
 
-.lightbox-close { position: absolute; top: 25px; right: 40px; font-size: 45px; color: #fff; cursor: pointer; }
-
-/* Pfeile mit blauem Hover */
 .lightbox-nav span { 
     position: absolute; top: 50%; transform: translateY(-50%); 
     font-size: 60px; color: #fff; cursor: pointer; 
-    transition: all 0.3s ease;
+    transition: color 0.3s;
     user-select: none;
     z-index: 10002;
 }
 
 .lightbox-nav span:hover { 
     color: var(--ranger-blue) !important; 
-    transform: translateY(-50%) scale(1.1);
 }
 
 .lightbox-prev { left: 40px; } 
 .lightbox-next { right: 40px; }
+.lightbox-close { position: absolute; top: 25px; right: 40px; font-size: 45px; color: #fff; cursor: pointer; }
 
-/* Modals */
-.modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); display: flex; justify-content: center; align-items: center; z-index: 9990; }
-.modal-overlay.hidden { opacity: 0; pointer-events: none; }
-.modal-content { background: white; padding: 35px 30px 30px 30px; border-radius: var(--radius); max-width: 450px; width: 90%; text-align: center; position: relative; }
-.modal-close { position: absolute; top: 10px; right: 15px; font-size: 32px; color: #999; cursor: pointer; }
-.progress-container { width: 100%; background: #eee; border-radius: 10px; margin: 20px 0; overflow: hidden; display: none; }
-.progress-bar { width: 0%; height: 15px; background: var(--ranger-blue); transition: width 0.3s; }
-
-@media (max-width: 600px) {
-    .gallery { padding: 0 15px !important; }
+/* --------------------------------------------
+   DOWNLOAD-MODAL & BUTTONS
+--------------------------------------------- */
+button, .download-btn {
+    background: var(--ranger-blue); color: white; border: none; padding: 10px 20px;
+    border-radius: 8px; cursor: pointer;
 }
+
+.modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: flex; justify-content: center; align-items: center; z-index: 9990; }
+.modal-overlay.hidden { opacity: 0; pointer-events: none; }
+.modal-content { background: white; padding: 30px; border-radius: 12px; text-align: center; max-width: 450px; }
