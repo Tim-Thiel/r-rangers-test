@@ -120,6 +120,10 @@ async function loadGallery() {
 
 function updateLightboxImage() {
     const lbImg = document.getElementById("lightbox-img");
+    if (lbImg) {
+        lbImg.src = ""; // Löscht das alte Bild aus dem Speicher des Elements
+        lbImg.style.opacity = "0"; // Optional: Macht es unsichtbar für den nächsten Start
+    }
     const lbContainer = document.getElementById("lightbox");
     if (!lbImg || !lbContainer) return;
     
