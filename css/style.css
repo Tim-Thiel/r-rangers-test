@@ -147,12 +147,24 @@ button:hover, .download-btn:hover, #download-selected:hover { background: var(--
 
 /* Lade-Spinner */
 .lightbox-loader {
+    display: none; /* Standardmäßig aus */
     border: 5px solid rgba(255, 255, 255, 0.3);
     border-radius: 50%;
     border-top: 5px solid var(--ranger-blue);
     width: 50px; height: 50px;
     animation: spin 1s linear infinite;
     position: absolute;
+    z-index: 10001; /* Vor dem Bild */
+}
+
+/* NUR anzeigen, wenn die Lightbox die Klasse .loading hat */
+.lightbox.loading .lightbox-loader {
+    display: block;
+}
+
+/* Das Bild dezent ausblenden, während es lädt */
+#lightbox-img {
+    transition: opacity 0.3s ease;
 }
 
 @keyframes spin {
