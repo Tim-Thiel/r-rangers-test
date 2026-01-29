@@ -86,6 +86,7 @@ async function loadGallery() {
 
             const card = document.createElement("div");
             card.className = "gallery-item";
+            card.setAttribute("onclick", `openLightbox(${idx})`);
             card.innerHTML = `
                 <img src="${thumbUrl}" alt="${cleanName}" onclick="openLightbox(${idx})" loading="lazy">
                 <div class="checkbox-container">
@@ -96,6 +97,14 @@ async function loadGallery() {
 
             card.querySelector(".download-btn").addEventListener("click", (e) => {
                 e.preventDefault();
+                showModalContent("Wichtiger Download-Hinweis!", downloadHinweisHTML, true, () => triggerSingleDownload(originalUrl, cleanName));
+            });
+            
+            const dlBtn = card.querySelector(`#dl-${idx}`);
+            dlBtn.addEventListener("click", (e) => {
+                e.preventDefault();
+                e.stopPropagation(); // Verhindert, dass die Lightbox aufgeht
+                const cleanName = file.public_id.split('/').pop() + "." + file.format;
                 showModalContent("Wichtiger Download-Hinweis!", downloadHinweisHTML, true, () => triggerSingleDownload(originalUrl, cleanName));
             });
 
