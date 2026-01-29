@@ -1,4 +1,4 @@
-/* script.js — Vollständige Datei für Tim Thiel (Royal Ranger Stamm 111) */
+/* script.js — Alles Fix & Fertig inkl. Handy-Zurück-Fix */
 
 const cloudName = "db4arm1o7"; 
 let galleryImages = [];    
@@ -38,6 +38,7 @@ window.downloadSelected = function() {
 window.closeDownloadModal = function() {
     if (modalOverlay) {
         modalOverlay.classList.add('hidden');
+        // Wenn das Modal manuell geschlossen wird, bereinigen wir den Verlaufseintrag
         if (window.history.state && window.history.state.popup) {
             window.history.back();
         }
@@ -49,7 +50,7 @@ window.openLightbox = function(idx) {
     const lb = document.getElementById("lightbox");
     if (lb) {
         lb.classList.remove("hidden");
-        // Eintrag im Verlauf für die Handy-Zurück-Taste
+        // NEU: Virtuellen Eintrag im Verlauf erstellen für die Handy-Zurück-Taste
         window.history.pushState({ popup: "lightbox" }, "");
     }
     updateLightboxImage();
@@ -108,7 +109,6 @@ function updateLightboxImage() {
     const lbContainer = document.getElementById("lightbox");
     if (!lbImg || !lbContainer) return;
     
-    // Spinner aktivieren (über CSS Klasse)
     lbContainer.classList.add("loading");
     lbImg.style.opacity = "0"; 
     
@@ -199,15 +199,18 @@ function showModalContent(title, html, showButton, action = null) {
         startDownloadBtn.style.display = "none";
     }
     modalOverlay.classList.remove('hidden');
+    // NEU: Verlaufseintrag für das Modal
     window.history.pushState({ popup: "modal" }, "");
 }
 
 // === BACK-BUTTON HANDLING (Handy-Fix) ===
 window.addEventListener("popstate", (event) => {
+    // Schließe Lightbox
     const lb = document.getElementById("lightbox");
     if (lb && !lb.classList.contains("hidden")) {
         lb.classList.add("hidden");
     }
+    // Schließe Modal
     if (modalOverlay && !modalOverlay.classList.contains("hidden")) {
         modalOverlay.classList.add('hidden');
     }
@@ -216,13 +219,9 @@ window.addEventListener("popstate", (event) => {
 document.addEventListener("DOMContentLoaded", () => {
     modalOverlay = document.getElementById('downloadModal');
     startDownloadBtn = document.getElementById('startDownloadBtn');
+    loadGallery();
     
-    // Lädt die Galerie nur, wenn das Element existiert
-    if (document.getElementById("gallery")) {
-        loadGallery();
-    }
-    
-    // Lightbox-Navigation
+    // Lightbox-Events
     document.querySelector(".lightbox-next")?.addEventListener("click", (e) => { 
         e.stopPropagation(); currentIndex = (currentIndex + 1) % galleryImages.length; updateLightboxImage();
     });
@@ -231,12 +230,11 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     document.querySelector(".lightbox-close")?.addEventListener("click", () => {
         document.getElementById("lightbox").classList.add("hidden");
+        // Verlauf korrigieren, wenn manuell über X geschlossen wird
         if (window.history.state && window.history.state.popup) {
             window.history.back();
         }
     });
-
-    // Tastatur-Steuerung
     document.addEventListener("keydown", (e) => {
         if (e.key === "Escape") { 
             window.closeDownloadModal(); 
