@@ -1,3 +1,5 @@
+/* script.js — Vollständige Datei für Tim Thiel (Royal Ranger Stamm 111) */
+
 const cloudName = "db4arm1o7"; 
 let galleryImages = [];    
 let originalImages = [];   
@@ -6,11 +8,14 @@ let currentIndex = 0;
 let modalOverlay;
 let startDownloadBtn;
 
+// Einheitlicher Text-Baustein für das Modal
 const downloadHinweisHTML = `
     <p>⚠️ <strong>Nur für private Nutzung!</strong></p>
     <p>Die Bilder dürfen <strong>nicht veröffentlicht</strong> oder <strong>an Dritte weitergegeben</strong> werden.</p>
     <p>Bestätige die Einhaltung dieser Regelung mit 'Download starten'.</p>
 `;
+
+// === GLOBALE FUNKTIONEN ===
 
 window.toggleAllCheckboxes = function() {
     const boxes = document.querySelectorAll(".img-checkbox");
@@ -44,10 +49,13 @@ window.openLightbox = function(idx) {
     const lb = document.getElementById("lightbox");
     if (lb) {
         lb.classList.remove("hidden");
+        // Eintrag im Verlauf für die Handy-Zurück-Taste
         window.history.pushState({ popup: "lightbox" }, "");
     }
     updateLightboxImage();
 };
+
+// === INTERNE LOGIK ===
 
 async function loadGallery() {
     const gallery = document.getElementById("gallery");
@@ -100,6 +108,7 @@ function updateLightboxImage() {
     const lbContainer = document.getElementById("lightbox");
     if (!lbImg || !lbContainer) return;
     
+    // Spinner aktivieren (über CSS Klasse)
     lbContainer.classList.add("loading");
     lbImg.style.opacity = "0"; 
     
@@ -114,12 +123,15 @@ function updateLightboxImage() {
 async function triggerSingleDownload(url, filename) {
     const bodyElem = document.getElementById("modalBody");
     const startBtn = document.getElementById("startDownloadBtn");
+    
     startBtn.style.display = "none";
     bodyElem.innerHTML = `<p>Bild wird vorbereitet...</p><span id="statusText">Lade Daten...</span>`;
+
     try {
         const resp = await fetch(url);
         const blob = await resp.blob();
         saveAs(blob, filename);
+        
         document.getElementById("statusText").innerText = "Fertig!";
         setTimeout(() => closeDownloadModal(), 800);
     } catch (err) {
@@ -131,8 +143,10 @@ async function triggerZipDownload() {
     const checked = document.querySelectorAll(".img-checkbox:checked");
     const zip = new JSZip();
     const total = checked.length;
+    
     const bodyElem = document.getElementById("modalBody");
     const startBtn = document.getElementById("startDownloadBtn");
+    
     startBtn.style.display = "none";
     bodyElem.innerHTML = `
         <p>Bilder werden für den ZIP-Download vorbereitet...</p>
@@ -141,10 +155,13 @@ async function triggerZipDownload() {
         </div>
         <span id="statusText">0 von ${total} Bildern geladen</span>
     `;
+
     const pBar = document.getElementById("pBar");
     const sText = document.getElementById("statusText");
+    
     let pageTitle = document.querySelector("h1") ? document.querySelector("h1").innerText : "Ranger_Bilder";
     let safeFileName = pageTitle.replace(/\s+/g, '_') + ".zip";
+
     let count = 0;
     for (let box of checked) {
         try {
@@ -152,15 +169,18 @@ async function triggerZipDownload() {
             const blob = await resp.blob();
             const fileName = box.value.split('/').pop().split('?')[0];
             zip.file(fileName, blob);
+            
             count++;
             const percent = (count / total) * 100;
             pBar.style.width = percent + "%";
             sText.innerText = `${count} von ${total} Bildern geladen`;
         } catch (err) { console.error("Fehler bei Bild:", box.value); }
     }
+    
     sText.innerText = "ZIP-Archiv wird erstellt...";
     const content = await zip.generateAsync({type: "blob"});
     saveAs(content, safeFileName);
+    
     setTimeout(() => closeDownloadModal(), 1000);
 }
 
@@ -168,8 +188,10 @@ function showModalContent(title, html, showButton, action = null) {
     if (!modalOverlay) return;
     const titleElem = document.getElementById("modalTitle") || modalOverlay.querySelector("h3");
     const bodyElem = document.getElementById("modalBody");
+    
     if (titleElem) titleElem.textContent = title;
     if (bodyElem) bodyElem.innerHTML = html;
+    
     if (showButton) {
         startDownloadBtn.style.display = "inline-block";
         startDownloadBtn.onclick = () => action();
@@ -180,6 +202,7 @@ function showModalContent(title, html, showButton, action = null) {
     window.history.pushState({ popup: "modal" }, "");
 }
 
+// === BACK-BUTTON HANDLING (Handy-Fix) ===
 window.addEventListener("popstate", (event) => {
     const lb = document.getElementById("lightbox");
     if (lb && !lb.classList.contains("hidden")) {
@@ -193,8 +216,13 @@ window.addEventListener("popstate", (event) => {
 document.addEventListener("DOMContentLoaded", () => {
     modalOverlay = document.getElementById('downloadModal');
     startDownloadBtn = document.getElementById('startDownloadBtn');
-    loadGallery();
     
+    // Lädt die Galerie nur, wenn das Element existiert
+    if (document.getElementById("gallery")) {
+        loadGallery();
+    }
+    
+    // Lightbox-Navigation
     document.querySelector(".lightbox-next")?.addEventListener("click", (e) => { 
         e.stopPropagation(); currentIndex = (currentIndex + 1) % galleryImages.length; updateLightboxImage();
     });
@@ -207,6 +235,8 @@ document.addEventListener("DOMContentLoaded", () => {
             window.history.back();
         }
     });
+
+    // Tastatur-Steuerung
     document.addEventListener("keydown", (e) => {
         if (e.key === "Escape") { 
             window.closeDownloadModal(); 
