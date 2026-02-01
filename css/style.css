@@ -108,6 +108,7 @@ h1, h2 { text-align: center; color: var(--ranger-blue); margin-top: 20px; font-w
     width: 100%;
     aspect-ratio: 3 / 2;
     object-fit: cover;
+    object-position: top; /* <--- DAS HIER RETTET DIE KÖPFE */
     border-radius: 8px;
 }
 
