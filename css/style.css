@@ -104,7 +104,7 @@ h1, h2 { text-align: center; color: var(--ranger-blue); margin-top: 20px; font-w
 }
 
 /* FIX: 3:2 FORMAT ÜBERALL */
-.landing-card img, .card img, .gallery-item img {
+.landing-card img, .card img {
     width: 100%;
     aspect-ratio: 3 / 2;
     object-fit: cover;
