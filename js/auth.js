@@ -84,10 +84,14 @@ function askPassword(area, onSuccess) {
         if (e && e.preventDefault) e.preventDefault(); 
         if (e && e.stopPropagation) e.stopPropagation();
         
+        // Suche diese Stelle in askPassword:
         if (input.value === PASSWORDS[area]) {
-            localStorage.setItem("auth_" + area, "true");
+            // Statt localStorage.setItem("auth_" + area, "true"); schreiben wir:
+            const today = new Date().toISOString().split('T')[0];
+            localStorage.setItem("auth_date_" + area, today); 
+        
             closePopupClean();
-            onSuccess();
+            onSuccess();  
         } else {
             showError("❌ Falsches Passwort!"); 
             input.value = "";
