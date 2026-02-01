@@ -2,9 +2,9 @@
 
 // 🔐 Passwörter an einer Stelle ändern
 const PASSWORDS = {
-    aktionen: "aktion",
+    aktionen: "rangers",
     team: "team",
-    privat: "privat"
+    privat: "freunde"
 };
 
 // ================= GLOBALE SCHLIESS-FUNKTIONEN =================
