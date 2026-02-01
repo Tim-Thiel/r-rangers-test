@@ -103,23 +103,14 @@ h1, h2 { text-align: center; color: var(--ranger-blue); margin-top: 20px; font-w
     box-shadow: var(--shadow-hover);
 }
 
-/* Deine bestehende Regel bleibt für die Karten */
-.landing-card img, .card img {
+/* FIX: 3:2 FORMAT ÜBERALL */
+.landing-card img, .card img, .gallery-item img {
     width: 100%;
     aspect-ratio: 3 / 2;
     object-fit: cover;
     border-radius: 8px;
 }
 
-/* Neue Regel NUR für die Galerie-Bilder */
-.gallery-item img {
-    width: 100%;
-    height: auto;       /* Höhe passt sich dem Bild an */
-    aspect-ratio: auto; /* Kein erzwungenes 3:2 mehr */
-    object-fit: contain; /* Nichts wird mehr abgeschnitten */
-    border-radius: 8px;
-    background: #f4f4f4; /* Optional: Falls die Boxen eine feste Höhe behalten sollen */
-}
 /* Startseite & Aktionen: Bilder ohne Rand oben */
 .landing-card img, .card img {
     width: calc(100% + 40px);
