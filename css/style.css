@@ -67,7 +67,7 @@ h1, h2 { text-align: center; color: var(--ranger-blue); margin-top: 20px; font-w
 
 .gallery {
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); /* Etwas kleinere Spalten für mehr Bilder */
-    gap: 15px; /* Engeres Raster für die Galerie */
+    gap: 10px; /* Engeres Raster für die Galerie */
 }
 
 .grid {
@@ -95,7 +95,7 @@ h1, h2 { text-align: center; color: var(--ranger-blue); margin-top: 20px; font-w
 
 /* Speziell für die Galerie: Weniger Padding, damit mehr Bild zu sehen ist */
 .gallery-item {
-    padding: 12px; 
+    padding: 5px; 
 }
 
 .landing-card:hover, .card:hover, .gallery-item:hover {
