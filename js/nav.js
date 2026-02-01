@@ -32,7 +32,7 @@ document.body.insertAdjacentHTML("beforeend", `
 `);
     // NEU: Fehler-Popup GLOBAL einfügen
 document.body.insertAdjacentHTML("beforeend", `
-    <div id="error-popup" class="modal-overlay hidden" style="z-index: 10000;">
+    <div id="error-popup" class="modal-overlay hidden" style="z-index: 20000;">
         <div class="modal-content" style="max-width: 300px; padding: 20px;">
             <h3 style="color: red;">Fehler</h3>
             <p id="error-message" style="margin: 15px 0;">Falsches Passwort!</p>
