@@ -56,9 +56,15 @@ function showError(message) {
 
 // ================= HAUPTLOGIK =================
 function checkAccess(area) {
-    return localStorage.getItem("auth_" + area) === "true";
-}
+    const savedDate = localStorage.getItem("auth_date_" + area);
+    if (!savedDate) return false;
 
+    // Das heutige Datum als String (z.B. "2026-02-01")
+    const today = new Date().toISOString().split('T')[0];
+
+    // Wenn das gespeicherte Datum mit heute übereinstimmt, gewähre Zugriff
+    return savedDate === today;
+}
 function askPassword(area, onSuccess) {
     const popup = document.getElementById("pw-popup");
     const input = document.getElementById("pw-popup-input");
