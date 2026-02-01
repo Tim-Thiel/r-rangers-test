@@ -93,9 +93,9 @@ h1, h2 { text-align: center; color: var(--ranger-blue); margin-top: 20px; font-w
     cursor: pointer;
 }
 
+/* Speziell für die Galerie: Weniger Padding, damit mehr Bild zu sehen ist */
 .gallery-item {
-    break-inside: avoid;
-    margin-bottom: 15px;
+    padding: 12px; 
 }
 
 .landing-card:hover, .card:hover, .gallery-item:hover {
@@ -104,22 +104,11 @@ h1, h2 { text-align: center; color: var(--ranger-blue); margin-top: 20px; font-w
 }
 
 /* FIX: 3:2 FORMAT ÜBERALL */
-.landing-card img, .card img {
+.landing-card img, .card img, .gallery-item img {
     width: 100%;
     aspect-ratio: 3 / 2;
     object-fit: cover;
     border-radius: 8px;
-}
-
-.gallery-item img {
-    width: 100%;
-    height: auto; /* Bild behält sein Original-Verhältnis */
-    display: block;
-}
-
-.gallery-container {
-    column-count: 3; /* Anzahl der Spalten */
-    column-gap: 15px;
 }
 
 /* Startseite & Aktionen: Bilder ohne Rand oben */
