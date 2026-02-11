@@ -8,6 +8,12 @@ document.addEventListener("DOMContentLoaded", () => {
         document.head.appendChild(faviconSymbol);
     }
     faviconSymbol.href = '../bilder/thumbs/favicon.png'; // Pfad zu deinem Logo
+
+        // FontAwesome für Icons laden
+const fontAwesome = document.createElement("link");
+fontAwesome.rel = "stylesheet";
+fontAwesome.href = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css";
+document.head.appendChild(fontAwesome);
     
     // Navigation HTML (KORRIGIERT)
 const navHTML = `
@@ -91,12 +97,6 @@ const footerHTML = `
 </footer>
 `;
 document.body.insertAdjacentHTML("beforeend", footerHTML);
-
-    // FontAwesome für Icons laden
-const fontAwesome = document.createElement("link");
-fontAwesome.rel = "stylesheet";
-fontAwesome.href = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css";
-document.head.appendChild(fontAwesome);
 
     // CSS laden
     const link = document.createElement("link");
