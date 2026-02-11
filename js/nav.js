@@ -50,17 +50,38 @@ document.body.insertAdjacentHTML("beforeend", `
     </div>
 `);
 
-// NEU: Footer automatisch ganz unten einfügen
-    const footerHTML = `
-    <footer style="text-align: center; padding: 30px; margin-top: 50px; border-top: 1px solid #eee; font-size: 0.85em; color: #666;">
-        <p>&copy; 2026 Tim Thiel | Stamm 111 Altensteig</p>
-        <p>
-            <a href="/rechtliches/impressum" style="color: #3498db; text-decoration: none;">Impressum</a> | 
-            <a href="/rechtliches/datenschutz" style="color: #3498db; text-decoration: none;">Datenschutz</a>
-        </p>
-    </footer>
-    `;
-    document.body.insertAdjacentHTML("beforeend", footerHTML);
+// NEU: Strukturierter Footer
+const footerHTML = `
+<footer class="site-footer">
+    <div class="footer-wrapper">
+        <div class="footer-sec">
+            <div class="footer-logo">⚜️</div>
+            <h3>Stamm 111 Altensteig</h3>
+            <p>Ein privates Projekt zur Dokumentation unserer Erlebnisse bei den Royal Rangern.</p>
+        </div>
+
+        <div class="footer-sec">
+            <h3>Kontakt</h3>
+            <p>📧 <a href="mailto:deine-email@beispiel.de" class="footer-link-white">E-Mail schreiben</a></p>
+            <p>📍 72213 Spielberg</p>
+            <p>⛺ Allzeit Bereit!</p>
+        </div>
+
+        <div class="footer-sec">
+            <h3>Rechtliches</h3>
+            <ul class="footer-nav-list">
+                <li><a href="/index">Startseite</a></li>
+                <li><a href="/rechtliches/impressum">Impressum</a></li>
+                <li><a href="/rechtliches/datenschutz">Datenschutz</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom-bar">
+        &copy; 2026 Tim Thiel | Privatprojekt
+    </div>
+</footer>
+`;
+document.body.insertAdjacentHTML("beforeend", footerHTML);
 
     // CSS laden
     const link = document.createElement("link");
