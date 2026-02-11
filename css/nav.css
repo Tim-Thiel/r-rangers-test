@@ -125,10 +125,9 @@ body {
     line-height: 1.6;
 }
 
-/* Links im Footer: Weiß, unterstrichen, aber bei Hover heller */
+/* Links im Footer: Weiß, aber bei Hover heller */
 .footer-sec a {
     color: #ffffff !important;
-    text-decoration: underline;
     transition: opacity 0.2s;
 }
 
