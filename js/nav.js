@@ -15,16 +15,16 @@ fontAwesome.rel = "stylesheet";
 fontAwesome.href = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css";
 document.head.appendChild(fontAwesome);
     
-    // Navigation HTML (KORRIGIERT)
+// Navigation HTML (KORRIGIERT & MODERNISIERT)
 const navHTML = `
     <nav class="site-navigation">
-        <a href="/index">⚜️ Startseite</a>
-        <a href="#" data-area="aktionen" data-url="/bereiche/aktionen">🔥 Aktionen & Camps</a>
-        <a href="#" data-area="team" data-url="/bereiche/team">🐾 Rennmäuse</a>
-        <a href="#" data-area="privat" data-url="/bereiche/privat">🔐 Private Bilder</a>
+        <a href="/index"><i class="fas fa-home"></i> Startseite</a>
+        <a href="#" data-area="aktionen" data-url="/bereiche/aktionen"><i class="fas fa-campground"></i> Aktionen & Camps</a>
+        <a href="#" data-area="team" data-url="/bereiche/team"><i class="fas fa-paw"></i> Rennmäuse</a>
+        <a href="#" data-area="privat" data-url="/bereiche/privat"><i class="fas fa-lock"></i> Private Bilder</a>
     </nav>
 `;
-
+    
     // Navigation ganz oben einfügen
     document.body.insertAdjacentHTML("afterbegin", navHTML);
 
