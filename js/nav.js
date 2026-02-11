@@ -18,10 +18,16 @@ document.head.appendChild(fontAwesome);
 // Navigation HTML (KORRIGIERT & MODERNISIERT)
 const navHTML = `
     <nav class="site-navigation">
-        <a href="/index"><i class="fas fa-home"></i> Startseite</a>
-        <a href="#" data-area="aktionen" data-url="/bereiche/aktionen"><i class="fas fa-campground"></i> Aktionen & Camps</a>
-        <a href="#" data-area="team" data-url="/bereiche/team"><i class="fas fa-paw"></i> Rennmäuse</a>
-        <a href="#" data-area="privat" data-url="/bereiche/privat"><i class="fas fa-lock"></i> Private Bilder</a>
+        <div class="menu-toggle" id="mobile-menu">
+            <i class="fas fa-bars"></i>
+        </div>
+
+        <div class="nav-links" id="nav-links">
+            <a href="/index"><i class="fas fa-home"></i> Startseite</a>
+            <a href="#" data-area="aktionen" data-url="/bereiche/aktionen"><i class="fas fa-campground"></i> Aktionen & Camps</a>
+            <a href="#" data-area="team" data-url="/bereiche/team"><i class="fas fa-paw"></i> Rennmäuse</a>
+            <a href="#" data-area="privat" data-url="/bereiche/privat"><i class="fas fa-lock"></i> Private Bilder</a>
+        </div>
     </nav>
 `;
     
