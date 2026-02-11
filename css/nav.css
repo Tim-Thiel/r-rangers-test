@@ -70,6 +70,14 @@ nav.site-navigation a.active {
     color: white;
 }
 
+/* Hamburger Button standardmäßig verstecken */
+.menu-toggle {
+    display: none;
+    font-size: 24px;
+    color: white;
+    cursor: pointer;
+}
+
 /* Mobile Ansicht (unverändert) */
 @media (max-width: 700px) {
     nav.site-navigation {
@@ -81,6 +89,38 @@ nav.site-navigation a.active {
     nav.site-navigation a {
         padding: 6px 10px;
         font-size: 16px;
+    }
+
+    .menu-toggle {
+        display: block; /* Zeigt das Icon am Handy */
+    }
+
+    .nav-links {
+        display: none; /* Versteckt die Links am Handy */
+        flex-direction: column;
+        width: 100%;
+        background-color: rgba(0, 68, 136, 0.95);
+        position: absolute;
+        top: 60px; /* Direkt unter der Leiste */
+        left: 0;
+        padding: 20px 0;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+
+    /* Wenn das Menü offen ist */
+    .nav-links.active {
+        display: flex; 
+    }
+
+    nav.site-navigation {
+        justify-content: space-between;
+    }
+
+    .nav-links a {
+        width: 100%;
+        text-align: center;
+        padding: 15px 0;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
     }
 
     .footer-wrapper {
