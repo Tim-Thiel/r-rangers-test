@@ -292,3 +292,8 @@ html {
 .legal-page .back-link:hover {
     text-decoration: underline;
 }
+
+.legal-page a {
+    color: white;
+    text-decoration: underline;
+}
