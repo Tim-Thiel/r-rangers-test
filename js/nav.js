@@ -1,5 +1,14 @@
 document.addEventListener("DOMContentLoaded", () => {
 
+    // Favicon dynamisch hinzufügen
+let link = document.querySelector("link[rel~='icon']");
+if (!link) {
+    link = document.createElement('link');
+    link.rel = 'icon';
+    document.head.appendChild(link);
+}
+link.href = '../bilder/thumbs/favicon.png'; // Pfad zu deinem Logo
+    
     // Navigation HTML (KORRIGIERT)
 const navHTML = `
     <nav class="site-navigation">
