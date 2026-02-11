@@ -152,9 +152,6 @@ body {
     color: white;
 }
 
-.footer-nav-list a:hover {
-    text-decoration: underline; /* Unterstreichung nur beim Drüberfahren */
-}
 /* Icons in weiß */
 .footer-icon {
     width: 25px;
