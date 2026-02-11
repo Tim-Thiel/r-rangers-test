@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Navigation HTML (KORRIGIERT)
 const navHTML = `
     <nav class="site-navigation">
-        <a href="/index.html">⚜️ Startseite</a>
+        <a href="/index">⚜️ Startseite</a>
         <a href="#" data-area="aktionen" data-url="/bereiche/aktionen">🔥 Aktionen & Camps</a>
         <a href="#" data-area="team" data-url="/bereiche/team">🐾 Rennmäuse</a>
         <a href="#" data-area="privat" data-url="/bereiche/privat">🔐 Private Bilder</a>
