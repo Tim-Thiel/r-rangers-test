@@ -77,7 +77,7 @@ const footerHTML = `
         </div>
     </div>
     <div class="footer-bottom-bar">
-        &copy; 2026 Tim Thiel | Privatprojekt
+        &copy; 2026 Tim Thiel
     </div>
 </footer>
 `;
