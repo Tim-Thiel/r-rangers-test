@@ -91,56 +91,69 @@ nav.site-navigation a.active {
         font-size: 16px;
     }
 
+/* 1. Navigationsleiste fixieren */
+    nav.site-navigation {
+        display: flex;
+        justify-content: space-between; /* Drückt Logo/Text nach links, Toggle nach rechts */
+        align-items: center;
+        position: sticky; /* Sorgt dafür, dass sie beim Scrollen oben bleibt */
+        top: 0;
+        z-index: 1000; /* Ganz nach oben, damit nichts drüber liegt */
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    /* 2. Drei Striche nach RECHTS */
     .menu-toggle {
         display: block;
+        order: 2; /* Schiebt das Icon im Flex-Layout nach rechts */
+        font-size: 24px;
+        color: white;
+        cursor: pointer;
+        padding: 5px;
     }
 
+    /* 3. Ausgeklapptes Feld & Mittiger Text */
     .nav-links {
-        display: flex; /* Muss jetzt flex sein, damit die Animation greift */
+        display: flex;
         flex-direction: column;
+        align-items: center; /* TEXT MITTIG AUSRICHTEN */
+        justify-content: center;
         width: 100%;
         
-        /* EXAKTE FARBE DER NAV */
-        background-color: rgba(0, 68, 136, 0.95); 
+        background-color: rgb(0, 68, 136); /* Vollton deines Blaus ohne Spalt */
         
-        /* POSITIONIERUNG OHNE SPALT */
         position: absolute;
-        top: 100%; /* Dockt direkt unten an die Nav-Leiste an */
+        top: 100%; /* Dockt direkt unter der Nav an */
         left: 0;
-        z-index: 100;
         
-        /* ANIMATION: VON OBEN RAUSFAHREN */
-        overflow: hidden; /* Verdeckt den Inhalt während der Animation */
-        max-height: 0;    /* Startzustand: Eingefahren */
-        transition: max-height 0.4s ease-out, padding 0.4s ease;
-        padding: 0;       /* Kein Padding im geschlossenen Zustand */
+        overflow: hidden;
+        max-height: 0;
+        transition: max-height 0.4s ease-in-out;
+        padding: 0;
     }
 
-    /* WENN DAS MENÜ AKTIV IST */
     .nav-links.active {
-        max-height: 500px; /* Groß genug für alle Links */
-        padding: 10px 0;   /* Erst beim Ausfahren Padding geben */
-        box-shadow: 0 8px 15px rgba(0,0,0,0.3);
-    }
-
-    nav.site-navigation {
-        justify-content: space-between;
-        position: relative; /* Wichtig für die Positionierung der nav-links */
+        max-height: 400px;
+        padding: 10px 0;
+        border-bottom: 2px solid rgba(255,255,255,0.1);
     }
 
     .nav-links a {
         width: 100%;
-        text-align: center;
+        text-align: center; /* Text innerhalb des Links zentrieren */
         padding: 15px 0;
+        color: white;
+        text-decoration: none;
+        font-size: 1.1rem;
         border-bottom: 1px solid rgba(255,255,255,0.1);
-        opacity: 0; /* Links am Anfang unsichtbar */
-        transition: opacity 0.3s ease;
+        display: block;
     }
 
-    .nav-links.active a {
-        opacity: 1; /* Links werden beim Ausfahren sichtbar */
+    /* Damit das erste Element keinen unnötigen Rand oben hat */
+    .nav-links a:last-child {
+        border-bottom: none;
     }
-}
 
     .footer-wrapper {
         flex-direction: column; 
