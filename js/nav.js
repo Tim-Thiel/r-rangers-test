@@ -129,3 +129,15 @@ document.body.insertAdjacentHTML("beforeend", footerHTML);
         closeBtn.addEventListener('click', closePopupClean);
     }
 });
+
+// Wartet, bis das Dokument geladen ist
+document.addEventListener('DOMContentLoaded', function() {
+    const menuBtn = document.getElementById('mobile-menu');
+    const navLinks = document.getElementById('nav-links');
+
+    if(menuBtn) {
+        menuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active'); // Schaltet das Menü an/aus
+        });
+    }
+});
