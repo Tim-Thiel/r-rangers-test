@@ -41,6 +41,18 @@ document.body.insertAdjacentHTML("beforeend", `
     </div>
 `);
 
+// NEU: Footer automatisch ganz unten einfügen
+    const footerHTML = `
+    <footer style="text-align: center; padding: 30px; margin-top: 50px; border-top: 1px solid #eee; font-size: 0.85em; color: #666;">
+        <p>&copy; 2026 Tim Thiel | Stamm 111 Altensteig</p>
+        <p>
+            <a href="/rechtliches/impressum" style="color: #3498db; text-decoration: none;">Impressum</a> | 
+            <a href="/rechtliches/datenschutz" style="color: #3498db; text-decoration: none;">Datenschutz</a>
+        </p>
+    </footer>
+    `;
+    document.body.insertAdjacentHTML("beforeend", footerHTML);
+
     // CSS laden
     const link = document.createElement("link");
     link.rel = "stylesheet";
