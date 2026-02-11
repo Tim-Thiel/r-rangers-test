@@ -78,13 +78,13 @@ nav.site-navigation a.active {
     }
 }
 
-/* --- MODERN FOOTER DESIGN (JMS-Style) --- */
+/* --- MODERN BLAUER FOOTER DESIGN --- */
 .site-footer {
-    background-color: #2c3e50; /* Dunkles Blau-Grau */
+    background-color: #1a252f; /* Noch ein Stück dunkler als vorher für mehr Tiefe */
     color: #ffffff;
     padding: 60px 20px 20px;
     margin-top: 80px;
-    border-top: 4px solid #ffca28; /* Goldener Ranger-Akzent */
+    border-top: 4px solid #3498db; /* Dezenter blauer Akzent-Streifen statt Gelb */
     font-family: sans-serif;
 }
 
@@ -99,40 +99,43 @@ nav.site-navigation a.active {
 
 .footer-sec {
     flex: 1;
-    min-width: 250px; /* Bricht auf Handys sauber um */
+    min-width: 250px;
 }
 
 .footer-sec h3 {
-    color: #ffca28; /* Ranger-Gelb */
+    color: #3498db; /* Klares Blau für die Überschriften */
     font-size: 1.1rem;
     margin-bottom: 20px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(52, 152, 219, 0.3); /* Blaue Trennlinie */
     padding-bottom: 10px;
     text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .footer-logo {
     font-size: 2.5rem;
     margin-bottom: 15px;
+    color: #ffffff;
 }
 
 .footer-sec p {
     font-size: 0.95rem;
     line-height: 1.6;
-    color: #ecf0f1;
+    color: #d5dbdb; /* Ganz leichtes Grau-Weiß für bessere Lesbarkeit */
 }
 
-/* Links im Footer weiß und unterstrichen wie gewünscht */
+/* Links im Footer weiß und unterstrichen */
 .footer-link-white, 
 .footer-nav-list a {
     color: #ffffff !important;
     text-decoration: underline;
     font-size: 0.95rem;
+    transition: color 0.3s ease;
 }
 
 .footer-link-white:hover, 
 .footer-nav-list a:hover {
-    color: #ffca28 !important;
+    color: #3498db !important; /* Hover-Effekt in Blau */
     text-decoration: none;
 }
 
@@ -151,27 +154,28 @@ nav.site-navigation a.active {
     padding-top: 20px;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
     font-size: 0.8rem;
-    color: #bdc3c7;
+    color: #7f8c8d;
 }
 
-/* Styling für die kleinen Icons vor dem Text */
+/* Icons vor dem Text - jetzt in Blau */
 .footer-icon {
-    width: 20px;         /* Feste Breite, damit der Text daneben bündig ist */
+    width: 20px;
     margin-right: 10px;
-    color: #ffca28;      /* Dein Ranger-Gelb für die Symbole */
+    color: #3498db; /* Icons in Akzent-Blau */
     font-size: 0.9rem;
 }
 
-/* Instagram Icon Styling */
+/* Instagram Icon Styling (ohne Kreis, pur) */
 .insta-icon-link {
-    font-size: 28px;         /* Hier stellst du die Größe des Logos ein */
-    color: #ffffff !important; /* Standardfarbe weiß */
+    font-size: 32px;
+    color: #ffffff !important;
     text-decoration: none !important;
     transition: all 0.3s ease;
     display: inline-block;
+    margin-top: 10px;
 }
 
 .insta-icon-link:hover {
-    color: #e4405f !important; /* Es färbt sich beim Hover in das Insta-Pink */
-    transform: scale(1.1);      /* Es wird minimal größer */
+    color: #3498db !important; /* Blau beim Hover, passend zum Rest */
+    transform: translateY(-3px); /* Kleiner "Hüpfer" nach oben */
 }
