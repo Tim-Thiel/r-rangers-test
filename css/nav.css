@@ -70,6 +70,23 @@ nav.site-navigation a.active {
     color: white;
 }
 
+/* Styling für das Nav-Logo */
+.nav-logo {
+    display: flex;
+    align-items: center;
+    padding: 0 !important; /* Entfernt Standard-Abstände von Links */
+}
+
+.nav-logo img {
+    height: 45px; /* Höhe des Emblems – kannst du nach Geschmack anpassen */
+    width: auto;
+    transition: transform 0.3s ease;
+}
+
+.nav-logo:hover img {
+    transform: rotate(5deg) scale(1.05); /* Kleiner technischer Effekt beim Hover */
+}
+
 /* Hamburger Button standardmäßig verstecken */
 .menu-toggle {
     display: none;
@@ -90,7 +107,10 @@ nav.site-navigation a.active {
         padding: 6px 10px;
         font-size: 16px;
     }
-
+    
+    .nav-logo {
+            order: 1; /* Logo bleibt auf Platz 1 (links) */
+        }
 /* 1. Navigationsleiste fixieren */
     nav.site-navigation {
         display: flex;
