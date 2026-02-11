@@ -60,7 +60,6 @@ nav.site-navigation a:hover {
 
 /* Optional: Icons beim Hover leicht einfärben oder bewegen */
 .site-navigation a:hover i {
-    color: var(--ranger-gold); /* Wenn du doch einen kleinen Akzent willst */
     transition: 0.2s;
 }
 
