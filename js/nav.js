@@ -54,23 +54,17 @@ document.body.insertAdjacentHTML("beforeend", `
 const footerHTML = `
 <footer class="site-footer">
     <div class="footer-wrapper">
-        <div class="footer-sec">
-            <div class="footer-logo">⚜️</div>
-            <h3>Stamm 111 Altensteig</h3>
-            <p>Ein privates Projekt zur Dokumentation unserer Erlebnisse bei den Royal Rangern.</p>
-        </div>
 
         <div class="footer-sec">
             <h3>Kontakt</h3>
-            <p>📧 <a href="mailto:deine-email@beispiel.de" class="footer-link-white">E-Mail schreiben</a></p>
-            <p>📍 72213 Spielberg</p>
-            <p>⛺ Allzeit Bereit!</p>
+            <p>📧 <a href="mailto:tim_thiel@r-rangers.de" class="footer-link-white">tim_thiel@r-rangers.de</a></p>
+            <p></p>
         </div>
 
         <div class="footer-sec">
-            <h3>Folge uns</h3>
+            <h3>Social Media</h3>
             <div class="social-links">
-                <a href="https://www.instagram.com/DEIN_PROFILNAME" target="_blank" class="insta-icon-link">
+                <a href="https://www.instagram.com/timthiel_" target="_blank" class="insta-icon-link">
                     <i class="fa-brands fa-instagram"></i>
                 </a>
             </div>
