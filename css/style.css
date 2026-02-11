@@ -45,9 +45,10 @@ h1, h2 { text-align: center; color: var(--ranger-blue); margin-top: 20px; font-w
 .signature {
    text-align: center;
     color: #7f8c8d; /* Ein dezentes Grau */
-    font-size: 0.9rem; /* Schön klein */
+    font-size: 1.0rem; /* Schön klein */
     font-weight: 400;
     margin-top: 0;
+    font-style: italic; /* Kursiv wirkt wie unterschrieben */
     letter-spacing: 0.5px;
 }
 
