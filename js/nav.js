@@ -64,12 +64,14 @@ const footerHTML = `
         <div class="footer-sec">
             <h3>Kontakt</h3>
             <p>
-                <i class="fas fa-envelope footer-icon"></i> 
-                <a href="mailto:tim_thiel@r-rangers.de" class="footer-link-white">tim_thiel@r-rangers.de</a>
+                <a href="mailto:tim_thiel@r-rangers.de" class="footer-link-white">
+                <i class="fas fa-envelope footer-icon"></i>tim_thiel@r-rangers.de           
+                </a>
             </p>
-            <p>
-                <i class="fas fa-globe footer-icon"></i> 
-                <a href="https://www.r-rangers.de" target="_blank" class="footer-link-white">www.r-rangers.de</a>
+            <p> 
+                <a href="https://www.r-rangers.de" target="_blank" class="footer-link-white">
+                <i class="fas fa-globe footer-icon"></i>www.r-rangers.de
+                </a>
             </p>
         </div>
 
