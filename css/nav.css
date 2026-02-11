@@ -92,28 +92,40 @@ nav.site-navigation a.active {
     }
 
     .menu-toggle {
-        display: block; /* Zeigt das Icon am Handy */
+        display: block;
     }
 
     .nav-links {
-        display: none; /* Versteckt die Links am Handy */
+        display: flex; /* Muss jetzt flex sein, damit die Animation greift */
         flex-direction: column;
         width: 100%;
-        background-color: rgba(0, 68, 136, 0.95);
+        
+        /* EXAKTE FARBE DER NAV */
+        background-color: rgba(0, 68, 136, 0.95); 
+        
+        /* POSITIONIERUNG OHNE SPALT */
         position: absolute;
-        top: 60px; /* Direkt unter der Leiste */
+        top: 100%; /* Dockt direkt unten an die Nav-Leiste an */
         left: 0;
-        padding: 20px 0;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        z-index: 100;
+        
+        /* ANIMATION: VON OBEN RAUSFAHREN */
+        overflow: hidden; /* Verdeckt den Inhalt während der Animation */
+        max-height: 0;    /* Startzustand: Eingefahren */
+        transition: max-height 0.4s ease-out, padding 0.4s ease;
+        padding: 0;       /* Kein Padding im geschlossenen Zustand */
     }
 
-    /* Wenn das Menü offen ist */
+    /* WENN DAS MENÜ AKTIV IST */
     .nav-links.active {
-        display: flex; 
+        max-height: 500px; /* Groß genug für alle Links */
+        padding: 10px 0;   /* Erst beim Ausfahren Padding geben */
+        box-shadow: 0 8px 15px rgba(0,0,0,0.3);
     }
 
     nav.site-navigation {
         justify-content: space-between;
+        position: relative; /* Wichtig für die Positionierung der nav-links */
     }
 
     .nav-links a {
@@ -121,7 +133,14 @@ nav.site-navigation a.active {
         text-align: center;
         padding: 15px 0;
         border-bottom: 1px solid rgba(255,255,255,0.1);
+        opacity: 0; /* Links am Anfang unsichtbar */
+        transition: opacity 0.3s ease;
     }
+
+    .nav-links.active a {
+        opacity: 1; /* Links werden beim Ausfahren sichtbar */
+    }
+}
 
     .footer-wrapper {
         flex-direction: column; 
