@@ -51,6 +51,19 @@ nav.site-navigation a:hover {
     transform: none; 
 }
 
+/* Styling für die Nav-Icons */
+.site-navigation a i {
+    margin-right: 10px; /* Abstand zum Text */
+    font-size: 0.9em;    /* Icons einen Tick kleiner als der Text wirken edler */
+    vertical-align: middle;
+}
+
+/* Optional: Icons beim Hover leicht einfärben oder bewegen */
+.site-navigation a:hover i {
+    color: var(--ranger-gold); /* Wenn du doch einen kleinen Akzent willst */
+    transition: 0.2s;
+}
+
 /* Aktiver Link */
 nav.site-navigation a.active {
     /* Hellerer, transparenter Hintergrund für den aktiven Link */
