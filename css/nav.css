@@ -70,6 +70,12 @@ nav.site-navigation a.active {
         padding: 6px 10px;
         font-size: 16px;
     }
+
+    .footer-wrapper {
+        flex-direction: column; 
+        text-align: center;
+        gap: 30px;
+    }
 }
 
 /* --- MODERN FOOTER DESIGN (JMS-Style) --- */
@@ -146,12 +152,4 @@ nav.site-navigation a.active {
     border-top: 1px solid rgba(255, 255, 255, 0.1);
     font-size: 0.8rem;
     color: #bdc3c7;
-}
-
-/* Responsive: Zentriert auf dem Handy */
-@media (max-width: 600px) {
-    .footer-wrapper {
-        flex-direction: column;
-        text-align: center;
-    }
 }
