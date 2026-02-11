@@ -71,3 +71,87 @@ nav.site-navigation a.active {
         font-size: 16px;
     }
 }
+
+/* --- MODERN FOOTER DESIGN (JMS-Style) --- */
+.site-footer {
+    background-color: #2c3e50; /* Dunkles Blau-Grau */
+    color: #ffffff;
+    padding: 60px 20px 20px;
+    margin-top: 80px;
+    border-top: 4px solid #ffca28; /* Goldener Ranger-Akzent */
+    font-family: sans-serif;
+}
+
+.footer-wrapper {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 40px;
+}
+
+.footer-sec {
+    flex: 1;
+    min-width: 250px; /* Bricht auf Handys sauber um */
+}
+
+.footer-sec h3 {
+    color: #ffca28; /* Ranger-Gelb */
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 10px;
+    text-transform: uppercase;
+}
+
+.footer-logo {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+}
+
+.footer-sec p {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: #ecf0f1;
+}
+
+/* Links im Footer weiß und unterstrichen wie gewünscht */
+.footer-link-white, 
+.footer-nav-list a {
+    color: #ffffff !important;
+    text-decoration: underline;
+    font-size: 0.95rem;
+}
+
+.footer-link-white:hover, 
+.footer-nav-list a:hover {
+    color: #ffca28 !important;
+    text-decoration: none;
+}
+
+.footer-nav-list {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-nav-list li {
+    margin-bottom: 12px;
+}
+
+.footer-bottom-bar {
+    text-align: center;
+    margin-top: 50px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 0.8rem;
+    color: #bdc3c7;
+}
+
+/* Responsive: Zentriert auf dem Handy */
+@media (max-width: 600px) {
+    .footer-wrapper {
+        flex-direction: column;
+        text-align: center;
+    }
+}
