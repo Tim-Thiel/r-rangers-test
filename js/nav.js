@@ -68,6 +68,15 @@ const footerHTML = `
         </div>
 
         <div class="footer-sec">
+            <h3>Folge uns</h3>
+            <div class="social-links">
+                <a href="https://www.instagram.com/DEIN_PROFILNAME" target="_blank" class="insta-icon-link">
+                    <i class="fa-brands fa-instagram"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="footer-sec">
             <h3>Rechtliches</h3>
             <ul class="footer-nav-list">
                 <li><a href="/index">Startseite</a></li>
@@ -82,6 +91,12 @@ const footerHTML = `
 </footer>
 `;
 document.body.insertAdjacentHTML("beforeend", footerHTML);
+
+    // FontAwesome für Icons laden
+const fontAwesome = document.createElement("link");
+fontAwesome.rel = "stylesheet";
+fontAwesome.href = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css";
+document.head.appendChild(fontAwesome);
 
     // CSS laden
     const link = document.createElement("link");
