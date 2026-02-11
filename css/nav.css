@@ -78,13 +78,13 @@ nav.site-navigation a.active {
     }
 }
 
-/* --- MODERN BLAUER FOOTER DESIGN --- */
+/* --- BLAUES FOOTER DESIGN (Passend zur Nav) --- */
 .site-footer {
-    background-color: #1a252f; /* Noch ein Stück dunkler als vorher für mehr Tiefe */
+    background-color: #3498db; /* Nutze hier das exakte Blau deiner Navigationsleiste */
     color: #ffffff;
     padding: 60px 20px 20px;
     margin-top: 80px;
-    border-top: 4px solid #3498db; /* Dezenter blauer Akzent-Streifen statt Gelb */
+    /* Kein oberer Rand, da die Farbe schon wirkt */
     font-family: sans-serif;
 }
 
@@ -97,85 +97,49 @@ nav.site-navigation a.active {
     gap: 40px;
 }
 
-.footer-sec {
-    flex: 1;
-    min-width: 250px;
-}
-
 .footer-sec h3 {
-    color: #3498db; /* Klares Blau für die Überschriften */
-    font-size: 1.1rem;
+    color: #ffffff; /* Weiß auf Blau wirkt sehr sauber */
+    font-size: 1.2rem;
     margin-bottom: 20px;
-    border-bottom: 1px solid rgba(52, 152, 219, 0.3); /* Blaue Trennlinie */
-    padding-bottom: 10px;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.3); /* Dezente weiße Linie */
+    padding-bottom: 8px;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    font-weight: bold;
 }
 
-.footer-logo {
-    font-size: 2.5rem;
-    margin-bottom: 15px;
-    color: #ffffff;
-}
-
-.footer-sec p {
-    font-size: 0.95rem;
-    line-height: 1.6;
-    color: #d5dbdb; /* Ganz leichtes Grau-Weiß für bessere Lesbarkeit */
-}
-
-/* Links im Footer weiß und unterstrichen */
-.footer-link-white, 
-.footer-nav-list a {
-    color: #ffffff !important;
+.footer-sec p, .footer-sec a {
+    color: #f0f3f4 !important; /* Ganz helles Off-White für weicheren Kontrast */
     text-decoration: underline;
     font-size: 0.95rem;
-    transition: color 0.3s ease;
 }
 
-.footer-link-white:hover, 
-.footer-nav-list a:hover {
-    color: #3498db !important; /* Hover-Effekt in Blau */
-    text-decoration: none;
+/* Icons in weiß, damit sie auf dem Blau leuchten */
+.footer-icon {
+    width: 20px;
+    margin-right: 10px;
+    color: #ffffff;
+    font-size: 1rem;
 }
 
-.footer-nav-list {
-    list-style: none;
-    padding: 0;
+/* Instagram-Logo spezial */
+.insta-icon-link {
+    font-size: 32px;
+    color: #ffffff !important;
+    text-decoration: none !important;
+    transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
-.footer-nav-list li {
-    margin-bottom: 12px;
+.insta-icon-link:hover {
+    opacity: 0.8;
+    transform: translateY(-3px);
 }
 
 .footer-bottom-bar {
     text-align: center;
     margin-top: 50px;
     padding-top: 20px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    font-size: 0.8rem;
-    color: #7f8c8d;
-}
-
-/* Icons vor dem Text - jetzt in Blau */
-.footer-icon {
-    width: 20px;
-    margin-right: 10px;
-    color: #3498db; /* Icons in Akzent-Blau */
-    font-size: 0.9rem;
-}
-
-/* Instagram Icon Styling (ohne Kreis, pur) */
-.insta-icon-link {
-    font-size: 32px;
-    color: #ffffff !important;
-    text-decoration: none !important;
-    transition: all 0.3s ease;
-    display: inline-block;
-    margin-top: 10px;
-}
-
-.insta-icon-link:hover {
-    color: #3498db !important; /* Blau beim Hover, passend zum Rest */
-    transform: translateY(-3px); /* Kleiner "Hüpfer" nach oben */
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    font-size: 0.85rem;
+    color: #ffffff;
+    opacity: 0.7; /* Copyright etwas dezenter */
 }
