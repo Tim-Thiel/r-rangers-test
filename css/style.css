@@ -27,6 +27,31 @@ body {
 h1, h2 { text-align: center; color: var(--ranger-blue); margin-top: 20px; font-weight: 700; }
 
 /* --------------------------------------------
+   Intro Text
+--------------------------------------------- */
+
+/* Styling für den Intro-Text (falls du ihn doch mal anpassen willst) */
+.intro-text-large {
+    text-align: center;
+    max-width: 800px;
+    margin: 30px auto 10px auto;
+    font-size: 1.3rem;
+    color: var(--text-dark); /* Text dunkel halten, Name blau */
+    font-weight: 500;
+}
+
+/* Dein Name als "Unterschrift" */
+.signature {
+    text-align: center;
+    font-size: 1.6rem;
+    color: var(--ranger-blue); /* Nutzt dein Blau aus den Variablen */
+    font-weight: 800;
+    margin-top: 5px;
+    font-style: italic; /* Kursiv wirkt wie unterschrieben */
+    letter-spacing: 1px;
+}
+
+/* --------------------------------------------
    GELBE INFO-BOX
 --------------------------------------------- */
 .info-box {
