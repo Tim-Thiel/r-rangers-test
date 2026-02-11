@@ -164,16 +164,14 @@ nav.site-navigation a.active {
 
 /* Instagram Icon Styling */
 .insta-icon-link {
-    display: inline-block;
-    margin-top: 15px;
-    color: #ffffff !important;
+    font-size: 28px;         /* Hier stellst du die Größe des Logos ein */
+    color: #ffffff !important; /* Standardfarbe weiß */
     text-decoration: none !important;
-    font-size: 1rem;
-    transition: color 0.3s ease;
+    transition: all 0.3s ease;
+    display: inline-block;
 }
 
 .insta-icon-link:hover {
-    background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); /* Instagram-Farben beim Hover */
-    transform: translateY(-3px); /* Hüpft leicht nach oben */
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    color: #e4405f !important; /* Es färbt sich beim Hover in das Insta-Pink */
+    transform: scale(1.1);      /* Es wird minimal größer */
 }
