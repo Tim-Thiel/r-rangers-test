@@ -58,7 +58,7 @@ const footerHTML = `
         <div class="footer-sec">
             <h3>Kontakt</h3>
             <p>📧 <a href="mailto:tim_thiel@r-rangers.de" class="footer-link-white">tim_thiel@r-rangers.de</a></p>
-            <p><a href="https://www.r-rangers.de" target="_blank"></p>
+            <p><a href="https://www.r-rangers.de" target="_blank">www.r-rangers.de</a></p>
         </div>
 
         <div class="footer-sec">
