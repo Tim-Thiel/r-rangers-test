@@ -57,8 +57,14 @@ const footerHTML = `
 
         <div class="footer-sec">
             <h3>Kontakt</h3>
-            <p>📧 <a href="mailto:tim_thiel@r-rangers.de" class="footer-link-white">tim_thiel@r-rangers.de</a></p>
-            <p><a href="https://www.r-rangers.de" target="_blank">www.r-rangers.de</a></p>
+            <p>
+                <i class="fas fa-envelope footer-icon"></i> 
+                <a href="mailto:tim_thiel@r-rangers.de" class="footer-link-white">tim_thiel@r-rangers.de</a>
+            </p>
+            <p>
+                <i class="fas fa-globe footer-icon"></i> 
+                <a href="https://www.r-rangers.de" target="_blank" class="footer-link-white">r-rangers.de</a>
+            </p>
         </div>
 
         <div class="footer-sec">
