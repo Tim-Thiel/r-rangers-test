@@ -260,3 +260,35 @@ html {
         padding: 10px 15px;
     }
 }
+
+/* Design für die rechtlichen Seiten */
+.legal-page {
+    line-height: 1.6;
+    padding: 20px;
+    max-width: 800px;
+    margin: 40px auto;
+    color: #333;
+}
+
+.legal-page h1 {
+    color: #2c3e50;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 10px;
+}
+
+.legal-page h2 {
+    color: #2980b9;
+    margin-top: 30px;
+}
+
+.legal-page .back-link {
+    display: inline-block;
+    margin-bottom: 20px;
+    text-decoration: none;
+    color: #3498db;
+    font-weight: bold;
+}
+
+.legal-page .back-link:hover {
+    text-decoration: underline;
+}
