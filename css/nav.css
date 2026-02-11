@@ -133,6 +133,15 @@ nav.site-navigation a.active {
     opacity: 0.7;
     text-decoration: none;
 }
+.footer-nav-list {
+    list-style: none; /* Entfernt die Punkte */
+    padding: 0;      /* Entfernt das Einrücken nach rechts */
+    margin: 0;
+}
+
+.footer-nav-list li {
+    margin-bottom: 10px; /* Abstand zwischen den Links */
+}
 
 /* Icons in weiß */
 .footer-icon {
