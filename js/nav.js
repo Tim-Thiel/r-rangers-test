@@ -18,6 +18,9 @@ document.head.appendChild(fontAwesome);
 // Navigation HTML (KORRIGIERT & MODERNISIERT)
 const navHTML = `
     <nav class="site-navigation">
+        <a href="/index" class="nav-logo">
+            <img src="bilder/thumbs/emblemwhite.png" alt="Royal Rangers Emblem">
+        </a>
         <div class="menu-toggle" id="mobile-menu">
             <i class="fas fa-bars"></i>
         </div>
