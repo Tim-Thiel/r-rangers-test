@@ -69,7 +69,7 @@ const footerHTML = `
             </p>
             <p>
                 <i class="fas fa-globe footer-icon"></i> 
-                <a href="https://www.r-rangers.de" target="_blank" class="footer-link-white">r-rangers.de</a>
+                <a href="https://www.r-rangers.de" target="_blank" class="footer-link-white">www.r-rangers.de</a>
             </p>
         </div>
 
