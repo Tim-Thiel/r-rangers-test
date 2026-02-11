@@ -78,19 +78,22 @@ nav.site-navigation a.active {
     }
 }
 
-/* --- BLAUES FOOTER DESIGN (Exakt passend zur Nav) --- */
+/* Grundgerüst für den "Sticky Footer" */
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Der Footer bleibt so hoch wie sein Inhalt, rückt aber nach unten */
 .site-footer {
-    /* Das ist der exakte Vollton deines Nav-Blaus (0, 68, 136) */
-    background-color: rgb(0, 68, 136); 
-    color: #ffffff;
-    padding: 60px 20px 20px;
-    margin-top: 80px;
-    font-family: sans-serif;
-    
-    /* Um den Footer vom Rest abzuheben, nutzen wir den gleichen Schatten wie oben, nur umgekehrt */
-    box-shadow: 0 -4px 12px rgba(0,0,0,0.2); 
-    
-    /* Zwingt den Footer über die gesamte Breite, falls nötig */
+    margin-top: auto; 
+    background-color: rgb(0, 68, 136);
     width: 100%;
     box-sizing: border-box;
 }
@@ -133,16 +136,25 @@ nav.site-navigation a.active {
     opacity: 0.7;
     text-decoration: none;
 }
+
 .footer-nav-list {
-    list-style: none; /* Entfernt die Punkte */
-    padding: 0;      /* Entfernt das Einrücken nach rechts */
+    list-style: none; /* Entfernt die Aufzählungspunkte */
+    padding: 0;      /* Entfernt den Standard-Einzug */
     margin: 0;
 }
 
 .footer-nav-list li {
-    margin-bottom: 10px; /* Abstand zwischen den Links */
+    margin-bottom: 12px; /* Schöner Abstand zwischen den Zeilen */
 }
 
+.footer-nav-list a {
+    text-decoration: none; /* Optional: Unterstreichung weg, wenn es cleaner sein soll */
+    color: white;
+}
+
+.footer-nav-list a:hover {
+    text-decoration: underline; /* Unterstreichung nur beim Drüberfahren */
+}
 /* Icons in weiß */
 .footer-icon {
     width: 25px;
