@@ -154,19 +154,22 @@ nav.site-navigation a.active {
     color: #bdc3c7;
 }
 
+/* Styling für die kleinen Icons vor dem Text */
+.footer-icon {
+    width: 20px;         /* Feste Breite, damit der Text daneben bündig ist */
+    margin-right: 10px;
+    color: #ffca28;      /* Dein Ranger-Gelb für die Symbole */
+    font-size: 0.9rem;
+}
+
 /* Instagram Icon Styling */
 .insta-icon-link {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    background-color: #3d5a80; /* Ein dezentes Blau oder das JMS-Blau */
-    color: white !important;
-    border-radius: 50%; /* Macht das Logo rund */
-    font-size: 20px;
+    display: inline-block;
+    margin-top: 15px;
+    color: #ffffff !important;
     text-decoration: none !important;
-    transition: all 0.3s ease;
+    font-size: 1rem;
+    transition: color 0.3s ease;
 }
 
 .insta-icon-link:hover {
