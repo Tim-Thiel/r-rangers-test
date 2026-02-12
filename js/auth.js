@@ -65,6 +65,7 @@ function checkAccess(area) {
     // Wenn das gespeicherte Datum mit heute übereinstimmt, gewähre Zugriff
     return savedDate === today;
 }
+
 function askPassword(area, onSuccess) {
     const popup = document.getElementById("pw-popup");
     const input = document.getElementById("pw-popup-input");
@@ -80,25 +81,34 @@ function askPassword(area, onSuccess) {
     input.value = "";
     input.focus();
 
-    const submit = async (e) => { // <--- Wichtig: async hinzugefügt!
+    // Hier ist das wichtige ASYNC
+    const submit = async (e) => { 
         if (e && e.preventDefault) e.preventDefault(); 
+        if (e && e.stopPropagation) e.stopPropagation();
         
-        // --- NEU: Passwort hashen ---
-        const msgUint8 = new TextEncoder().encode(input.value);
-        const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
-        const hashArray = Array.from(new Uint8Array(hashBuffer));
-        const inputHash = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-        // ----------------------------
+        const enteredText = input.value;
 
-        if (inputHash === PASSWORDS[area]) {
-            const today = new Date().toISOString().split('T')[0];
-            localStorage.setItem("auth_date_" + area, today); 
-        
-            closePopupClean();
-            onSuccess();  
-        } else {
-            showError("❌ Falsches Passwort!"); 
-            input.value = "";
+        try {
+            // Passwort in Hash umwandeln
+            const msgUint8 = new TextEncoder().encode(enteredText);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            const inputHash = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+
+            // Vergleich mit der Liste oben
+            if (inputHash === PASSWORDS[area]) {
+                const today = new Date().toISOString().split('T')[0];
+                localStorage.setItem("auth_date_" + area, today); 
+            
+                closePopupClean();
+                onSuccess();  
+            } else {
+                showError("❌ Falsches Passwort!"); 
+                input.value = "";
+            }
+        } catch (err) {
+            console.error("Fehler bei der Verschlüsselung:", err);
+            showError("Technischer Fehler bei der Eingabe.");
         }
     };
 
