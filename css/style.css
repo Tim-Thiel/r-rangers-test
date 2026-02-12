@@ -30,6 +30,17 @@ h1, h2 { text-align: center; color: var(--ranger-blue); margin-top: 20px; font-w
    Intro Text
 --------------------------------------------- */
 
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+
 /* Styling für den Intro-Text (falls du ihn doch mal anpassen willst) */
 .intro-text-large {
    text-align: center;
