@@ -78,23 +78,18 @@ function askPassword(area, onSuccess) {
     input.value = "";
     input.focus();
 
-    // Die Funktion muss async sein, damit await funktioniert
     const submit = async (e) => {
         if (e) e.preventDefault();
         
         const enteredText = input.value;
         
-        // --- Hier wird gehasht ---
+        // Hash berechnen
         const msgUint8 = new TextEncoder().encode(enteredText);
         const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
         const hashArray = Array.from(new Uint8Array(hashBuffer));
         const inputHash = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 
-        // DEBUG-LOGS (Rechtsklick im Browser -> Untersuchen -> Konsole)
-        console.log("Eingabe:", enteredText);
-        console.log("Berechneter Hash:", inputHash);
-        console.log("Erwarteter Hash:", PASSWORDS[area]);
-
+        // Nur der Vergleich - keine Logs mehr!
         if (inputHash === PASSWORDS[area]) {
             const today = new Date().toISOString().split('T')[0];
             localStorage.setItem("auth_date_" + area, today); 
@@ -106,7 +101,6 @@ function askPassword(area, onSuccess) {
         }
     };
 
-    // WICHTIG: Die Zuweisung muss klappen
     btnOpen.onclick = (e) => submit(e);
 
     input.onkeydown = (e) => {
