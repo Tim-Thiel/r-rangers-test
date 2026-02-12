@@ -23,3 +23,8 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
 });
+
+// Wartet, bis die Seite geladen ist und ändert dann den Tab-Namen
+document.addEventListener('DOMContentLoaded', function() {
+    document.title = "R-Rangers – Start"; 
+});
