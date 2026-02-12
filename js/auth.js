@@ -2,9 +2,9 @@
 
 // 🔐 Passwörter an einer Stelle ändern
 const PASSWORDS = {
-    aktionen: "rangers",
-    team: "team",
-    privat: "freunde"
+    aktionen: "637f9e5784260d8a57e627d2c34d3f57270b240164c483a936a2818c32274955",
+    team: "e033e0811e5828469d67781a95a894a4c68832e8d3885d996e38a2039233f240",
+    privat: "f7149024c0006769f333b28b5e2823675e4663364f33668f44d852a466453985"
 };
 
 // ================= GLOBALE SCHLIESS-FUNKTIONEN =================
@@ -80,13 +80,17 @@ function askPassword(area, onSuccess) {
     input.value = "";
     input.focus();
 
-    const submit = (e) => {
+    const submit = async (e) => { // <--- Wichtig: async hinzugefügt!
         if (e && e.preventDefault) e.preventDefault(); 
-        if (e && e.stopPropagation) e.stopPropagation();
         
-        // Suche diese Stelle in askPassword:
-        if (input.value === PASSWORDS[area]) {
-            // Statt localStorage.setItem("auth_" + area, "true"); schreiben wir:
+        // --- NEU: Passwort hashen ---
+        const msgUint8 = new TextEncoder().encode(input.value);
+        const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        const inputHash = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        // ----------------------------
+
+        if (inputHash === PASSWORDS[area]) {
             const today = new Date().toISOString().split('T')[0];
             localStorage.setItem("auth_date_" + area, today); 
         
