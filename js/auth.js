@@ -72,50 +72,47 @@ function askPassword(area, onSuccess) {
     const btnOpen = document.getElementById("pw-popup-confirm");
     const btnCancel = document.getElementById("pw-popup-cancel");
 
-    if (!popup) {
-        console.error("Kein Passwort-Popup im DOM gefunden!");
-        return;
-    }
+    if (!popup) return;
 
     popup.classList.remove("hidden");
     input.value = "";
     input.focus();
 
-    // Hier ist das wichtige ASYNC
-    const submit = async (e) => { 
-        if (e && e.preventDefault) e.preventDefault(); 
-        if (e && e.stopPropagation) e.stopPropagation();
+    // Die Funktion muss async sein, damit await funktioniert
+    const submit = async (e) => {
+        if (e) e.preventDefault();
         
         const enteredText = input.value;
+        
+        // --- Hier wird gehasht ---
+        const msgUint8 = new TextEncoder().encode(enteredText);
+        const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        const inputHash = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 
-        try {
-            // Passwort in Hash umwandeln
-            const msgUint8 = new TextEncoder().encode(enteredText);
-            const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
-            const hashArray = Array.from(new Uint8Array(hashBuffer));
-            const inputHash = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        // DEBUG-LOGS (Rechtsklick im Browser -> Untersuchen -> Konsole)
+        console.log("Eingabe:", enteredText);
+        console.log("Berechneter Hash:", inputHash);
+        console.log("Erwarteter Hash:", PASSWORDS[area]);
 
-            // Vergleich mit der Liste oben
-            if (inputHash === PASSWORDS[area]) {
-                const today = new Date().toISOString().split('T')[0];
-                localStorage.setItem("auth_date_" + area, today); 
-            
-                closePopupClean();
-                onSuccess();  
-            } else {
-                showError("❌ Falsches Passwort!"); 
-                input.value = "";
-            }
-        } catch (err) {
-            console.error("Fehler bei der Verschlüsselung:", err);
-            showError("Technischer Fehler bei der Eingabe.");
+        if (inputHash === PASSWORDS[area]) {
+            const today = new Date().toISOString().split('T')[0];
+            localStorage.setItem("auth_date_" + area, today); 
+            closePopupClean();
+            onSuccess();  
+        } else {
+            showError("❌ Falsches Passwort!"); 
+            input.value = "";
         }
     };
 
-    btnOpen.onclick = submit;
+    // WICHTIG: Die Zuweisung muss klappen
+    btnOpen.onclick = (e) => submit(e);
 
     input.onkeydown = (e) => {
-        if (e.key === "Enter") submit(e);
+        if (e.key === "Enter") {
+            submit(e);
+        }
     };
 
     btnCancel.onclick = closePopupClean;
