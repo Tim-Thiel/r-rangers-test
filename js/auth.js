@@ -4,7 +4,7 @@
 const PASSWORDS = {
     aktionen: "9b6fcb3d1877b41b17e0051e1ac4da83e1b20e9c91b73de5abb5189782f6160f",
     team: "126d1337beb85580e514c90bfb75d92b90adb11feec2062ff01868e73f8444bb",
-    privat: "96bb84e686eacde798941295c582654ecd13551f3ffdcd47f6f1866e16ab8efb"
+    privat: "8fe9a4033f5d75198b568dd54c6af0824c5dbf00a3d2f9fdedebf2cd3bb2d3cf"
 };
 
 // ================= GLOBALE SCHLIESS-FUNKTIONEN =================
