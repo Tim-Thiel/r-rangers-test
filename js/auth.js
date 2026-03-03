@@ -2,7 +2,7 @@
 
 // 🔐 Passwörter mit passwordsgenerator.net/sha256-hash-generator/ generieren und einfügen
 const PASSWORDS = {
-    aktionen: "2bc0659381c5a5ea1421ba9bc04f34f13522e4ccc919f8ce51d4f1ff949d67bc",
+    aktionen: "9b6fcb3d1877b41b17e0051e1ac4da83e1b20e9c91b73de5abb5189782f6160f",
     team: "ca8b22d0db83a22db163b560b3e4e51527e533d31d067b614a0c33c4d2df8432",
     privat: "96bb84e686eacde798941295c582654ecd13551f3ffdcd47f6f1866e16ab8efb"
 };
