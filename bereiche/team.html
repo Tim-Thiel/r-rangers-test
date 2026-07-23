@@ -3,48 +3,69 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>R-Rangers - Rennmäuse</title>
+<title>R-Rangers - Rennmäuse/Forscher</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link rel="stylesheet" href="/css/nav.css">
 <link rel="stylesheet" href="../css/style.css">
 <script src="/js/auth.js"></script>
 <script>
 if (!checkAccess("team")) {
-    alert("Zugang nur mit Passwort möglich.");
     window.location.href = "/index";
 }
 </script>
 
-<script src="../js/nav.js" defer></script>
+<script src="/js/nav.js" defer></script>
 
 </head>
 
 <body>
     <div class="page-wrapper">
-    <h1>Rennmäuse</h1>
+    <h1>Rennmäuse/Forscher</h1>
 
     <div class="grid">
 
-        <div class="card" onclick="location.href='team/weihnachtsstammtreff2025'">
-            <img src="https://res.cloudinary.com/db4arm1o7/image/upload/v1769723802/DSC02689.jpg" alt="Weihnachtsstammtreff 2025">
+        <div class="card" onclick="location.href='/bereiche/galerie?bereich=team&id=teamtreff17.07.2026&titel=Teamtreff%2017.07.2026'">
+            <img loading="lazy" src="/api/thumb.php?bereich=team&id=teamtreff17.07.2026&datei=DSC03825.jpg&w=400" alt="Teamtreff 17.07.2026">
+            <h3>Teamtreff 17.07.2026</h3>
+        </div>
+
+        <div class="card" onclick="location.href='/bereiche/galerie?bereich=team&id=forschercamp2026&titel=Forschercamp%202026'">
+            <img loading="lazy" src="/api/thumb.php?bereich=team&id=forschercamp2026&datei=DSC03133.jpg&w=400" alt="Forschercamp 2026">
+            <h3>Forschercamp 2026</h3>
+        </div>
+
+        <div class="card" onclick="location.href='/bereiche/galerie?bereich=team&id=teamtreff08.05.2026&titel=Teamtreff%2008.05.2026'">
+            <img loading="lazy" src="/api/thumb.php?bereich=team&id=teamtreff08.05.2026&datei=DSC02972.jpg&w=400" alt="Teamtreff 08.05.2026">
+            <h3>Teamtreff 08.05.2026</h3>
+        </div>
+
+        <div class="card" onclick="location.href='/bereiche/galerie?bereich=team&id=teamtreff17.04.2026&titel=Teamtreff%2017.04.2026'">
+            <img loading="lazy" src="/api/thumb.php?bereich=team&id=teamtreff17.04.2026&datei=DSC02887.jpg&w=400" alt="Teamtreff 17.04.2026">
+            <h3>Teamtreff 17.04.2026</h3>
+        </div>
+
+        <div class="card" onclick="location.href='/bereiche/galerie?bereich=team&id=weihnachtsstammtreff2025&titel=Weihnachtsstammtreff%202025'">
+            <img loading="lazy" src="/api/thumb.php?bereich=team&id=weihnachtsstammtreff2025&datei=DSC02689.jpg&w=400" alt="Weihnachtsstammtreff 2025">
             <h3>Weihnachtsstammtreff 2025</h3>
         </div>
 
-        <div class="card" onclick="location.href='team/teamtreff14.11.2025'">
-            <img src="https://res.cloudinary.com/db4arm1o7/image/upload/v1769723802/DSC02585.jpg" alt="Teamtreff 14.11.2025">
+        <div class="card" onclick="location.href='/bereiche/galerie?bereich=team&id=teamtreff14.11.2025&titel=Teamtreff%2014.11.2025'">
+            <img loading="lazy" src="/api/thumb.php?bereich=team&id=teamtreff14.11.2025&datei=DSC02585.jpg&w=400" alt="Teamtreff 14.11.2025">
             <h3>Teamtreff 14.11.2025</h3>
         </div>
 
-        <div class="card" onclick="location.href='team/teamtreff07.11.2025'">
-            <img src="https://res.cloudinary.com/db4arm1o7/image/upload/v1769723802/DSC02516.jpg" alt="Teamtreff 07.11.2025">
+        <div class="card" onclick="location.href='/bereiche/galerie?bereich=team&id=teamtreff07.11.2025&titel=Teamtreff%2007.11.2025'">
+            <img loading="lazy" src="/api/thumb.php?bereich=team&id=teamtreff07.11.2025&datei=DSC02516.jpg&w=400" alt="Teamtreff 07.11.2025">
             <h3>Teamtreff 07.11.2025</h3>
         </div>
 
-        <div class="card" onclick="location.href='team/teamtreff10.10.2025'">
-            <img src="https://res.cloudinary.com/db4arm1o7/image/upload/v1769723802/DSC02371.jpg" alt="Teamtreff 10.10.2025">
+        <div class="card" onclick="location.href='/bereiche/galerie?bereich=team&id=teamtreff10.10.2025&titel=Teamtreff%2010.10.2025'">
+            <img loading="lazy" src="/api/thumb.php?bereich=team&id=teamtreff10.10.2025&datei=DSC02371.jpg&w=400" alt="Teamtreff 10.10.2025">
             <h3>Teamtreff 10.10.2025</h3>
         </div>
 
-        <div class="card" onclick="location.href='team/teamtreff18.07.2025'">
-            <img src="https://res.cloudinary.com/db4arm1o7/image/upload/v1769723802/DSC01273.jpg" alt="Teamtreff 18.07.2025">
+        <div class="card" onclick="location.href='/bereiche/galerie?bereich=team&id=teamtreff18.07.2025&titel=Teamtreff%2018.07.2025'">
+            <img loading="lazy" src="/api/thumb.php?bereich=team&id=teamtreff18.07.2025&datei=DSC01273.jpg&w=400" alt="Teamtreff 18.07.2025">
             <h3>Teamtreff 18.07.2025</h3>
         </div>
 

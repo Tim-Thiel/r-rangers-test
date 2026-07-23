@@ -15,8 +15,69 @@
 }
 
 /* --------------------------------------------
+   Dark Mode
+--------------------------------------------- */
+@media (prefers-color-scheme: dark) {
+    html:not([class*="dark-mode"]):not(.light-mode) {
+        --light-bg: #0f172a;
+        --card-bg: #1e2d3d;
+        --text-dark: #e2e8f0;
+        --shadow: 0 2px 8px rgba(0,0,0,0.5);
+        --shadow-hover: 0 10px 25px rgba(0,85,170,0.5);
+    }
+}
+
+html.dark-mode {
+    --light-bg: #0f172a;
+    --card-bg: #1e2d3d;
+    --text-dark: #e2e8f0;
+    --shadow: 0 2px 8px rgba(0,0,0,0.5);
+    --shadow-hover: 0 10px 25px rgba(0,85,170,0.5);
+}
+
+/* Hardcoded-Farben im Dark Mode überschreiben */
+html.dark-mode .modal-content {
+    background: #1e2d3d;
+    color: var(--text-dark);
+}
+html.dark-mode .modal-close             { color: #94a3b8; }
+html.dark-mode .progress-container     { background: #2d3f52; }
+html.dark-mode input[type="password"]  { background: #2d3f52; color: var(--text-dark); border: 1px solid #4b6280; border-radius: 8px; outline: none; }
+html.dark-mode .info-box               { background: rgba(241,196,15,0.08); }
+html.dark-mode .signature              { color: #94a3b8; }
+html.dark-mode h1, html.dark-mode h2   { color: #7ec8ff; }
+html.dark-mode .legal-page            { color: var(--text-dark); }
+html.dark-mode .legal-page h1         { color: var(--text-dark); border-color: #4b6280; }
+html.dark-mode .legal-page h2         { color: #7ec8ff; }
+html.dark-mode .legal-page .back-link { color: #7ec8ff; }
+html.dark-mode .legal-page a          { color: #e2e8f0; }
+html.dark-mode .info-box strong,
+html.dark-mode #modalBody strong      { color: #7ec8ff; }
+
+@media (prefers-color-scheme: dark) {
+    html:not(.dark-mode):not(.light-mode) .modal-content     { background: #1e2d3d; color: #e2e8f0; }
+    html:not(.dark-mode):not(.light-mode) .modal-close       { color: #94a3b8; }
+    html:not(.dark-mode):not(.light-mode) .progress-container { background: #2d3f52; }
+    html:not(.dark-mode):not(.light-mode) input[type="password"] { background: #2d3f52; color: #e2e8f0; border: 1px solid #4b6280; border-radius: 8px; }
+    html:not(.dark-mode):not(.light-mode) .info-box          { background: rgba(241,196,15,0.08); }
+    html:not(.dark-mode):not(.light-mode) .info-box strong,
+    html:not(.dark-mode):not(.light-mode) #modalBody strong  { color: #7ec8ff; }
+    html:not(.dark-mode):not(.light-mode) .signature         { color: #94a3b8; }
+    html:not(.dark-mode):not(.light-mode) h1,
+    html:not(.dark-mode):not(.light-mode) h2                 { color: #7ec8ff; }
+    html:not(.dark-mode):not(.light-mode) .legal-page        { color: #e2e8f0; }
+    html:not(.dark-mode):not(.light-mode) .legal-page h1     { color: #e2e8f0; border-color: #4b6280; }
+    html:not(.dark-mode):not(.light-mode) .legal-page .back-link { color: #7ec8ff; }
+    html:not(.dark-mode):not(.light-mode) .legal-page a      { color: #e2e8f0; }
+}
+
+/* --------------------------------------------
    Globales Layout
 --------------------------------------------- */
+* {
+    -webkit-tap-highlight-color: transparent;
+}
+
 body {
     margin: 0; padding: 0;
     font-family: "Segoe UI", Arial, sans-serif;
@@ -88,33 +149,46 @@ h1, h2 { text-align: center; color: var(--ranger-blue); margin-top: 20px; font-w
    Layout Container
 --------------------------------------------- */
 .landing-grid, .grid, .gallery {
-    display: grid;
     margin: 20px auto 40px auto;
     padding: 0 40px;
     max-width: 95%;
     box-sizing: border-box;
-    gap: 30px;
 }
 
 .landing-grid {
+    display: grid;
+    gap: 30px;
     grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
     justify-content: center;
     max-width: 1600px;
 }
 
-.gallery {
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); /* Etwas kleinere Spalten für mehr Bilder */
-    gap: 10px; /* Engeres Raster für die Galerie */
+.grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
 }
 
-.grid {
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+.grid .card {
+    flex: 0 0 280px;
+}
+
+/* Masonry-Galerie (Zeilen-Reihenfolge via JS-Spans) */
+.gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, 280px);
+    grid-auto-rows: 10px;
+    gap: 10px;
+    padding: 0 20px;
+    align-items: start;
+    justify-content: center;
 }
 
 /* --------------------------------------------
-   VEREINHEITLICHES KARTEN-DESIGN
+   KARTEN-DESIGN (Landing & Bereiche)
 --------------------------------------------- */
-.landing-card, .card, .gallery-item {
+.landing-card, .card {
     background: var(--card-bg);
     border: none;
     border-radius: var(--radius);
@@ -125,71 +199,177 @@ h1, h2 { text-align: center; color: var(--ranger-blue); margin-top: 20px; font-w
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     display: flex;
     flex-direction: column;
-    align-items: center; 
+    align-items: center;
     text-align: center;
     cursor: pointer;
 }
 
-/* Speziell für die Galerie: Weniger Padding, damit mehr Bild zu sehen ist */
-.gallery-item {
-    padding: 5px; 
-}
-
-.landing-card:hover, .card:hover, .gallery-item:hover {
-    transform: translateY(-4px); 
+.landing-card:hover, .card:hover {
+    transform: translateY(-4px);
     box-shadow: var(--shadow-hover);
 }
 
-/* FIX: 3:2 FORMAT ÜBERALL */
-.landing-card img, .card img, .gallery-item img {
-    width: 100%;
-    aspect-ratio: 3 / 2;
-    object-fit: cover;
-    object-position: 50% 20%; /* <--- DAS HIER RETTET DIE KÖPFE */
-    border-radius: 8px;
-}
-
-/* Startseite & Aktionen: Bilder ohne Rand oben */
+/* Bilder in Landing & Bereichen: 3:2, Köpfe oben */
 .landing-card img, .card img {
     width: calc(100% + 40px);
+    aspect-ratio: 3 / 2;
+    object-fit: cover;
+    object-position: 50% 20%;
     margin: -20px -20px 10px -20px;
     border-radius: 12px 12px 0 0;
 }
 
-/* Texte kompakt halten */
-.landing-card h3, .card h3, .gallery-item h3 { margin: 5px 0; color: var(--ranger-blue); font-size: 1.1em; }
-.landing-card p, .card p, .gallery-item p { margin: 5px 0 10px 0; font-size: 0.9em; line-height: 1.3; }
+.landing-card h3, .card h3 { margin: 5px 0; color: var(--ranger-blue); font-size: 1.1em; }
+.landing-card p,  .card p  { margin: 5px 0 10px 0; font-size: 0.9em; line-height: 1.3; }
+
+/* --------------------------------------------
+   GALERIE-ITEMS (Masonry)
+--------------------------------------------- */
+
+/* Einblend-Animation beim Laden der Galerie */
+@keyframes galleryItemIn {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.gallery-item--entering {
+    opacity: 0;
+    animation: galleryItemIn 0.45s ease forwards;
+}
+
+.gallery-item {
+    position: relative;
+    border-radius: var(--radius);
+    overflow: hidden;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    background: transparent;
+}
+
+.gallery-item img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.gallery-item:hover {
+    box-shadow: 0 0 0 3px var(--ranger-blue), var(--shadow-hover);
+}
+
+/* Download-Button (Kreis) unten rechts */
+.gallery-dl-btn {
+    position: absolute;
+    bottom: 10px; right: 10px;
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.85);
+    background: rgba(0,0,0,0.3);
+    color: white;
+    font-size: 13px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.2s, background 0.2s, border-color 0.2s;
+    z-index: 5;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+}
+
+.gallery-item:hover .gallery-dl-btn {
+    opacity: 1;
+}
+
+.gallery-dl-btn:hover {
+    background: var(--ranger-blue);
+    border-color: var(--ranger-blue);
+}
+
+/* Auswahl-Button (Häkchen-Kreis) unten links */
+.gallery-select-btn {
+    position: absolute;
+    bottom: 10px; left: 10px;
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    border: 2.5px solid white;
+    background: rgba(0,0,0,0.25);
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.2s;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.gallery-item:hover .gallery-select-btn {
+    opacity: 1;
+}
+
+.gallery-select-btn:hover {
+    background: rgba(255,255,255,0.35);
+    border-color: white;
+}
+
+.gallery-item.selected .gallery-select-btn {
+    opacity: 1;
+    background: var(--ranger-blue);
+    border-color: var(--ranger-blue);
+}
+
+/* Checkbox-Input verstecken – visuelle Anzeige übernimmt .gallery-select-icon */
+.img-checkbox { display: none; }
+
+/* Häkchen-Icon: immer sichtbar, bei Auswahl voll weiß */
+.gallery-select-icon {
+    color: rgba(255,255,255,0.65);
+    font-size: 14px;
+    pointer-events: none;
+    transition: color 0.15s;
+}
+.gallery-item.selected .gallery-select-icon {
+    color: white;
+}
 
 /* --------------------------------------------
    Buttons & Checkboxen
 --------------------------------------------- */
-button, .download-btn, #download-selected {
+button, .download-btn {
     background: var(--ranger-blue); color: white; border: none; padding: 10px 20px;
     font-size: 14px; border-radius: 8px; cursor: pointer; transition: 0.25s;
     display: inline-block; text-decoration: none; width: fit-content;
-    margin: 5px auto 0 auto; 
+    margin: 5px auto 0 auto;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
 }
 
-button:hover, .download-btn:hover, #download-selected:hover { background: var(--ranger-blue-dark); }
-.checkbox-container { display: flex; justify-content: center; align-items: center; gap: 8px; margin-top: 5px; font-size: 0.9em; }
+button:hover, .download-btn:hover { background: var(--ranger-blue-dark); }
+.btn-gray { background: #666; }
+.btn-gray:hover { background: #444; }
+.lightbox-nav span:hover, .lightbox-close:hover { color: var(--ranger-blue) !important; }
 
 /* --------------------------------------------
    LIGHTBOX & MODAL
 --------------------------------------------- */
-.lightbox { 
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-    background: rgba(0,0,0,0.95); display: flex; justify-content: center; 
-    align-items: center; z-index: 9999; 
+.lightbox {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.95); display: flex; justify-content: center;
+    align-items: center; z-index: 9999;
+    /* Padding reserviert Platz für X (oben), Pfeile (links/rechts), Download-Button (unten) */
+    padding: 65px 100px 85px 100px;
+    box-sizing: border-box;
 }
 
 .lightbox.hidden { opacity: 0; pointer-events: none; }
 
-/* Bild mit Übergang für das Einblenden aus der JS */
-.lightbox img { 
-    max-width: 90%; 
-    max-height: 85%; 
-    border-radius: 12px; 
-    transition: opacity 0.3s ease; /* Wichtig für lbImg.style.opacity */
+/* Bild ohne CSS-Transition (wird komplett per JS gesteuert) */
+.lightbox img {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 12px;
 }
 
 /* DER LADEPINNER (wird aktiv, wenn JS .loading hinzufügt) */
@@ -210,18 +390,20 @@ button:hover, .download-btn:hover, #download-selected:hover { background: var(--
     100% { transform: rotate(360deg); }
 }
 
-.lightbox-close { position: absolute; top: 25px; right: 40px; font-size: 45px; color: #fff; cursor: pointer; }
+.lightbox-close { position: absolute; top: 25px; right: 40px; font-size: 45px; color: #fff; cursor: pointer; transition: color 0.2s; user-select: none; -webkit-tap-highlight-color: transparent; }
+.lightbox-close:hover { color: var(--ranger-blue); }
 
 /* Pfeile mit blauem Hover-Effekt */
-.lightbox-nav span { 
-    position: absolute; 
-    top: 50%; 
-    transform: translateY(-50%); 
-    font-size: 60px; 
-    color: #fff; 
-    cursor: pointer; 
+.lightbox-nav span {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 60px;
+    color: #fff;
+    cursor: pointer;
     transition: all 0.3s ease;
     user-select: none;
+    -webkit-tap-highlight-color: transparent;
     z-index: 10002;
 }
 
@@ -248,15 +430,44 @@ button:hover, .download-btn:hover, #download-selected:hover { background: var(--
 .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); display: flex; justify-content: center; align-items: center; z-index: 10010; }
 .modal-overlay.hidden { opacity: 0; pointer-events: none; }
 .modal-content { background: white; padding: 35px 30px 30px 30px; border-radius: var(--radius); max-width: 450px; width: 90%; text-align: center; position: relative; }
-.modal-close { position: absolute; top: 10px; right: 15px; font-size: 32px; color: #999; cursor: pointer; }
+.modal-close { position: absolute; top: 10px; right: 15px; font-size: 32px; color: #999; cursor: pointer; transition: color 0.2s; }
+.error-title { color: #e53935; }
+.modal-close:hover { color: var(--ranger-blue); }
 .progress-container { width: 100%; background: #eee; border-radius: 10px; margin: 20px 0; overflow: hidden; display: none; }
 .progress-bar { width: 0%; height: 15px; background: var(--ranger-blue); transition: width 0.3s; }
 
 /* --------------------------------------------
    MOBILE OPTIMIERUNG
 --------------------------------------------- */
-@media (max-width: 600px) {
-    .landing-grid, .grid, .gallery { padding: 0 15px !important; }
+/* Mobiler Controls-Toggle: nur auf Handys (max 768px) */
+#toggleControlsBtn { display: none; }
+@media (max-width: 768px) {
+    #toggleControlsBtn { display: inline-block; }
+}
+
+/* Wenn Controls eingeblendet: Buttons immer sichtbar */
+.gallery--controls-visible .gallery-select-btn,
+.gallery--controls-visible .gallery-dl-btn {
+    opacity: 1;
+}
+
+@media (max-width: 768px) {
+    /* Lightbox auf Handy: Pfeile verstecken, Wischen via Touch */
+    .lightbox {
+        padding: 50px 15px 65px 15px;
+    }
+    .lightbox-nav span { display: none; }
+    .lightbox-close { top: 12px; right: 15px; font-size: 34px; }
+    #lightbox-download-btn { padding: 8px 18px; font-size: 13px; bottom: 15px; }
+
+    /* Hover nur unterdrücken wenn Controls nicht aktiv und Item nicht ausgewählt */
+    .gallery:not(.gallery--controls-visible) .gallery-item:not(.selected):hover {
+        box-shadow: var(--shadow);
+    }
+    .gallery:not(.gallery--controls-visible) .gallery-item:not(.selected):hover .gallery-select-btn,
+    .gallery:not(.gallery--controls-visible) .gallery-item:not(.selected):hover .gallery-dl-btn {
+        opacity: 0;
+    }
 }
 
 /* Sanftes Scrollen für die ganze Seite aktivieren */
@@ -276,12 +487,15 @@ html {
     background-color: var(--ranger-blue);
     color: white;
     cursor: pointer;
-    padding: 15px 20px;
-    border-radius: var(--radius);
-    font-size: 20px;
-    font-weight: bold;
+    width: 50px;
+    height: 50px;
+    padding: 0;
+    border-radius: 50%;
+    font-size: 22px;
+    font-weight: 900;
+    line-height: 1;
     box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-    transition: background-color 0.3s, transform 0.2s, opacity 0.3s;
+    transition: background-color 0.3s, transform 0.2s;
 }
 
 #scrollTopBtn:hover {
@@ -289,13 +503,11 @@ html {
     transform: scale(1.1);
 }
 
-/* Falls der Button auf dem Handy zu groß ist */
 @media (max-width: 600px) {
-    #scrollTopBtn {
-        bottom: 20px;
-        right: 20px;
-        padding: 10px 15px;
-    }
+    .landing-grid, .grid { padding: 0 15px !important; }
+    .grid .card { flex: 0 0 100%; }
+    .gallery { grid-template-columns: repeat(2, 1fr); padding: 0 10px; }
+    #scrollTopBtn { bottom: 20px; right: 20px; width: 42px; height: 42px; font-size: 18px; }
 }
 
 /* Design für die rechtlichen Seiten */

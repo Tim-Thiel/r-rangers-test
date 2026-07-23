@@ -63,11 +63,15 @@ nav.site-navigation a:hover {
     transition: 0.2s;
 }
 
-/* Aktiver Link */
+/* Aktiver Link – nur Unterstrich, kein Hover-Hintergrund */
 nav.site-navigation a.active {
-    /* Hellerer, transparenter Hintergrund für den aktiven Link */
-    background: rgba(255, 255, 255, 0.25);
+    background: transparent;
     color: white;
+    border-bottom: 2px solid #7ec8ff;
+}
+
+nav.site-navigation a.active:hover {
+    background: rgba(255, 255, 255, 0.15);
 }
 
 /* Styling für das Nav-Logo */
@@ -81,6 +85,24 @@ nav.site-navigation a.active {
     height: 45px; /* Höhe des Emblems – kannst du nach Geschmack anpassen */
     width: auto;
     transition: transform 0.3s ease;
+}
+
+/* Dark Mode Toggle Button */
+.theme-toggle {
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 17px;
+    cursor: pointer;
+    padding: 8px 12px;
+    border-radius: 8px;
+    transition: background 0.2s;
+    margin: 0;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+}
+.theme-toggle:hover {
+    background: rgba(255, 255, 255, 0.15);
 }
 
 /* Hamburger Button standardmäßig verstecken */
@@ -105,28 +127,27 @@ nav.site-navigation a.active {
     }
     
     .nav-logo {
-            order: 1; /* Logo bleibt auf Platz 1 (links) */
-        }
-/* 1. Navigationsleiste fixieren */
-    nav.site-navigation {
-        display: flex;
-        justify-content: space-between; /* Drückt Logo/Text nach links, Toggle nach rechts */
-        align-items: center;
-        position: sticky; /* Sorgt dafür, dass sie beim Scrollen oben bleibt */
-        top: 0;
-        z-index: 1000; /* Ganz nach oben, damit nichts drüber liegt */
-        width: 100%;
-        box-sizing: border-box;
+        order: 1;
+        justify-content: space-between;
     }
 
-    /* 2. Drei Striche nach RECHTS */
+    /* Dark Mode Toggle: rechts neben Logo, vor Hamburger */
+    .theme-toggle {
+        order: 2;
+        margin-left: auto;
+        padding: 5px 10px;
+    }
+
+    /* Hamburger-Menü ganz rechts */
     .menu-toggle {
         display: block;
-        order: 2; /* Schiebt das Icon im Flex-Layout nach rechts */
+        order: 3;
+        margin-left: 0;
         font-size: 24px;
         color: white;
         cursor: pointer;
         padding: 5px;
+        -webkit-tap-highlight-color: transparent;
     }
 
     /* 3. Ausgeklapptes Feld & Mittiger Text */
@@ -139,37 +160,30 @@ nav.site-navigation a.active {
         position: absolute;
         top: 100%;
         left: 0;
-        
+
         overflow: hidden;
         max-height: 0;
-        /* WICHTIG: Padding muss hier auf 0 stehen */
-        padding: 0; 
-        
-        /* Wir animieren max-height UND padding gleichzeitig */
+        padding: 0;
         transition: max-height 0.3s ease-in-out, padding 0.3s ease-in-out;
     }
 
     .nav-links.active {
         max-height: 350px;
-        /* Das Padding wird erst hier aktiv und mit-animiert */
-        padding: 10px 0; 
+        padding: 10px 0;
         border-bottom: 2px solid rgba(255,255,255,0.1);
     }
 
     .nav-links a {
-        width: 100%;
-        text-align: center; /* Text innerhalb des Links zentrieren */
-        padding: 15px 0;
+        width: fit-content;
+        min-width: 180px;
+        text-align: center;
+        padding: 10px 25px;
         color: white;
         text-decoration: none;
         font-size: 1.1rem;
-        border-bottom: 1px solid rgba(255,255,255,0.1);
+        border-radius: 8px;
         display: block;
-    }
-
-    /* Damit das erste Element keinen unnötigen Rand oben hat */
-    .nav-links a:last-child {
-        border-bottom: none;
+        margin: 2px auto;
     }
 
     .footer-wrapper {
